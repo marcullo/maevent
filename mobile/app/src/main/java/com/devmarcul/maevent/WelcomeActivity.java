@@ -2,6 +2,7 @@ package com.devmarcul.maevent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +13,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,6 +29,8 @@ public class WelcomeActivity extends AppCompatActivity
     private static final String LOG_TAG = "SW/WELCOME";
     private static final int RC_SIGN_IN = 9001;
     public static GoogleSignInClient mSignInClient;
+
+    private int mScreenOrientation;
 
     private ImageView mWelcomeImageView;
     private TextView mWelcomeTextView;
@@ -96,11 +98,15 @@ public class WelcomeActivity extends AppCompatActivity
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                Log.d(LOG_TAG, "Welcome animation started.");
+                mScreenOrientation = getRequestedOrientation();
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 Log.d(LOG_TAG, "Welcome animation finished.");
+                setRequestedOrientation(mScreenOrientation);
             }
 
             @Override
