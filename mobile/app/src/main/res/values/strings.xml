@@ -1,4 +1,7 @@
 <resources>
+    <string name="text_todo">Not implemented yet!</string>
     <string name="app_name">Maevent</string>
     <string name="text_welcome">Your major events in one place!</string>
+    <string name="text_config_profile">Configure profile</string>
+    <string name="text_logout">Log out</string>
 </resources>

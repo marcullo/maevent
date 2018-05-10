@@ -1,9 +1,6 @@
 <resources>
-
     <style name="AppTheme" parent="Theme.AppCompat.Light">
     </style>
-
     <style name="WelcomeTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
-
 </resources>
