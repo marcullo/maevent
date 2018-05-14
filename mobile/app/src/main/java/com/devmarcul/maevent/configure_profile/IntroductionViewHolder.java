@@ -13,6 +13,7 @@ import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.profile.Profile;
 
 public class IntroductionViewHolder {
+    private View view;
     private EditText mFirstNameEditText;
     private EditText mLastNameEditText;
     private EditText mPoseEditText;
@@ -21,12 +22,13 @@ public class IntroductionViewHolder {
     private Spinner mTitleSpinner;
 
     public IntroductionViewHolder(Context context, View itemView) {
-        mFirstNameEditText = itemView.findViewById(R.id.et_configure_profile_first_name);
-        mLastNameEditText = itemView.findViewById(R.id.et_configure_profile_last_name);
-        mPoseEditText = itemView.findViewById(R.id.et_configure_profile_pose);
-        mHeadlineEditText = itemView.findViewById(R.id.et_configure_profile_headline);
-        mProfileImage = itemView.findViewById(R.id.ibtn_configure_profile_image);
-        mTitleSpinner = itemView.findViewById(R.id.sp_configure_profile_title);
+        view = itemView;
+        mFirstNameEditText = view.findViewById(R.id.et_configure_profile_first_name);
+        mLastNameEditText = view.findViewById(R.id.et_configure_profile_last_name);
+        mPoseEditText = view.findViewById(R.id.et_configure_profile_pose);
+        mHeadlineEditText = view.findViewById(R.id.et_configure_profile_headline);
+        mProfileImage = view.findViewById(R.id.ibtn_configure_profile_image);
+        mTitleSpinner = view.findViewById(R.id.sp_configure_profile_title);
 
         initializeName();
         initializePhoto();

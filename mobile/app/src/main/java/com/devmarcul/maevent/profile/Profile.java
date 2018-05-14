@@ -19,6 +19,7 @@ public class Profile {
     private static GoogleSignInAccount googleAccount;
     //TODO Refactor photo storage in order not to load from the internet constantly
     private static Bitmap photo;
+    private static String location;
 
     public static void updateContent(Context context) {
         //TODO Replace dummy initialization with data base query
@@ -59,6 +60,22 @@ public class Profile {
         return content.headline;
     }
 
+    public static String getPhone() {
+        return content.phone;
+    }
+
+    public static String getEmail() {
+        return content.email;
+    }
+
+    public static String getLinkedin() {
+        return content.linkedin;
+    }
+
+    public static String getLocation() {
+        return content.location;
+    }
+
     public static Bitmap getPhoto() {
         new GetPhotoFromUrlTask().execute(content.photo.toString());
         return photo;
@@ -70,6 +87,9 @@ public class Profile {
         content.title = "Phd.";
         content.pose = "Embedded Software Architect";
         content.headline = "Looking for 2 well-experienced dev-ops for collaboration.";
+        content.phone = "+48123456789";
+        content.linkedin = "maeventTest";
+        content.location = "Warsaw";
     }
 
     private static boolean isNameValid() {
@@ -86,10 +106,15 @@ public class Profile {
 
         content.firstName = limbs[0];
         content.lastName = limbs[1];
+        content.email = googleAccount.getEmail();
+
+        //TODO Add selecting image from local memory
+        /*
         content.photo = googleAccount.getPhotoUrl();
         if (content.photo != null) {
             content.hasPhoto = true;
         }
+        */
     }
 
     private static class GetPhotoFromUrlTask extends AsyncTask<String, Void, Bitmap> {

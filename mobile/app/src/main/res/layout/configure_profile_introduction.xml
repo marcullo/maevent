@@ -54,6 +54,7 @@
         android:layout_height="96dp"
         android:layout_marginEnd="@dimen/configure_profile_margin_size"
         android:layout_marginStart="@dimen/configure_profile_margin_size"
+        android:padding="@dimen/configure_profile_margin_size"
         app:layout_constraintEnd_toStartOf="@+id/et_configure_profile_last_name"
         app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"

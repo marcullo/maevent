@@ -8,6 +8,10 @@ public class ProfileContent {
     public String title;
     public String pose;
     public String headline;
+    public String phone;
+    public String email;
+    public String linkedin;
+    public String location;
     public boolean hasPhoto;
     public Uri photo;
 
@@ -17,6 +21,10 @@ public class ProfileContent {
         title = "";
         pose = "";
         headline = "";
+        phone = "";
+        email = "";
+        linkedin = "";
+        location = "";
         hasPhoto = false;
         photo = null;
     }
