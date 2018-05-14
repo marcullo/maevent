@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWelcomeBackground"
+    android:background="@color/colorTextIcons"
     tools:context=".WelcomeActivity">
 
     <LinearLayout
@@ -36,8 +36,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/text_welcome"
-            android:textColor="@color/colorWelcomePrimaryDark"
+            android:textColor="@color/colorPrimaryDark"
             android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="italic|bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -47,6 +49,7 @@
             android:id="@+id/btn_welcome_sign_in"
             android:layout_width="@dimen/welcome_sign_in_button_width"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
             android:layout_marginTop="@dimen/default_vertical_margin">
 
         </com.google.android.gms.common.SignInButton>

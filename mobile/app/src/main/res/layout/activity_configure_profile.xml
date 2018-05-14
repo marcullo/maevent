@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/default_vertical_margin"
-    android:paddingLeft="@dimen/default_horizontal_margin"
-    android:paddingRight="@dimen/default_horizontal_margin"
-    android:paddingTop="@dimen/default_vertical_margin"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
     tools:context=".ConfigureProfileActivity">
 
-    <TextView
-        android:text="@string/text_todo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <include
+            android:id="@+id/configure_profile_introduction_label"
+            layout="@layout/configure_profile_item" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_configure_profile_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:tooltipText="@string/text_logout"
-        app:backgroundTint="@color/colorWelcomePrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/googleg_standard_color_18" />
+        <include
+            android:id="@+id/configure_profile_introduction"
+            android:visibility="visible"
+            layout="@layout/configure_profile_introduction" />
 
-</android.support.constraint.ConstraintLayout>
+        <include
+            android:id="@+id/configure_profile_contact_label"
+            layout="@layout/configure_profile_item" />
+
+        <include
+            android:id="@+id/configure_profile_contact"
+            android:visibility="visible"
+            layout="@layout/configure_profile_contact" />
+
+</LinearLayout>
+</ScrollView>

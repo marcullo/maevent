@@ -1,6 +1,29 @@
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="WelcomeTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="ConfigureProfileItemTheme">
+        <item name="android:layout_marginBottom">@dimen/configure_profile_margin_size</item>
+        <item name="android:layout_marginTop">@dimen/configure_profile_margin_size</item>
+        <item name="android:tint">@drawable/item_selector_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ConfigureProfileTItemLabelTheme">
+        <item name="android:layout_marginBottom">@dimen/configure_profile_margin_size</item>
+        <item name="android:layout_marginTop">@dimen/configure_profile_margin_size</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@drawable/item_selector_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 </resources>

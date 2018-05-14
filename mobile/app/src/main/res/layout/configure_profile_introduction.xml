@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditText
+        android:id="@+id/et_configure_profile_first_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/default_horizontal_margin"
+        android:layout_marginTop="@dimen/default_horizontal_margin"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_configure_profile_first_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/configure_profile_margin_size"
+        android:text="@string/configure_profile_first_name_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintEnd_toEndOf="@+id/et_configure_profile_first_name"
+        app:layout_constraintTop_toBottomOf="@+id/et_configure_profile_first_name" />
+
+    <EditText
+        android:id="@+id/et_configure_profile_last_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/default_horizontal_margin"
+        android:layout_marginTop="@dimen/configure_profile_margin_size"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_configure_profile_first_name_label" />
+
+    <TextView
+        android:id="@+id/tv_configure_profile_last_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/configure_profile_margin_size"
+        android:layout_marginTop="@dimen/configure_profile_margin_size"
+        android:text="@string/configure_profile_last_name_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/et_configure_profile_last_name"
+        app:layout_constraintStart_toStartOf="@+id/et_configure_profile_first_name"
+        app:layout_constraintTop_toBottomOf="@+id/et_configure_profile_first_name" />
+
+    <ImageButton
+        android:id="@+id/ibtn_configure_profile_image"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginEnd="@dimen/configure_profile_margin_size"
+        android:layout_marginStart="@dimen/configure_profile_margin_size"
+        app:layout_constraintEnd_toStartOf="@+id/et_configure_profile_last_name"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sp_configure_profile_title"
+        app:srcCompat="@drawable/ic_configure_profile_introduction" />
+
+    <Spinner
+        android:id="@+id/sp_configure_profile_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/ibtn_configure_profile_image"
+        app:layout_constraintTop_toTopOf="@+id/et_configure_profile_first_name" />
+
+    <EditText
+        android:id="@+id/et_configure_profile_pose"
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="16"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_configure_profile_last_name" />
+
+    <TextView
+        android:id="@+id/tv_configure_profile_pose_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/configure_profile_pose_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintEnd_toEndOf="@+id/et_configure_profile_pose"
+        app:layout_constraintTop_toBottomOf="@+id/et_configure_profile_pose" />
+
+    <EditText
+        android:id="@+id/et_configure_profile_headline"
+        android:layout_width="wrap_content"
+        android:layout_height="94dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_configure_profile_pose_label" />
+
+    <TextView
+        android:id="@+id/tv_configure_profile_headline_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/configure_profile_headline_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/et_configure_profile_headline"
+        app:layout_constraintStart_toStartOf="@+id/et_configure_profile_pose" />
+
+</android.support.constraint.ConstraintLayout>

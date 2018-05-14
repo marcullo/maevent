@@ -3,6 +3,8 @@ package com.devmarcul.maevent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -57,9 +60,26 @@ public class WelcomeActivity extends AppCompatActivity
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+                if (hasInternetConnection()) {
+                    signIn();
+                }
+                else {
+                    showNoInternetPrompt();
+                }
             }
         });
+    }
+
+    private boolean hasInternetConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        return info != null && info.isConnectedOrConnecting();
+    }
+
+    private void showNoInternetPrompt() {
+        Toast toast = Toast.makeText(this, "No internet connection!", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override

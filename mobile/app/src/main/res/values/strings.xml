@@ -4,4 +4,20 @@
     <string name="text_welcome">Your major events in one place!</string>
     <string name="text_config_profile">Configure profile</string>
     <string name="text_logout">Log out</string>
+
+    <string name="configure_profile_expand_all">Expand all</string>
+    <string name="configure_profile_collapse_all">Collapse all</string>
+    <string name="configure_profile_introduction_label">Introduction</string>
+    <string name="configure_profile_contact_label">Contact</string>
+    <string name="configure_profile_first_name_label">FIRST NAME</string>
+    <string name="configure_profile_last_name_label">LAST NAME</string>
+    <string name="configure_profile_title_label">TITLE</string>
+    <string name="configure_profile_pose_label">POSE</string>
+    <string name="configure_profile_headline_label">HEADLINE</string>
+    <string-array name="configure_profile_titles">
+        <item>Rank</item>
+        <item>B.Sc.</item>
+        <item>M.Sc.</item>
+        <item>Phd.</item>
+    </string-array>
 </resources>
