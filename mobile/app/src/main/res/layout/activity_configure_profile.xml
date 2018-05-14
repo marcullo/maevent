@@ -13,23 +13,32 @@
     android:paddingTop="0dp"
     tools:context=".ConfigureProfileActivity">
 
-        <include
-            android:id="@+id/configure_profile_introduction_label"
-            layout="@layout/configure_profile_item" />
+    <include
+        android:id="@+id/configure_profile_introduction_label"
+        layout="@layout/configure_profile_item" />
 
-        <include
-            android:id="@+id/configure_profile_introduction"
-            android:visibility="visible"
-            layout="@layout/configure_profile_introduction" />
+    <include
+        android:id="@+id/configure_profile_introduction"
+        android:visibility="visible"
+        layout="@layout/configure_profile_introduction" />
 
-        <include
-            android:id="@+id/configure_profile_contact_label"
-            layout="@layout/configure_profile_item" />
+    <include
+        android:id="@+id/configure_profile_contact_label"
+        layout="@layout/configure_profile_item" />
 
-        <include
-            android:id="@+id/configure_profile_contact"
-            android:visibility="visible"
-            layout="@layout/configure_profile_contact" />
+    <include
+        android:id="@+id/configure_profile_contact"
+        android:visibility="visible"
+        layout="@layout/configure_profile_contact" />
+
+    <include
+        android:id="@+id/configure_profile_tags_label"
+        layout="@layout/configure_profile_item" />
+
+    <include
+        android:id="@+id/configure_profile_tags"
+        android:visibility="visible"
+        layout="@layout/configure_profile_tags" />
 
 </LinearLayout>
 </ScrollView>

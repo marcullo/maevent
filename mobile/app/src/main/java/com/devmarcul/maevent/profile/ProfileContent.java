@@ -2,6 +2,8 @@ package com.devmarcul.maevent.profile;
 
 import android.net.Uri;
 
+import java.util.List;
+
 public class ProfileContent {
     public String firstName;
     public String lastName;
@@ -13,6 +15,7 @@ public class ProfileContent {
     public String linkedin;
     public String location;
     public boolean hasPhoto;
+    public List<String> tags;
     public Uri photo;
 
     ProfileContent() {
@@ -25,6 +28,7 @@ public class ProfileContent {
         email = "";
         linkedin = "";
         location = "";
+        tags = null;
         hasPhoto = false;
         photo = null;
     }

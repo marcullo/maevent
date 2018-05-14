@@ -24,7 +24,14 @@ public class ItemViewHolder {
         arrow = view.findViewById(R.id.iv_configure_profile_item_arrow);
         icon.setImageResource(imageResource);
         label.setText(title);
+
         this.collapsed = collapsed;
+        if (this.collapsed) {
+            collapse();
+        }
+        else {
+            expand();
+        }
     }
 
     public boolean isCollapsed() {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <me.originqiu.library.EditTag
+        android:id="@+id/et_configure_profile_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:input_layout="@layout/configure_profile_input_tag"
+        app:tag_layout="@layout/configure_profile_tag"/>
+
+</android.support.constraint.ConstraintLayout>

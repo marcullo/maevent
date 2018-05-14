@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Profile {
     private static ProfileContent content = new ProfileContent();
@@ -81,6 +83,10 @@ public class Profile {
         return photo;
     }
 
+    public static List<String> getTags() {
+        return content.tags;
+    }
+
     private static void initializeContent() {
         content.firstName = "";
         content.lastName = "";
@@ -90,6 +96,12 @@ public class Profile {
         content.phone = "+48123456789";
         content.linkedin = "maeventTest";
         content.location = "Warsaw";
+
+        content.tags = new ArrayList<>();
+        content.tags.add("Android");
+        content.tags.add("Java");
+        content.tags.add("Python");
+        content.tags.add("SOLID");
     }
 
     private static boolean isNameValid() {

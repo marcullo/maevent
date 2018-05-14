@@ -13,8 +13,8 @@ import android.view.View;
 import com.devmarcul.maevent.configure_profile.ContactViewHolder;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;
+import com.devmarcul.maevent.configure_profile.TagsViewHolder;
 import com.devmarcul.maevent.profile.Profile;
-import com.devmarcul.maevent.utils.tools.Prompt;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -25,6 +25,8 @@ public class ConfigureProfileActivity extends AppCompatActivity {
     private IntroductionViewHolder mIntroductionViewHolder;
     private ItemViewHolder mContactLabel;
     private ContactViewHolder mContactViewHolder;
+    private ItemViewHolder mTagsLabel;
+    private TagsViewHolder mTagsViewHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +39,31 @@ public class ConfigureProfileActivity extends AppCompatActivity {
         final View introductionView = findViewById(R.id.configure_profile_introduction);
         final View contactLabelView = findViewById(R.id.configure_profile_contact_label);
         final View contactView = findViewById(R.id.configure_profile_contact);
+        final View tasPickerLabelView = findViewById(R.id.configure_profile_tags_label);
+        final View tagsPickerView = findViewById(R.id.configure_profile_tags);
+
+        final String introductionLabel = getString(R.string.configure_profile_introduction_label);
+        final String contactLabel = getString(R.string.configure_profile_contact_label);
+        final String tagsPickerLabel = getString(R.string.configure_profile_tags_picker_label);
+
+        final int introductionIconResource = R.drawable.ic_configure_profile_introduction;
+        final int contactIconResource = R.drawable.ic_configure_profile_contact;
+        final int tagsPickerResource = R.drawable.ic_configure_profile_contact;
+
+        mIntroductionLabel = new ItemViewHolder(introductionLabelView, introductionView, introductionLabel, introductionIconResource, false);
+        mContactLabel = new ItemViewHolder(contactLabelView, contactView, contactLabel, contactIconResource, true);
+        mTagsLabel = new ItemViewHolder(tasPickerLabelView, tagsPickerView, tagsPickerLabel, tagsPickerResource, true);
+
+        mIntroductionViewHolder = new IntroductionViewHolder(this, introductionView);
+        mContactViewHolder = new ContactViewHolder(this, contactView);
+        mTagsViewHolder = new TagsViewHolder(this, tagsPickerView);
+
 
         introductionLabelView.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 mIntroductionLabel.toggle();
-             }
+            @Override
+            public void onClick(View v) {
+                mIntroductionLabel.toggle();
+            }
         });
 
         contactLabelView.setOnClickListener(new View.OnClickListener() {
@@ -52,17 +73,12 @@ public class ConfigureProfileActivity extends AppCompatActivity {
             }
         });
 
-        final String introductionLabel = getString(R.string.configure_profile_introduction_label);
-        final String contactLabel = getString(R.string.configure_profile_contact_label);
-
-        final int introductionIconResource = R.drawable.ic_configure_profile_introduction;
-        final int contactIconResource = R.drawable.ic_configure_profile_contact;
-
-        mIntroductionLabel = new ItemViewHolder(introductionLabelView, introductionView, introductionLabel, introductionIconResource, false);
-        mContactLabel = new ItemViewHolder(contactLabelView, contactView, contactLabel, contactIconResource, false);
-
-        mIntroductionViewHolder = new IntroductionViewHolder(this, introductionView);
-        mContactViewHolder = new ContactViewHolder(this, contactView);
+        tasPickerLabelView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTagsLabel.toggle();
+            }
+        });
 
         Log.d(LOG_TAG, "Created.");
     }
@@ -87,13 +103,36 @@ public class ConfigureProfileActivity extends AppCompatActivity {
             collapseAllItems();
             return true;
         }
+        if (id == R.id.action_expand_all) {
+            expandAllItems();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
     private void collapseAllItems() {
-        mIntroductionLabel.collapse();
-        mContactLabel.collapse();
+        if (!mIntroductionLabel.isCollapsed()) {
+            mIntroductionLabel.collapse();
+        }
+        if (!mContactLabel.isCollapsed()) {
+            mContactLabel.collapse();
+        }
+        if (!mTagsLabel.isCollapsed()) {
+            mTagsLabel.collapse();
+        }
+    }
+
+    private void expandAllItems() {
+        if (mIntroductionLabel.isCollapsed()) {
+            mIntroductionLabel.expand();
+        }
+        if (mContactLabel.isCollapsed()) {
+            mContactLabel.expand();
+        }
+        if (mTagsLabel.isCollapsed()) {
+            mTagsLabel.expand();
+        }
     }
 
     private void signOut() {
