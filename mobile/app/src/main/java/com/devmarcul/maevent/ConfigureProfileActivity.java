@@ -16,6 +16,8 @@ import com.devmarcul.maevent.configure_profile.ItemViewHolder;
 import com.devmarcul.maevent.configure_profile.TagsViewHolder;
 import com.devmarcul.maevent.profile.Profile;
 import com.devmarcul.maevent.utils.tools.Prompt;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -34,7 +36,11 @@ public class ConfigureProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configure_profile);
 
-        Profile.updateContent(this);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        Profile.updateContent(account);
+        if (Profile.isValid()) {
+            setMainActivity();
+        }
 
         final View introductionLabelView = findViewById(R.id.configure_profile_introduction_label);
         final View introductionView = findViewById(R.id.configure_profile_introduction);
@@ -119,7 +125,7 @@ public class ConfigureProfileActivity extends AppCompatActivity {
     }
 
     private void saveConfiguration() {
-        //TODO Add saving to storage while launching another activity
+        //TODO Add saving to storage while launcing another activity
         Prompt.displayTodo(this);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -143,6 +149,13 @@ public class ConfigureProfileActivity extends AppCompatActivity {
     private void setWelcomeActivity() {
         Log.d(LOG_TAG, "Setting welcome activity.");
         Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void setMainActivity() {
+        Log.d(LOG_TAG, "Setting main activity.");
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }

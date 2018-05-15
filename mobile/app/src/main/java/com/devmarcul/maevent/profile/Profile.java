@@ -76,6 +76,7 @@ public class Profile {
     }
 
     private static void initializeContent() {
+        content.email = "";
         content.firstName = "";
         content.lastName = "";
         content.title = "Phd.";
@@ -92,18 +93,13 @@ public class Profile {
         content.tags.add("SOLID");
     }
 
-    public static void updateContent(Context context) {
+    public static void updateContent(GoogleSignInAccount account) {
         //TODO Replace dummy initialization with data base query
         initializeContent();
 
-        if (!isValid()) {
-            googleAccount = GoogleSignIn.getLastSignedInAccount(context);
-            if (googleAccount != null) {
-                updateFromGoogleAccount();
-            }
-            else {
-                Prompt.displayShort("Error while retrieving data!", context);
-            }
+        googleAccount = account;
+        if (!isValid() && googleAccount != null) {
+            updateFromGoogleAccount();
         }
 
         content.valid = checkValidity();

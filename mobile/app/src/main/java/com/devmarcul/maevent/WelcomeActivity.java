@@ -22,7 +22,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 
@@ -73,11 +72,8 @@ public class WelcomeActivity extends AppCompatActivity
     private boolean hasInternetConnection() {
         ConnectivityManager cm =
                 (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null) {
-            NetworkInfo info = cm.getActiveNetworkInfo();
-            return info != null && info.isConnectedOrConnecting();
-        }
-        return false;
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        return info != null && info.isConnectedOrConnecting();
     }
 
     private void showNoInternetPrompt() {
@@ -109,7 +105,7 @@ public class WelcomeActivity extends AppCompatActivity
 
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            handleSignInResult();
         }
     }
 
@@ -148,13 +144,8 @@ public class WelcomeActivity extends AppCompatActivity
         startActivityForResult(intent, RC_SIGN_IN);
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            setNextActivity();
-        } catch (ApiException e) {
-            Log.w(LOG_TAG, "sign in result failed. Code=" + e.getStatusCode());
-        }
+    private void handleSignInResult() {
+        setNextActivity();
     }
 
     private void setNextActivity() {
