@@ -18,5 +18,5 @@
         android:id="@+id/action_logout"
         android:icon="@drawable/googleg_standard_color_18"
         android:title="@string/text_logout"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
 </menu>
