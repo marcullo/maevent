@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/main_agenda"
+        android:icon="@drawable/ic_date_range"
+        android:title="@string/main_incoming_events_label" />
+
+    <item
+        android:id="@+id/main_live_event"
+        android:icon="@drawable/ic_flash"
+        android:title="@string/main_live_event_label"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/main_create_event"
+        android:icon="@mipmap/butterfly_tie"
+        android:title="@string/main_create_event_label"
+        app:showAsAction="never"/>
+</menu>

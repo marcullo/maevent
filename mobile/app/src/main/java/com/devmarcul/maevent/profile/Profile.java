@@ -21,21 +21,9 @@ public class Profile {
     private static GoogleSignInAccount googleAccount;
     //TODO Refactor photo storage in order not to load from the internet constantly
     private static Bitmap photo;
-    private static String location;
 
-    public static void updateContent(Context context) {
-        //TODO Replace dummy initialization with data base query
-        initializeContent();
-
-        if (!isNameValid()) {
-            googleAccount = GoogleSignIn.getLastSignedInAccount(context);
-            if (googleAccount != null) {
-                updateFromGoogleAccount();
-            }
-            else {
-                Prompt.displayShort("Error while retrieving data!", context);
-            }
-        }
+    public static boolean isValid() {
+        return content.valid;
     }
 
     public static boolean hasPhoto() {
@@ -104,12 +92,21 @@ public class Profile {
         content.tags.add("SOLID");
     }
 
-    private static boolean isNameValid() {
-        return content.firstName != null
-                && content.lastName != null
-                && content.firstName.length() > 2
-                && content.lastName.length() > 2
-                && !content.firstName.equals(content.lastName);
+    public static void updateContent(Context context) {
+        //TODO Replace dummy initialization with data base query
+        initializeContent();
+
+        if (!isValid()) {
+            googleAccount = GoogleSignIn.getLastSignedInAccount(context);
+            if (googleAccount != null) {
+                updateFromGoogleAccount();
+            }
+            else {
+                Prompt.displayShort("Error while retrieving data!", context);
+            }
+        }
+
+        content.valid = checkValidity();
     }
 
     private static void updateFromGoogleAccount() {
@@ -157,5 +154,13 @@ public class Profile {
         protected void onPostExecute(Bitmap bmp) {
             photo = bmp;
         }
+    }
+
+    public static boolean checkValidity() {
+        return content.firstName != null
+                && content.lastName != null
+                && content.firstName.length() > 1
+                && content.lastName.length() > 1
+                && !content.firstName.equals(content.lastName);
     }
 }

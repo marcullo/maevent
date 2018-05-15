@@ -17,6 +17,7 @@ public class ProfileContent {
     public boolean hasPhoto;
     public List<String> tags;
     public Uri photo;
+    public boolean valid;
 
     ProfileContent() {
         firstName = "";
@@ -31,5 +32,6 @@ public class ProfileContent {
         tags = null;
         hasPhoto = false;
         photo = null;
+        valid = false;
     }
 }

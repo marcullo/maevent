@@ -15,6 +15,7 @@ import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;
 import com.devmarcul.maevent.configure_profile.TagsViewHolder;
 import com.devmarcul.maevent.profile.Profile;
+import com.devmarcul.maevent.utils.tools.Prompt;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -86,7 +87,12 @@ public class ConfigureProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.configure_profile, menu);
+        inflater.inflate(R.menu.menu_configure_profile, menu);
+        //TODO Refactor cancel item
+        if (Profile.isValid()) {
+            MenuItem cancelItem = menu.findItem(R.id.configure_profile_action_cancel);
+            cancelItem.setVisible(true);
+        }
         return true;
     }
 
@@ -94,45 +100,34 @@ public class ConfigureProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.configure_profile_action_save) {
+            saveConfiguration();
+            return true;
+        }
         //TODO Move logout to the proper place
-        if (id == R.id.action_logout) {
+        if (id == R.id.configure_profile_action_logout) {
             signOut();
             return true;
         }
-        if (id == R.id.action_collapse_all) {
-            collapseAllItems();
+        if (id == R.id.configure_profile_action_cancel) {
+            cancelConfiguration();
             return true;
         }
-        if (id == R.id.action_expand_all) {
-            expandAllItems();
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void collapseAllItems() {
-        if (!mIntroductionLabel.isCollapsed()) {
-            mIntroductionLabel.collapse();
-        }
-        if (!mContactLabel.isCollapsed()) {
-            mContactLabel.collapse();
-        }
-        if (!mTagsLabel.isCollapsed()) {
-            mTagsLabel.collapse();
-        }
+    private void saveConfiguration() {
+        //TODO Add saving to storage while launching another activity
+        Prompt.displayTodo(this);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
-    private void expandAllItems() {
-        if (mIntroductionLabel.isCollapsed()) {
-            mIntroductionLabel.expand();
-        }
-        if (mContactLabel.isCollapsed()) {
-            mContactLabel.expand();
-        }
-        if (mTagsLabel.isCollapsed()) {
-            mTagsLabel.expand();
-        }
+    private void cancelConfiguration() {
+        Prompt.displayTodo(this);
     }
 
     private void signOut() {

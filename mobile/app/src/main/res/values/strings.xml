@@ -5,8 +5,8 @@
     <string name="text_config_profile">Configure profile</string>
     <string name="text_logout">Log out</string>
 
-    <string name="configure_profile_expand_all">Expand all</string>
-    <string name="configure_profile_collapse_all">Collapse all</string>
+    <string name="configure_profile_save">SAVE</string>
+    <string name="configure_profile_cancel">Cancel</string>
     <string name="configure_profile_introduction_label">Introduction</string>
     <string name="configure_profile_contact_label">Contact</string>
     <string name="configure_profile_tags_picker_label">Tags</string>
@@ -24,4 +24,9 @@
         <item>M.Sc.</item>
         <item>Phd.</item>
     </string-array>
+
+    <string name="main_incoming_events_label">Agenda</string>
+    <string name="main_live_event_label">Live</string>
+    <string name="main_create_event_label">Maven</string>
+
 </resources>
