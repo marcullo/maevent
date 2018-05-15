@@ -3,6 +3,7 @@ package com.devmarcul.maevent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -10,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.devmarcul.maevent.fragment.AgendaFragment;
+import com.devmarcul.maevent.fragment.LiveEventFragment;
+import com.devmarcul.maevent.helper.BottomNavigationBehavior;
 
 public class MainActivity extends AppCompatActivity {
     private ActionBar mToolbar;
@@ -24,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationBehavior());
 
         loadFragment(new AgendaFragment());
     }
@@ -46,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.main_live_event:
-                    fragment = new AgendaFragment();
+                    fragment = new LiveEventFragment();
                     break;
 
                 case R.id.main_create_event:

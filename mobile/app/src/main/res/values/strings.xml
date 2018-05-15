@@ -27,6 +27,6 @@
 
     <string name="main_incoming_events_label">Agenda</string>
     <string name="main_live_event_label">Live</string>
-    <string name="main_create_event_label">Maven</string>
+    <string name="main_create_event_label">Mavent</string>
 
 </resources>
