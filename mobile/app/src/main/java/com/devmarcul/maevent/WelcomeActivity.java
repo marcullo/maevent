@@ -73,8 +73,11 @@ public class WelcomeActivity extends AppCompatActivity
     private boolean hasInternetConnection() {
         ConnectivityManager cm =
                 (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = cm.getActiveNetworkInfo();
-        return info != null && info.isConnectedOrConnecting();
+        if (cm != null) {
+            NetworkInfo info = cm.getActiveNetworkInfo();
+            return info != null && info.isConnectedOrConnecting();
+        }
+        return false;
     }
 
     private void showNoInternetPrompt() {

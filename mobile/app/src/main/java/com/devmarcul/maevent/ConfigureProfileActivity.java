@@ -39,8 +39,8 @@ public class ConfigureProfileActivity extends AppCompatActivity {
         final View introductionView = findViewById(R.id.configure_profile_introduction);
         final View contactLabelView = findViewById(R.id.configure_profile_contact_label);
         final View contactView = findViewById(R.id.configure_profile_contact);
-        final View tasPickerLabelView = findViewById(R.id.configure_profile_tags_label);
-        final View tagsPickerView = findViewById(R.id.configure_profile_tags);
+        final View tagsLabelView = findViewById(R.id.configure_profile_tags_label);
+        final View tagsView = findViewById(R.id.configure_profile_tags);
 
         final String introductionLabel = getString(R.string.configure_profile_introduction_label);
         final String contactLabel = getString(R.string.configure_profile_contact_label);
@@ -48,15 +48,15 @@ public class ConfigureProfileActivity extends AppCompatActivity {
 
         final int introductionIconResource = R.drawable.ic_configure_profile_introduction;
         final int contactIconResource = R.drawable.ic_configure_profile_contact;
-        final int tagsPickerResource = R.drawable.ic_configure_profile_contact;
+        final int tagsPickerResource = R.mipmap.butterfly_tie;
 
-        mIntroductionLabel = new ItemViewHolder(introductionLabelView, introductionView, introductionLabel, introductionIconResource, false);
+        mIntroductionLabel = new ItemViewHolder(introductionLabelView, introductionView, introductionLabel, introductionIconResource, true);
         mContactLabel = new ItemViewHolder(contactLabelView, contactView, contactLabel, contactIconResource, true);
-        mTagsLabel = new ItemViewHolder(tasPickerLabelView, tagsPickerView, tagsPickerLabel, tagsPickerResource, true);
+        mTagsLabel = new ItemViewHolder(tagsLabelView, tagsView, tagsPickerLabel, tagsPickerResource, true);
 
         mIntroductionViewHolder = new IntroductionViewHolder(this, introductionView);
         mContactViewHolder = new ContactViewHolder(this, contactView);
-        mTagsViewHolder = new TagsViewHolder(this, tagsPickerView);
+        mTagsViewHolder = new TagsViewHolder(this, tagsView);
 
 
         introductionLabelView.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +73,7 @@ public class ConfigureProfileActivity extends AppCompatActivity {
             }
         });
 
-        tasPickerLabelView.setOnClickListener(new View.OnClickListener() {
+        tagsLabelView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mTagsLabel.toggle();

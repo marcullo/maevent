@@ -4,6 +4,9 @@
     <dimen name="default_horizontal_margin">16dp</dimen>
     <dimen name="welcome_sign_in_button_width">200dp</dimen>
 
+    <dimen name="welcome_image_width">300dp</dimen>
+    <dimen name="welcome_image_height">140dp</dimen>
+
     <dimen name="configure_profile_item_height">48dp</dimen>
     <dimen name="configure_profile_margin_size">8dp</dimen>
 

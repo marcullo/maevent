@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/image_welcome"
-            android:layout_width="match_parent"
-            android:layout_height="175dp"
+            android:layout_width="@dimen/welcome_image_width"
+            android:layout_height="@dimen/welcome_image_height"
             android:baselineAlignBottom="false"
             android:src="@mipmap/maevent_logo"
             app:srcCompat="@mipmap/maevent_logo" />
