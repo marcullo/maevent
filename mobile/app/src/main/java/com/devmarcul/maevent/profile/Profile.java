@@ -91,15 +91,19 @@ public class Profile {
         content.tags.add("Java");
         content.tags.add("Python");
         content.tags.add("SOLID");
+
+        content.valid = false;
     }
 
     public static void updateContent(GoogleSignInAccount account) {
-        //TODO Replace dummy initialization with data base query
-        initializeContent();
-
         googleAccount = account;
-        if (!isValid() && googleAccount != null) {
-            updateFromGoogleAccount();
+
+        if (!isValid()) {
+            //TODO Replace dummy initialization with data base query
+            initializeContent();
+            if (googleAccount != null) {
+                updateFromGoogleAccount();
+            }
         }
 
         content.valid = checkValidity();
@@ -114,12 +118,11 @@ public class Profile {
         content.email = googleAccount.getEmail();
 
         //TODO Add selecting image from local memory
-        /*
+
         content.photo = googleAccount.getPhotoUrl();
         if (content.photo != null) {
             content.hasPhoto = true;
         }
-        */
     }
 
     private static class GetPhotoFromUrlTask extends AsyncTask<String, Void, Bitmap> {
@@ -157,6 +160,7 @@ public class Profile {
                 && content.lastName != null
                 && content.firstName.length() > 1
                 && content.lastName.length() > 1
-                && !content.firstName.equals(content.lastName);
+                && !content.firstName.equals(content.lastName)
+                && content.hasPhoto;
     }
 }

@@ -17,6 +17,6 @@ public class LiveEventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.menu_main_live_event, container, false);
+        return inflater.inflate(R.layout.menu_fragment_live_event, container, false);
     }
 }
