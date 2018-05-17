@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.devmarcul.maevent.utils.tools.Prompt;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Profile {
+    private static final String LOG_TAG = "SW/PROFILE";
+
     private static ProfileContent content = new ProfileContent();
     private static GoogleSignInAccount googleAccount;
     //TODO Refactor photo storage in order not to load from the internet constantly
@@ -110,11 +113,8 @@ public class Profile {
     }
 
     private static void updateFromGoogleAccount() {
-        String name = googleAccount.getDisplayName();
-        String[] limbs = name.split(" ");
-
-        content.firstName = limbs[0];
-        content.lastName = limbs[1];
+        content.firstName = googleAccount.getGivenName();
+        content.lastName = googleAccount.getFamilyName();
         content.email = googleAccount.getEmail();
 
         //TODO Add selecting image from local memory
@@ -156,11 +156,8 @@ public class Profile {
     }
 
     public static boolean checkValidity() {
-        return content.firstName != null
-                && content.lastName != null
-                && content.firstName.length() > 1
-                && content.lastName.length() > 1
-                && !content.firstName.equals(content.lastName)
-                && content.hasPhoto;
+        final String debugContent = content.getContentForDebug();
+        Log.d(LOG_TAG, "Profile: " + debugContent);
+        return content.isValid();
     }
 }
