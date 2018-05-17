@@ -37,15 +37,17 @@ public class ProfileContent {
         valid = false;
     }
 
-    public boolean isValid() {
-        return firstName != null
+    public boolean checkValidity() {
+        valid = firstName != null
                 && lastName != null
                 && firstName.length() > 1
                 && lastName.length() > 1
                 && !firstName.equals(lastName)
+                && email != null
+                && email.length() > 5
                 && phone != null
-                && phone.length() > 8
-                && hasPhoto;
+                && phone.length() > 8;
+        return valid;
     }
 
     public String getContentForDebug() {

@@ -14,7 +14,6 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".WelcomeActivity"
-            android:noHistory="true"
             android:theme="@style/WelcomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

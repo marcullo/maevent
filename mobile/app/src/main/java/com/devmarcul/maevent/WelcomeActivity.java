@@ -12,27 +12,25 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.devmarcul.maevent.profile.MaeventAccountManager;
+import com.devmarcul.maevent.static_data.WelcomeActivityStaticData;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.Task;
 
 public class WelcomeActivity extends AppCompatActivity
-        implements GoogleApiClient.OnConnectionFailedListener {
-
-    private static final String LOG_TAG = "SW/WELCOME";
-    private static final int RC_SIGN_IN = 9001;
-    public static GoogleSignInClient mSignInClient;
+        implements  GoogleApiClient.OnConnectionFailedListener,
+                    WelcomeActivityStaticData,
+                    Button.OnClickListener {
 
     private int mScreenOrientation;
+    private boolean mAnimationFinished;
 
     private ImageView mWelcomeImageView;
     private TextView mWelcomeTextView;
@@ -40,34 +38,62 @@ public class WelcomeActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "Hello to Maevent!");
-
         super.onCreate(savedInstanceState);
+        Log.i(LOG_TAG, "Hello to Maevent!");
         setContentView(R.layout.activity_welcome);
 
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(
-          GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+        MaeventAccountManager.setupClient(this);
 
-        mSignInClient = GoogleSignIn.getClient(this, signInOptions);
+        mAnimationFinished = false;
 
         mWelcomeImageView = findViewById(R.id.image_welcome);
         mWelcomeTextView = findViewById(R.id.message_welcome);
         mSignInButton = findViewById(R.id.btn_welcome_sign_in);
 
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (hasInternetConnection()) {
-                    signIn();
-                }
-                else {
-                    showNoInternetPrompt();
-                }
-            }
-        });
+        mSignInButton.setOnClickListener(this);
     }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_welcome_sign_in) {
+            if (hasInternetConnection()) {
+                MaeventAccountManager.signInForResult(this);
+            }
+            else {
+                showNoInternetPrompt();
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
+        if (account != null) {
+            setNextActivity();
+        }
+
+        if (!mAnimationFinished) {
+            startAnimation();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(LOG_TAG, "Failed connection with Maevent account.");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        boolean result = MaeventAccountManager.handleSignInResult(requestCode, resultCode, data);
+        if (result) {
+            setNextActivity();
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------//
 
     private boolean hasInternetConnection() {
         ConnectivityManager cm =
@@ -79,34 +105,6 @@ public class WelcomeActivity extends AppCompatActivity
     private void showNoInternetPrompt() {
         Toast toast = Toast.makeText(this, "No internet connection!", Toast.LENGTH_SHORT);
         toast.show();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
-            setNextActivity();
-        }
-
-        startAnimation();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "Failed connection with Google Auth.");
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(LOG_TAG, "Getting back from Google sign in.");
-
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult();
-        }
     }
 
     private void startAnimation() {
@@ -125,6 +123,7 @@ public class WelcomeActivity extends AppCompatActivity
             @Override
             public void onAnimationEnd(Animation animation) {
                 Log.d(LOG_TAG, "Welcome animation finished.");
+                mAnimationFinished = true;
                 setRequestedOrientation(mScreenOrientation);
             }
 
@@ -138,19 +137,10 @@ public class WelcomeActivity extends AppCompatActivity
         mSignInButton.startAnimation(animation);
     }
 
-    private void signIn() {
-        Log.d(LOG_TAG, "Requesting Google sign in API.");
-        Intent intent = mSignInClient.getSignInIntent();
-        startActivityForResult(intent, RC_SIGN_IN);
-    }
-
-    private void handleSignInResult() {
-        setNextActivity();
-    }
-
     private void setNextActivity() {
         Log.d(LOG_TAG, "Setting next activity.");
         Intent intent = new Intent(this, ConfigureProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

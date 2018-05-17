@@ -14,15 +14,16 @@ import com.devmarcul.maevent.configure_profile.ContactViewHolder;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;
 import com.devmarcul.maevent.configure_profile.TagsViewHolder;
+import com.devmarcul.maevent.profile.MaeventAccountManager;
 import com.devmarcul.maevent.profile.Profile;
+import com.devmarcul.maevent.static_data.ConfigureProfileStaticData;
 import com.devmarcul.maevent.utils.tools.Prompt;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class ConfigureProfileActivity extends AppCompatActivity {
-    private static final String LOG_TAG = "SW/CONFIG_PROFILE";
+public class ConfigureProfileActivity extends AppCompatActivity
+        implements ConfigureProfileStaticData {
 
     private ItemViewHolder mIntroductionLabel;
     private IntroductionViewHolder mIntroductionViewHolder;
@@ -34,13 +35,14 @@ public class ConfigureProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_configure_profile);
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
         Profile.updateContent(account);
         if (Profile.isValid()) {
             setMainActivity();
         }
+
+        setContentView(R.layout.activity_configure_profile);
 
         final View introductionLabelView = findViewById(R.id.configure_profile_introduction_label);
         final View introductionView = findViewById(R.id.configure_profile_introduction);
@@ -112,7 +114,12 @@ public class ConfigureProfileActivity extends AppCompatActivity {
         }
         //TODO Move logout to the proper place
         if (id == R.id.configure_profile_action_logout) {
-            signOut();
+            MaeventAccountManager.signOut(this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    setWelcomeActivity();
+                }
+            });
             return true;
         }
         if (id == R.id.configure_profile_action_cancel) {
@@ -134,16 +141,6 @@ public class ConfigureProfileActivity extends AppCompatActivity {
 
     private void cancelConfiguration() {
         Prompt.displayTodo(this);
-    }
-
-    private void signOut() {
-        WelcomeActivity.mSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        setWelcomeActivity();
-                    }
-                });
     }
 
     private void setWelcomeActivity() {

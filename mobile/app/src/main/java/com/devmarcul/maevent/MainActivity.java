@@ -17,13 +17,15 @@ import android.widget.ImageView;
 import com.devmarcul.maevent.fragment.AgendaFragment;
 import com.devmarcul.maevent.fragment.LiveEventFragment;
 import com.devmarcul.maevent.helper.BottomNavigationBehavior;
+import com.devmarcul.maevent.profile.MaeventAccountManager;
 import com.devmarcul.maevent.profile.Profile;
+import com.devmarcul.maevent.static_data.MainActivityStaticData;
 import com.devmarcul.maevent.utils.tools.Prompt;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String LOG_TAG = "SW/MAIN";
+public class MainActivity extends AppCompatActivity
+        implements MainActivityStaticData {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,12 @@ public class MainActivity extends AppCompatActivity {
         }
         //TODO Move logout to the proper place
         if (id == R.id.main_action_logout) {
-            signOut();
+            MaeventAccountManager.signOut(this, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    setWelcomeActivity();
+                }
+            });
             return true;
         }
 
@@ -100,16 +107,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
-
-    private void signOut() {
-        WelcomeActivity.mSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        setWelcomeActivity();
-                    }
-                });
-    }
 
     private void setWelcomeActivity() {
         Log.d(LOG_TAG, "Setting welcome activity.");

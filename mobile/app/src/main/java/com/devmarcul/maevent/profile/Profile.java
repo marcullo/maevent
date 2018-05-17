@@ -1,13 +1,11 @@
 package com.devmarcul.maevent.profile;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.devmarcul.maevent.utils.tools.Prompt;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.io.IOException;
@@ -80,8 +78,8 @@ public class Profile {
 
     private static void initializeContent() {
         content.email = "";
-        content.firstName = "";
-        content.lastName = "";
+        content.firstName = "Mr.";
+        content.lastName = "Nobody";
         content.title = "Phd.";
         content.pose = "Embedded Software Architect";
         content.headline = "Looking for 2 well-experienced dev-ops for collaboration.";
@@ -99,29 +97,44 @@ public class Profile {
     }
 
     public static void updateContent(GoogleSignInAccount account) {
-        googleAccount = account;
 
-        if (!isValid()) {
-            //TODO Replace dummy initialization with data base query
-            initializeContent();
-            if (googleAccount != null) {
-                updateFromGoogleAccount();
-            }
+        //TODO Replace dummy initialization with data base query
+        initializeContent();
+        content.checkValidity();
+
+        googleAccount = account;
+        if (!content.valid && googleAccount != null) {
+            updateFromGoogleAccount();
+            content.checkValidity();
         }
 
-        content.valid = checkValidity();
+        final String debugContent = content.getContentForDebug();
+        Log.d(LOG_TAG, "Profile: " + debugContent);
     }
 
     private static void updateFromGoogleAccount() {
-        content.firstName = googleAccount.getGivenName();
-        content.lastName = googleAccount.getFamilyName();
-        content.email = googleAccount.getEmail();
-
+        String givenName = googleAccount.getGivenName();
+        String familyName = googleAccount.getFamilyName();
+        String email = googleAccount.getEmail();
         //TODO Add selecting image from local memory
+        Uri photo = googleAccount.getPhotoUrl();
 
-        content.photo = googleAccount.getPhotoUrl();
-        if (content.photo != null) {
+        if (!givenName.equals("null")) {
+            content.firstName = givenName;
+        }
+        if (!familyName.equals("null")) {
+            content.lastName = familyName;
+        }
+        if (!email.equals("null")) {
+            content.email = email;
+        }
+
+        if (photo != null) {
+            content.photo = photo;
             content.hasPhoto = true;
+        }
+        else {
+            content.hasPhoto = false;
         }
     }
 
@@ -153,11 +166,5 @@ public class Profile {
         protected void onPostExecute(Bitmap bmp) {
             photo = bmp;
         }
-    }
-
-    public static boolean checkValidity() {
-        final String debugContent = content.getContentForDebug();
-        Log.d(LOG_TAG, "Profile: " + debugContent);
-        return content.isValid();
     }
 }
