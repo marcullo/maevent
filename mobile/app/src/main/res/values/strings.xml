@@ -6,12 +6,16 @@
     <string name="text_profile">Profile</string>
     <string name="text_logout">Log out</string>
     <string name="text_support">Support</string>
+    <string name="text_yes">Yes</string>
+    <string name="text_no">No</string>
 
     <string name="configure_profile_save">SAVE</string>
     <string name="configure_profile_cancel">Cancel</string>
     <string name="configure_profile_introduction_label">Introduction</string>
     <string name="configure_profile_contact_label">Contact</string>
     <string name="configure_profile_tags_picker_label">Tags</string>
+    <string name="configure_profile_cancel_dialog_title">Discard changes</string>
+    <string name="configure_profile_cancel_dialog_subtitle">Are you sure?</string>
 
     <string name="configure_profile_first_name_label">FIRST NAME</string>
     <string name="configure_profile_last_name_label">LAST NAME</string>

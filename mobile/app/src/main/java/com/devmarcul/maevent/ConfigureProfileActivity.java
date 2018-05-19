@@ -1,8 +1,10 @@
 package com.devmarcul.maevent;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +16,8 @@ import com.devmarcul.maevent.configure_profile.ContactViewHolder;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;
 import com.devmarcul.maevent.configure_profile.TagsViewHolder;
+import com.devmarcul.maevent.dialog.TwoButtonsDialog;
+import com.devmarcul.maevent.dialog.TwoButtonsDialogListener;
 import com.devmarcul.maevent.profile.MaeventAccountManager;
 import com.devmarcul.maevent.profile.Profile;
 import com.devmarcul.maevent.static_data.ConfigureProfileStaticData;
@@ -32,6 +36,8 @@ public class ConfigureProfileActivity extends AppCompatActivity
     private ContactViewHolder mContactViewHolder;
     private ItemViewHolder mTagsLabel;
     private TagsViewHolder mTagsViewHolder;
+
+    private TwoButtonsDialog mCancelDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +83,6 @@ public class ConfigureProfileActivity extends AppCompatActivity
         mContactViewHolder = new ContactViewHolder(this, contactView);
         mTagsViewHolder = new TagsViewHolder(this, tagsView);
 
-
         introductionLabelView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +103,24 @@ public class ConfigureProfileActivity extends AppCompatActivity
                 mTagsLabel.toggle();
             }
         });
+
+        mCancelDialog = new TwoButtonsDialog.Builder(this)
+            .setTitle(getString(R.string.configure_profile_cancel_dialog_title))
+            .setSubtitle(getString(R.string.configure_profile_cancel_dialog_subtitle))
+            .setConfirmButtonColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .setCancelButtonColor(ContextCompat.getColor(this, R.color.colorAccent))
+            .setConfirmButton(getString(R.string.text_yes), new TwoButtonsDialogListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    setMainActivity();
+                }
+            })
+            .setCancelButton(getString(R.string.text_no), new TwoButtonsDialogListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            })
+            .build();
 
         Log.d(LOG_TAG, "Created.");
     }
@@ -134,7 +157,7 @@ public class ConfigureProfileActivity extends AppCompatActivity
             return true;
         }
         if (id == R.id.configure_profile_action_cancel) {
-            setMainActivity();
+            displayCancelDialog();
             return true;
         }
 
@@ -160,5 +183,9 @@ public class ConfigureProfileActivity extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void displayCancelDialog() {
+        mCancelDialog.show();
     }
 }
