@@ -96,6 +96,12 @@ public class Profile {
         content.valid = false;
     }
 
+    private static void initializeIncompleteContent() {
+        content.email = "";
+        content.firstName = "Incomplete";
+        content.valid = false;
+    }
+
     public static void updateContent(GoogleSignInAccount account) {
 
         //TODO Replace dummy initialization with data base query

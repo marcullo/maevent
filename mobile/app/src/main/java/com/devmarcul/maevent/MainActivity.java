@@ -121,6 +121,5 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, ConfigureProfileActivity.class);
         intent.putExtra(KEY_CONFIG_PROFILE_REQUESTED, true);
         startActivity(intent);
-        finish();
     }
 }
