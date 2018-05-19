@@ -17,6 +17,7 @@ import com.devmarcul.maevent.configure_profile.TagsViewHolder;
 import com.devmarcul.maevent.profile.MaeventAccountManager;
 import com.devmarcul.maevent.profile.Profile;
 import com.devmarcul.maevent.static_data.ConfigureProfileStaticData;
+import com.devmarcul.maevent.static_data.MainActivityStaticData;
 import com.devmarcul.maevent.utils.tools.Prompt;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,9 +37,18 @@ public class ConfigureProfileActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        boolean configProfileRequested = false;
+        Intent starter = getIntent();
+        if (starter != null) {
+            final String configProfileRequestedKey = MainActivityStaticData.KEY_CONFIG_PROFILE_REQUESTED;
+            if (starter.hasExtra(configProfileRequestedKey)) {
+                configProfileRequested = starter.getBooleanExtra(configProfileRequestedKey, false);
+            }
+        }
+
         GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
         Profile.updateContent(account);
-        if (Profile.isValid()) {
+        if (Profile.isValid() && !configProfileRequested) {
             setMainActivity();
         }
 
@@ -110,6 +120,7 @@ public class ConfigureProfileActivity extends AppCompatActivity
 
         if (id == R.id.configure_profile_action_save) {
             saveConfiguration();
+            setMainActivity();
             return true;
         }
         //TODO Move logout to the proper place
@@ -123,24 +134,18 @@ public class ConfigureProfileActivity extends AppCompatActivity
             return true;
         }
         if (id == R.id.configure_profile_action_cancel) {
-            cancelConfiguration();
+            setMainActivity();
             return true;
         }
-
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveConfiguration() {
-        //TODO Add saving to storage while launcing another activity
-        Prompt.displayTodo(this);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
+    //--------------------------------------------------------------------------------------------//
 
-    private void cancelConfiguration() {
-        Prompt.displayTodo(this);
+    private void saveConfiguration() {
+        //TODO Add saving to storage while launching another activity
+        Prompt.displayShort("TODO Add saving to storage", this);
     }
 
     private void setWelcomeActivity() {

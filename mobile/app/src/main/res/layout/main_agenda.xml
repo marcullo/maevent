@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.devmarcul.maevent.fragment.AgendaFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/main_incoming_events_label"
+            layout="@layout/main_agenda_incoming_events_label" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_agenda_margin_size" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_incoming_events"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv_incoming_events_prompt"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_agenda_margin_size" />
+
+        <include
+            android:id="@+id/main_invitations_label"
+            layout="@layout/main_agenda_invitations_label" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_agenda_margin_size" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_invitations"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv_invitations_prompt"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_agenda_margin_size" />
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

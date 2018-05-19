@@ -1,6 +1,7 @@
 package com.devmarcul.maevent;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -52,6 +53,10 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.main_action_configure_profile) {
+            setConfigureProfileActivity();
+            return true;
+        }
         if (id == R.id.main_action_support) {
             Prompt.displayTodo(this);
             return true;
@@ -100,10 +105,6 @@ public class MainActivity extends AppCompatActivity
             }
 
             loadFragment(fragment);
-            if (Profile.hasPhoto()) {
-                ImageView iv = findViewById(R.id.imageView);
-                iv.setImageBitmap(Profile.getPhoto());
-            }
             return true;
         }
     };
@@ -111,6 +112,14 @@ public class MainActivity extends AppCompatActivity
     private void setWelcomeActivity() {
         Log.d(LOG_TAG, "Setting welcome activity.");
         Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void setConfigureProfileActivity() {
+        Log.d(LOG_TAG, "Setting configure profile activity.");
+        Intent intent = new Intent(this, ConfigureProfileActivity.class);
+        intent.putExtra(KEY_CONFIG_PROFILE_REQUESTED, true);
         startActivity(intent);
         finish();
     }

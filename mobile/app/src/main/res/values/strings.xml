@@ -3,6 +3,7 @@
     <string name="app_name">Maevent</string>
     <string name="text_welcome">Your major events in one place!</string>
     <string name="text_config_profile">Configure profile</string>
+    <string name="text_profile">Profile</string>
     <string name="text_logout">Log out</string>
     <string name="text_support">Support</string>
 
@@ -26,8 +27,12 @@
         <item>Phd.</item>
     </string-array>
 
-    <string name="main_incoming_events_label">Agenda</string>
+    <string name="main_agenda_label">Agenda</string>
     <string name="main_live_event_label">Live</string>
     <string name="main_create_event_label">Mavent</string>
+    <string name="main_incoming_events_label">Incoming events</string>
+    <string name="main_invitations_label">Invitations</string>
+    <string name="main_incoming_events_prompt">The list is empty. Uff!</string>
+    <string name="main_invitations_prompt">No pending invitations.</string>
 
 </resources>
