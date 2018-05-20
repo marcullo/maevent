@@ -1,31 +1,21 @@
 package com.devmarcul.maevent.agenda;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.DrawableContainer;
-import android.media.Image;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.event.Maevent;
 import com.devmarcul.maevent.event.Maevents;
-import com.devmarcul.maevent.utils.tools.Prompt;
 
 public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdapter.IncomingEventAdapterViewHolder> {
+
     //TODO Replace with Content Provider / etc.
     private Maevents mIncomingEvents;
     private final IncomingEventAdapterOnClickHandler mClickHandler;
@@ -70,12 +60,14 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
         notifyDataSetChanged();
     }
 
-    public void updateIncomingEventsData(Maevents incomingEventsData, int pos, Maevent event) {
+    public Maevents updateIncomingEventsData(int pos, Maevent event) {
         mIncomingEvents.set(pos, event);
         notifyDataSetChanged();
+        return mIncomingEvents;
     }
 
     public class IncomingEventAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         final View view;
         final ImageButton rsvpView;
         final ImageButton locationView;
@@ -93,8 +85,8 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
             eventNameView = view.findViewById(R.id.tv_main_incoming_event_name);
             eventPlaceView = view.findViewById(R.id.tv_main_incoming_event_place);
             eventTimeView = view.findViewById(R.id.tv_main_incoming_event_time);
-            view.setOnClickListener(this);
 
+            view.setOnClickListener(this);
             rsvpView.setOnClickListener(this);
             callView.setOnClickListener(this);
             locationView.setOnClickListener(this);
@@ -107,7 +99,7 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
 
             if (v == rsvpView) {
                 Maevent event = mClickHandler.onClickRsvp(incomingEventData);
-                updateIncomingEventsData(mIncomingEvents, adapterPosition, event);
+                mIncomingEvents = updateIncomingEventsData(adapterPosition, event);
             }
             if (v == callView) {
                 mClickHandler.onClickCall(incomingEventData);

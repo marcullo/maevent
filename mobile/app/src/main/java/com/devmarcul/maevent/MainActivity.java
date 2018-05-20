@@ -1,25 +1,26 @@
 package com.devmarcul.maevent;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.view.View;
 
 import com.devmarcul.maevent.fragment.AgendaFragment;
 import com.devmarcul.maevent.fragment.LiveEventFragment;
 import com.devmarcul.maevent.helper.BottomNavigationBehavior;
+import com.devmarcul.maevent.interfaces.ViewScroller;
 import com.devmarcul.maevent.profile.MaeventAccountManager;
-import com.devmarcul.maevent.profile.Profile;
 import com.devmarcul.maevent.static_data.MainActivityStaticData;
 import com.devmarcul.maevent.utils.tools.Prompt;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,10 +29,15 @@ import com.google.android.gms.tasks.Task;
 public class MainActivity extends AppCompatActivity
         implements MainActivityStaticData {
 
+    int lastLoadedFragmentId;
+    Fragment lastLoadedFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        lastLoadedFragmentId = 0;
 
         BottomNavigationView navigation = findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -39,7 +45,15 @@ public class MainActivity extends AppCompatActivity
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
 
-        loadFragment(new AgendaFragment());
+        //TODO Load agenda if there is no live event
+        lastLoadedFragment = new LiveEventFragment();
+        lastLoadedFragmentId = 1;
+        loadFragment(lastLoadedFragment);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -75,6 +89,20 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //TODO Add proper back button behavior
+    }
+
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame_container, fragment);
@@ -86,8 +114,18 @@ public class MainActivity extends AppCompatActivity
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            int newFragmentId = item.getItemId();
+            if (newFragmentId == lastLoadedFragmentId) {
+                NestedScrollView scrollView = ((ViewScroller)lastLoadedFragment).getScrollView();
+                if (scrollView != null) {
+                    animateScroll(scrollView);
+                }
+                return true;
+            }
+
             Fragment fragment;
-            switch (item.getItemId()) {
+            switch (newFragmentId) {
                 case R.id.main_agenda:
                     fragment = new AgendaFragment();
                     break;
@@ -105,9 +143,16 @@ public class MainActivity extends AppCompatActivity
             }
 
             loadFragment(fragment);
+            lastLoadedFragmentId = newFragmentId;
+            lastLoadedFragment = fragment;
             return true;
         }
     };
+
+    private void animateScroll(NestedScrollView scrollView) {
+        scrollView.fullScroll(View.FOCUS_DOWN);
+        scrollView.fullScroll(View.FOCUS_UP);
+    }
 
     private void setWelcomeActivity() {
         Log.d(LOG_TAG, "Setting welcome activity.");

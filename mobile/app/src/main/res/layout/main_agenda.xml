@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/sv_main_agenda"
     tools:context="com.devmarcul.maevent.fragment.AgendaFragment">
 
     <LinearLayout
@@ -17,6 +18,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_incoming_events"
             android:visibility="visible"
+            android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -36,6 +38,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_invitations"
             android:visibility="gone"
+            android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

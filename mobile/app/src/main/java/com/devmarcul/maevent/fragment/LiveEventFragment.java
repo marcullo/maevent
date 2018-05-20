@@ -2,13 +2,18 @@ package com.devmarcul.maevent.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.interfaces.ViewScroller;
 
-public class LiveEventFragment extends Fragment {
+public class LiveEventFragment extends Fragment implements ViewScroller {
+
+    private View view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +22,13 @@ public class LiveEventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_agenda_live_event, container, false);
+        view = inflater.inflate(R.layout.main_live_event, container, false);
+        return view;
+    }
+
+    @Override
+    public NestedScrollView getScrollView() {
+        NestedScrollView view = this.view.findViewById(R.id.sv_main_live_event);
+        return view;
     }
 }
