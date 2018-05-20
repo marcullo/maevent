@@ -64,7 +64,7 @@ public class Maevent implements MaeventStaticData {
         content.checkValidity();
 
         final String debugContent = content.getContentForDebug();
-        Log.d(LOG_TAG, "Profile: " + debugContent);
+        Log.d(LOG_TAG, "Event: " + debugContent);
     }
 
     private void initializeContent() {

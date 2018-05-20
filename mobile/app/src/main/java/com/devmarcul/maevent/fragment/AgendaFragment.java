@@ -97,7 +97,7 @@ public class AgendaFragment extends Fragment implements
     @Override
     public Maevent onClickRsvp(Maevent eventData) {
         Maevent data = eventData;
-        Prompt.displayShort("TODO Add check RSVP", parent);
+        Prompt.displayShort("TODO Presence confirmed", parent);
         data.confirm(true);
         return data;
     }

@@ -101,7 +101,7 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
                 Maevent event = mClickHandler.onClickRsvp(incomingEventData);
                 mIncomingEvents = updateIncomingEventsData(adapterPosition, event);
             }
-            if (v == callView) {
+            else if (v == callView) {
                 mClickHandler.onClickCall(incomingEventData);
             }
             else if (v == locationView) {

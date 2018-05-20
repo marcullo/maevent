@@ -39,16 +39,14 @@ public class MainActivity extends AppCompatActivity
 
         lastLoadedFragmentId = 0;
 
-        BottomNavigationView navigation = findViewById(R.id.main_navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        BottomNavigationView bottomNavigation = findViewById(R.id.main_navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomNavigation.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
 
         //TODO Load agenda if there is no live event
-        lastLoadedFragment = new LiveEventFragment();
-        lastLoadedFragmentId = 1;
-        loadFragment(lastLoadedFragment);
+        bottomNavigation.setSelectedItemId(R.id.main_live_event);
     }
 
     @Override
