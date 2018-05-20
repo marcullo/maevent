@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/tv_invitations_label"
-        style="@style/ConfigureProfileTItemLabelTheme"
+        style="@style/ConfigureProfileItemLabelTheme"
         android:text="@string/main_invitations_label"
         android:layout_marginStart="@dimen/main_agenda_margin_size"
         app:layout_constraintBottom_toBottomOf="@+id/iv_invitations_icon"
@@ -38,7 +38,7 @@
 
     <TextView
         android:id="@+id/tv_invitations_number"
-        style="@style/ConfigureProfileTItemLabelTheme"
+        style="@style/ConfigureProfileItemLabelTheme"
         android:visibility="invisible"
         android:layout_marginStart="@dimen/main_agenda_margin_size"
         app:layout_constraintTop_toTopOf="@+id/iv_invitations_icon"

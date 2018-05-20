@@ -20,9 +20,8 @@
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:itemBackground="@color/colorPrimary"
-        android:foreground="?attr/selectableItemBackground"
-        app:itemIconTint="@color/colorAccent"
-        app:itemTextColor="@color/colorAccent"
+        app:itemIconTint="@drawable/tab_selector"
+        app:itemTextColor="@drawable/tab_selector"
         app:menu="@menu/menu_main_navigation" />
 
 </android.support.design.widget.CoordinatorLayout>

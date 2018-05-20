@@ -17,7 +17,7 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="ConfigureProfileTItemLabelTheme">
+    <style name="ConfigureProfileItemLabelTheme">
         <item name="android:layout_marginBottom">@dimen/configure_profile_margin_size</item>
         <item name="android:layout_marginTop">@dimen/configure_profile_margin_size</item>
         <item name="android:textSize">20sp</item>

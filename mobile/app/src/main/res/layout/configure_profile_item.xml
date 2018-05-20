@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/tv_configure_profile_item_label"
-        style="@style/ConfigureProfileTItemLabelTheme"
+        style="@style/ConfigureProfileItemLabelTheme"
         android:layout_marginStart="@dimen/configure_profile_margin_size"
         app:layout_constraintBottom_toBottomOf="@+id/iv_configure_profile_item_icon"
         app:layout_constraintStart_toEndOf="@+id/iv_configure_profile_item_icon"
