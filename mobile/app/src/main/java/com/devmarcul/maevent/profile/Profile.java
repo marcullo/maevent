@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.devmarcul.maevent.static_data.ProfileStaticData;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.io.IOException;
@@ -15,9 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Profile {
-    private static final String LOG_TAG = "SW/PROFILE";
-
+public class Profile implements ProfileStaticData {
     private static ProfileContent content = new ProfileContent();
     private static GoogleSignInAccount googleAccount;
     //TODO Refactor photo storage in order not to load from the internet constantly
