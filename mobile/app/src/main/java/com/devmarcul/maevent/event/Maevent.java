@@ -5,6 +5,7 @@ import android.util.Log;
 import com.devmarcul.maevent.static_data.MaeventStaticData;
 
 public class Maevent implements MaeventStaticData {
+
     private MaeventContent content = new MaeventContent();
 
     public boolean isValid() {
@@ -71,8 +72,8 @@ public class Maevent implements MaeventStaticData {
         content.name = "Presidential Banquet";
         content.place = "Warsaw Belveder";
         content.address = "ul. Belwederska 54/56, 00-001 Warszawa";
-        content.startTime = "17:00, 20.05.2018";
-        content.stopTime = "23:00, 20.05.2018";
+        content.startTime = "17:00, 20.05.18";
+        content.stopTime = "23:00, 20.05.18";
         content.rsvp = true;
         content.valid = false;
     }

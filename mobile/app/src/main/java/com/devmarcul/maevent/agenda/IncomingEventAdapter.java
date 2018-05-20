@@ -14,10 +14,12 @@ import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.event.Maevent;
 import com.devmarcul.maevent.event.Maevents;
 
-public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdapter.IncomingEventAdapterViewHolder> {
+public class IncomingEventAdapter
+        extends RecyclerView.Adapter<IncomingEventAdapter.IncomingEventAdapterViewHolder> {
 
     //TODO Replace with Content Provider / etc.
     private Maevents mIncomingEvents;
+
     private final IncomingEventAdapterOnClickHandler mClickHandler;
 
     public interface IncomingEventAdapterOnClickHandler {
@@ -66,7 +68,9 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
         return mIncomingEvents;
     }
 
-    public class IncomingEventAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class IncomingEventAdapterViewHolder
+            extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         final View view;
         final ImageButton rsvpView;
@@ -95,20 +99,20 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            Maevent incomingEventData = mIncomingEvents.get(adapterPosition);
+            Maevent event = mIncomingEvents.get(adapterPosition);
 
             if (v == rsvpView) {
-                Maevent event = mClickHandler.onClickRsvp(incomingEventData);
+                event = mClickHandler.onClickRsvp(event);
                 mIncomingEvents = updateIncomingEventsData(adapterPosition, event);
             }
             else if (v == callView) {
-                mClickHandler.onClickCall(incomingEventData);
+                mClickHandler.onClickCall(event);
             }
             else if (v == locationView) {
-                mClickHandler.onClickLocation(incomingEventData);
+                mClickHandler.onClickLocation(event);
             }
             else {
-                mClickHandler.onClick(incomingEventData);
+                mClickHandler.onClick(event);
             }
         }
     }

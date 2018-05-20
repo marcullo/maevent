@@ -41,10 +41,10 @@
         style="@style/ConfigureProfileItemLabelTheme"
         android:visibility="invisible"
         android:layout_marginStart="@dimen/main_agenda_margin_size"
+        android:layout_marginEnd="@dimen/main_agenda_margin_size"
         app:layout_constraintTop_toTopOf="@+id/iv_invitations_icon"
         app:layout_constraintBottom_toBottomOf="@+id/iv_invitations_icon"
-        app:layout_constraintStart_toStartOf="@id/pb_invitations_number_loading_indicator"
-        app:layout_constraintEnd_toEndOf="@id/pb_invitations_number_loading_indicator"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:text="25" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@drawable/touch_selector"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/_main_invitation_arrow_left"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:srcCompat="@drawable/ic_arrow_left"
+        app:layout_constraintBottom_toTopOf="@+id/main_incoming_event_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline" />
+
+    <TextView
+        android:id="@+id/tv_main_invitation_event_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        app:layout_constraintBottom_toTopOf="@+id/main_incoming_event_guideline"
+        app:layout_constraintStart_toEndOf="@+id/_main_invitation_arrow_left"
+        tools:text="Presidential Banquet" />
+
+    <TextView
+        android:id="@+id/tv_main_invitation_event_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/colorSecondaryText"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_main_invitation_event_name"
+        app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline"
+        tools:text="Warsaw Belvedere"/>
+
+    <TextView
+        android:id="@+id/tv_main_invitation_host"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/main_agenda_margin_size"
+        android:paddingEnd="@dimen/main_agenda_margin_size"
+        android:fontFamily="sans-serif-light"
+        android:gravity="right"
+        android:textColor="@color/colorSecondaryText"
+        app:layout_constraintRight_toLeftOf="@+id/tv_main_invitation_event_time"
+        app:layout_constraintBottom_toBottomOf="@+id/main_incoming_event_guideline"
+        app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline"
+        android:textAllCaps="true"
+        tools:text="Andrew Block"/>
+
+    <TextView
+        android:id="@+id/tv_main_invitation_event_time"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/main_agenda_margin_size"
+        android:paddingEnd="@dimen/main_agenda_margin_size"
+        android:fontFamily="sans-serif-light"
+        android:gravity="right"
+        app:layout_constraintRight_toLeftOf="@+id/_main_invitation_arrow_right"
+        app:layout_constraintBottom_toBottomOf="@+id/main_incoming_event_guideline"
+        app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline"
+        android:textAllCaps="true"
+        tools:text="In 2 hours"/>
+
+    <ImageView
+        android:id="@+id/_main_invitation_arrow_right"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:srcCompat="@drawable/ic_arrow_right"
+        app:layout_constraintBottom_toTopOf="@+id/main_incoming_event_guideline"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/main_incoming_event_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="383dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.5" />
+</android.support.constraint.ConstraintLayout>
