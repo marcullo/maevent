@@ -1,9 +1,16 @@
 package com.devmarcul.maevent.agenda;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
 import android.media.Image;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +32,7 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
 
     public interface IncomingEventAdapterOnClickHandler {
         void onClick(Maevent eventData);
+        Maevent onClickRsvp(Maevent eventData);
         void onClickCall(Maevent eventData);
         void onClickLocation(Maevent eventData);
     }
@@ -62,6 +70,11 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
         notifyDataSetChanged();
     }
 
+    public void updateIncomingEventsData(Maevents incomingEventsData, int pos, Maevent event) {
+        mIncomingEvents.set(pos, event);
+        notifyDataSetChanged();
+    }
+
     public class IncomingEventAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final View view;
         final ImageButton rsvpView;
@@ -82,6 +95,7 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
             eventTimeView = view.findViewById(R.id.tv_main_incoming_event_time);
             view.setOnClickListener(this);
 
+            rsvpView.setOnClickListener(this);
             callView.setOnClickListener(this);
             locationView.setOnClickListener(this);
         }
@@ -91,6 +105,10 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
             int adapterPosition = getAdapterPosition();
             Maevent incomingEventData = mIncomingEvents.get(adapterPosition);
 
+            if (v == rsvpView) {
+                Maevent event = mClickHandler.onClickRsvp(incomingEventData);
+                updateIncomingEventsData(mIncomingEvents, adapterPosition, event);
+            }
             if (v == callView) {
                 mClickHandler.onClickCall(incomingEventData);
             }
@@ -130,5 +148,4 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
         //TODO Get event time
         return "IN 2 HOURS";
     }
-
 }

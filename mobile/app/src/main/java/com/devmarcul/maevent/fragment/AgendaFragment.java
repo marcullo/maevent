@@ -61,9 +61,15 @@ public class AgendaFragment extends Fragment implements
 
     @Override
     public void onClick(Maevent event) {
-        mIncomingEventsData.get(0).confirm(true);
-        mIncomingEventAdapter.setIncomingEventsData(mIncomingEventsData);
         Prompt.displayTodo(parent);
+    }
+
+    @Override
+    public Maevent onClickRsvp(Maevent eventData) {
+        Maevent data = eventData;
+        Prompt.displayShort("TODO Add check RSVP", parent);
+        data.confirm(true);
+        return data;
     }
 
     @Override
