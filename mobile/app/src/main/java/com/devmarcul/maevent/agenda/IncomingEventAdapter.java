@@ -2,6 +2,7 @@ package com.devmarcul.maevent.agenda;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.event.Maevent;
 import com.devmarcul.maevent.event.Maevents;
+import com.devmarcul.maevent.utils.tools.Prompt;
 
 public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdapter.IncomingEventAdapterViewHolder> {
     //TODO Replace with Content Provider / etc.
@@ -23,6 +25,8 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
 
     public interface IncomingEventAdapterOnClickHandler {
         void onClick(Maevent eventData);
+        void onClickCall(Maevent eventData);
+        void onClickLocation(Maevent eventData);
     }
 
     public IncomingEventAdapter(IncomingEventAdapterOnClickHandler clickHandler) {
@@ -59,27 +63,43 @@ public class IncomingEventAdapter extends RecyclerView.Adapter<IncomingEventAdap
     }
 
     public class IncomingEventAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final View view;
         final ImageButton rsvpView;
         final ImageButton locationView;
+        final ImageButton callView;
         final TextView eventNameView;
         final TextView eventPlaceView;
         final TextView eventTimeView;
 
         IncomingEventAdapterViewHolder(View itemView) {
             super(itemView);
-            rsvpView = itemView.findViewById(R.id.btn_main_incoming_event_rsvp);
-            locationView = itemView.findViewById(R.id.btn_main_incoming_event_location);
-            eventNameView = itemView.findViewById(R.id.tv_main_incoming_event_name);
-            eventPlaceView = itemView.findViewById(R.id.tv_main_incoming_event_place);
-            eventTimeView = itemView.findViewById(R.id.tv_main_incoming_event_time);
-            itemView.setOnClickListener(this);
+            view = itemView;
+            rsvpView = view.findViewById(R.id.btn_main_incoming_event_rsvp);
+            callView = view.findViewById(R.id.btn_main_incoming_event_call);
+            locationView = view.findViewById(R.id.btn_main_incoming_event_location);
+            eventNameView = view.findViewById(R.id.tv_main_incoming_event_name);
+            eventPlaceView = view.findViewById(R.id.tv_main_incoming_event_place);
+            eventTimeView = view.findViewById(R.id.tv_main_incoming_event_time);
+            view.setOnClickListener(this);
+
+            callView.setOnClickListener(this);
+            locationView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Maevent incomingEventData = mIncomingEvents.get(adapterPosition);
-            mClickHandler.onClick(incomingEventData);
+
+            if (v == callView) {
+                mClickHandler.onClickCall(incomingEventData);
+            }
+            else if (v == locationView) {
+                mClickHandler.onClickLocation(incomingEventData);
+            }
+            else {
+                mClickHandler.onClick(incomingEventData);
+            }
         }
     }
 

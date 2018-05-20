@@ -22,7 +22,6 @@ public class AgendaFragment extends Fragment implements
         IncomingEventAdapter.IncomingEventAdapterOnClickHandler {
 
     private Activity parent;
-
     private Maevents mIncomingEventsData;
 
     private RecyclerView mRecyclerView;
@@ -65,5 +64,15 @@ public class AgendaFragment extends Fragment implements
         mIncomingEventsData.get(0).confirm(true);
         mIncomingEventAdapter.setIncomingEventsData(mIncomingEventsData);
         Prompt.displayTodo(parent);
+    }
+
+    @Override
+    public void onClickCall(Maevent eventData) {
+        Prompt.displayShort("TODO Add call organizer", parent);
+    }
+
+    @Override
+    public void onClickLocation(Maevent eventData) {
+        Prompt.displayShort("TODO Add show on map", parent);
     }
 }
