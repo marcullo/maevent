@@ -1,4 +1,4 @@
-package com.devmarcul.maevent.dialog;
+package com.devmarcul.maevent.interfaces;
 
 import android.content.DialogInterface;
 

@@ -11,5 +11,6 @@
     <dimen name="configure_profile_margin_size">8dp</dimen>
 
     <dimen name="main_agenda_margin_size">8dp</dimen>
+    <dimen name="main_event_details_corner_radius">16dp</dimen>
 
 </resources>

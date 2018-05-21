@@ -17,7 +17,7 @@ import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;
 import com.devmarcul.maevent.configure_profile.TagsViewHolder;
 import com.devmarcul.maevent.dialog.TwoButtonsDialog;
-import com.devmarcul.maevent.dialog.TwoButtonsDialogListener;
+import com.devmarcul.maevent.interfaces.TwoButtonsDialogListener;
 import com.devmarcul.maevent.profile.MaeventAccountManager;
 import com.devmarcul.maevent.profile.Profile;
 import com.devmarcul.maevent.static_data.ConfigureProfileStaticData;
