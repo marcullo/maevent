@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:weightSum="3"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button
+        android:id="@+id/main_live_event_agenda"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/JoinButtonTheme"
+        android:text="@string/main_agenda_label" />
+
+    <Button
+        android:id="@+id/main_live_event_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/JoinButtonTheme"
+        android:text="@string/main_description_label" />
+
+    <Button
+        android:id="@+id/main_live_event_wall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/JoinButtonTheme"
+        android:text="@string/main_event_wall_label" />
+
+</LinearLayout>

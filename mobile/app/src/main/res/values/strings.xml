@@ -34,6 +34,8 @@
 
     <string name="main_join_event">Join</string>
     <string name="main_agenda_label">Agenda</string>
+    <string name="main_description_label">Description</string>
+    <string name="main_event_wall_label">Wall</string>
     <string name="main_live_event_label">Live</string>
     <string name="main_create_event_label">Mavent</string>
     <string name="main_incoming_events_label">Incoming events</string>

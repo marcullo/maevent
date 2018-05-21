@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 
+import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.interfaces.TwoButtonsDialogListener;
 
 public class TwoButtonsDialog {
@@ -107,6 +108,7 @@ public class TwoButtonsDialog {
 
                     cancelButton.setTextColor(cancelButtonColor);
                     cancelButton.setBackgroundColor(confirmButtonColor);
+                    cancelButton.setBackground(context.getDrawable(R.drawable.tag_background));
                 }
             });
 

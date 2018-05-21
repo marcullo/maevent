@@ -12,5 +12,7 @@
 
     <dimen name="main_agenda_margin_size">8dp</dimen>
     <dimen name="main_event_details_corner_radius">16dp</dimen>
+    <dimen name="main_live_event_card_corner_radius">16dp</dimen>
+    <dimen name="empty_tall_divider_height">1dp</dimen>
 
 </resources>

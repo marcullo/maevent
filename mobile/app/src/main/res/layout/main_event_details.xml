@@ -139,35 +139,34 @@
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/colorSecondaryText"
-            card_view:layout_constraintBottom_toTopOf="@+id/tv_event_details_name"
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_event_details_time"
             card_view:layout_constraintEnd_toStartOf="@+id/iv_event_details_time_icon"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_event_details_name"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_event_details_time"
             tools:text="8 Hrs" />
 
         <ImageView
             android:id="@+id/iv_event_details_invitees_number_icon"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/ic_share"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/ic_people"
             android:backgroundTint="@color/colorPrimary"
             android:gravity="end"
-            card_view:layout_constraintBottom_toBottomOf="@+id/iv_event_details_time_icon"
-            card_view:layout_constraintEnd_toStartOf="@+id/tv_event_details_duration"
-            card_view:layout_constraintTop_toTopOf="@+id/iv_event_details_time_icon" />
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_event_details_invitees_number"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_event_details_invitees_number"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_event_details_invitees_number" />
 
         <TextView
             android:id="@+id/tv_event_details_invitees_number"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginTop="8dp"
             android:gravity="right"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/colorSecondaryText"
-            card_view:layout_constraintBottom_toBottomOf="@+id/iv_event_details_invitees_number_icon"
-            card_view:layout_constraintEnd_toStartOf="@+id/iv_event_details_invitees_number_icon"
-            card_view:layout_constraintTop_toTopOf="@+id/iv_event_details_invitees_number_icon"
+            card_view:layout_constraintEnd_toEndOf="@+id/tv_event_details_duration"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_event_details_duration"
             tools:text="0" />
 
         <ImageButton
