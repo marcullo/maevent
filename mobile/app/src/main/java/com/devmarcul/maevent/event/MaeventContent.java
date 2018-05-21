@@ -4,8 +4,10 @@ import com.devmarcul.maevent.utils.Utils;
 
 class MaeventContent {
     public String name;
+    public String hosts;
     public String place;
-    public String address;
+    public String addressStreet;
+    public String addressPostCode;
     public String startTime;
     public String stopTime;
     public boolean rsvp;
@@ -14,8 +16,10 @@ class MaeventContent {
 
     public MaeventContent() {
         name = "";
+        hosts = "";
         place = "";
-        address = "";
+        addressStreet = "";
+        addressPostCode = "";
         startTime = "";
         stopTime = "";
         rsvp = false;
@@ -27,13 +31,17 @@ class MaeventContent {
         return place != null && place.length() > 2;
     }
 
+    public boolean isAddressValid() {
+        return isAddressStreetValid() && isAddressPostCodeValid();
+    }
+
     public boolean checkValidity() {
         valid = name != null
                 && name.length() > 5
-                && (
-                    (isPlaceValid())
-                 || (address != null && address.length() > 10)
-                )
+                && hosts != null
+                && hosts.length() > 5
+                && isPlaceValid()
+                && isAddressValid()
                 && startTime != null
                 && startTime.length() > 5
                 && stopTime != null
@@ -46,8 +54,17 @@ class MaeventContent {
         final String ENDL = Utils.getNewLine();
         String content = ENDL;
         content += name + ENDL;
-        content += place + " (" + address + ")" + ENDL;
+        content += "Hosts: " + hosts + ENDL;
+        content += place + " (" + addressStreet + ", " + addressPostCode + ")" + ENDL;
         content += startTime + " - " + stopTime + " rsvp " + (rsvp ? "yes" : "not required") + ENDL;
         return content;
+    }
+
+    private boolean isAddressStreetValid() {
+        return addressStreet != null && addressPostCode.length() > 6;
+    }
+
+    private boolean isAddressPostCodeValid() {
+        return addressPostCode != null && addressPostCode.length() == 6;
     }
 }

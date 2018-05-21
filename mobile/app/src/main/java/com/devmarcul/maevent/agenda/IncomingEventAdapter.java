@@ -19,7 +19,6 @@ public class IncomingEventAdapter
 
     //TODO Replace with Content Provider / etc.
     private Maevents mIncomingEvents;
-
     private final IncomingEventAdapterOnClickHandler mClickHandler;
 
     public interface IncomingEventAdapterOnClickHandler {

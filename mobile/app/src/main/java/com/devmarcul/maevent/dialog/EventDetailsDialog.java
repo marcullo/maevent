@@ -2,60 +2,45 @@ package com.devmarcul.maevent.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
-import com.devmarcul.maevent.event.EventDetailsViewHolder;
+import com.devmarcul.maevent.utils.tools.Prompt;
 
 public class EventDetailsDialog {
 
     private Dialog dialog;
-    private EventDetailsViewHolder detailsViewHolder;
+    private View detailsView;
 
     private EventDetailsDialog(EventDetailsDialog.Builder builder) {
         this.dialog = builder.dialog;
-        this.detailsViewHolder = builder.detailsViewHolder;
+        this.detailsView = builder.detailsView;
     }
 
     public static class Builder {
         private Dialog dialog;
         private AlertDialog.Builder builder;
         private Context context;
-        private EventDetailsViewHolder detailsViewHolder;
+        private View detailsView;
 
-        public Builder(Context context, EventDetailsViewHolder holder) {
+        public Builder(Context context, View detailsView) {
             this.context = context;
-            this.detailsViewHolder = holder;
+            this.detailsView = detailsView;
         }
 
         public EventDetailsDialog build() {
-            View view = detailsViewHolder.getView();
-
             builder = new AlertDialog.Builder(context);
-            builder.setView(view);
+            builder.setView(detailsView);
             dialog = builder.create();
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    detailsViewHolder.bindOnClickListeners();
-                }
-            });
-            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    detailsViewHolder.unbindOnClickListeners();
-                }
-            });
-
             return new EventDetailsDialog(this);
         }
     }
 
     public void show() {
+        Prompt.displayTodo(detailsView.getContext());
         dialog.show();
     }
 }

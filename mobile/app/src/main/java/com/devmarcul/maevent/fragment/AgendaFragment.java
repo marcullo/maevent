@@ -20,7 +20,7 @@ import com.devmarcul.maevent.agenda.IncomingEventAdapter;
 import com.devmarcul.maevent.agenda.InvitationAdapter;
 import com.devmarcul.maevent.agenda.ItemViewHolder;
 import com.devmarcul.maevent.dialog.EventDetailsDialog;
-import com.devmarcul.maevent.event.EventDetailsViewHolder;
+import com.devmarcul.maevent.event.EventDetailsAdapter;
 import com.devmarcul.maevent.event.Invitation;
 import com.devmarcul.maevent.event.Invitations;
 import com.devmarcul.maevent.event.Maevent;
@@ -50,7 +50,8 @@ public class AgendaFragment extends Fragment implements
 
     private View mEventDetailsView;
     private EventDetailsDialog mEventDetailsDialog;
-    private EventDetailsViewHolder mEventDetailsViewHolder;
+    private EventDetailsAdapter mEventDetailsAdapter;
+    private EventDetailsAdapter.ViewHolder mEventDetailsViewHolder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,8 @@ public class AgendaFragment extends Fragment implements
 
     @Override
     public void onClick(Maevent event) {
-        Prompt.displayTodo(parent);
+        mEventDetailsAdapter.adaptContent(event);
+        mEventDetailsAdapter.bindOnClickListeners();
         mEventDetailsDialog.show();
     }
 
@@ -236,7 +238,7 @@ public class AgendaFragment extends Fragment implements
 
     private void initEventDetailsDialog() {
         View eventDetailsView = mEventDetailsView.findViewById(R.id.main_event_details);
-        mEventDetailsViewHolder = new EventDetailsViewHolder(new EventDetailsViewHolder.OnClickHandler() {
+        EventDetailsAdapter.OnClickHandler onClickHandler =  new EventDetailsAdapter.OnClickHandler() {
             @Override
             public void onClickCall() {
                 Prompt.displayTodo(parent);
@@ -246,8 +248,15 @@ public class AgendaFragment extends Fragment implements
             public void onClickLocation() {
                 Prompt.displayTodo(parent);
             }
-        }, eventDetailsView);
-        EventDetailsDialog.Builder builder = new EventDetailsDialog.Builder(parent, mEventDetailsViewHolder);
+
+            @Override
+            public void onClickCalendar() {
+                Prompt.displayTodo(parent);
+            }
+        };
+        mEventDetailsAdapter = new EventDetailsAdapter(onClickHandler, eventDetailsView);
+        mEventDetailsViewHolder = mEventDetailsAdapter.getViewHolder();
+        EventDetailsDialog.Builder builder = new EventDetailsDialog.Builder(parent, eventDetailsView);
         mEventDetailsDialog = builder.build();
     }
 }

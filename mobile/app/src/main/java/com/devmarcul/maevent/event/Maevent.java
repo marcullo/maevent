@@ -25,16 +25,19 @@ public class Maevent implements MaeventStaticData {
     }
 
     public String getPlace() {
-        if (content.isPlaceValid()) {
-            return content.place;
-        }
-        else {
-            return content.address;
-        }
+        return content.place;
     }
 
-    public String getAddress() {
-        return content.address;
+    public String getHosts() {
+        return content.hosts;
+    }
+
+    public String getAddressStreet() {
+        return content.addressStreet;
+    }
+
+    public String getAddressPostCode() {
+        return content.addressPostCode;
     }
 
     public String getStartTime() {
@@ -70,10 +73,12 @@ public class Maevent implements MaeventStaticData {
 
     private void initializeContent() {
         content.name = "Presidential Banquet";
+        content.hosts = "Michael Block";
         content.place = "Warsaw Belveder";
-        content.address = "ul. Belwederska 54/56, 00-001 Warszawa";
-        content.startTime = "17:00, 20.05.18";
-        content.stopTime = "23:00, 20.05.18";
+        content.addressStreet = "ul. Belwederska 54/56";
+        content.addressPostCode = "00-001 Warszawa";
+        content.startTime = "17:00, 20.05";
+        content.stopTime = "23:00, 20.05";
         content.rsvp = true;
         content.valid = false;
     }
