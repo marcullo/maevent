@@ -48,6 +48,10 @@ public class Maevent implements MaeventStaticData {
         return content.stopTime;
     }
 
+    public int getInviteesNumber() {
+        return content.inviteesNumber;
+    }
+
     public void setRsvp(boolean rsvp) {
         content.rsvp = rsvp;
     }

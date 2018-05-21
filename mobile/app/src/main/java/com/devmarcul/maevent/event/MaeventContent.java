@@ -10,6 +10,7 @@ class MaeventContent {
     public String addressPostCode;
     public String startTime;
     public String stopTime;
+    public int inviteesNumber;
     public boolean rsvp;
     public boolean confirmed;
     public boolean valid;
@@ -22,6 +23,7 @@ class MaeventContent {
         addressPostCode = "";
         startTime = "";
         stopTime = "";
+        inviteesNumber = 0;
         rsvp = false;
         confirmed = false;
         valid = false;

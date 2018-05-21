@@ -56,6 +56,8 @@ public class EventDetailsAdapter implements View.OnClickListener {
         private final TextView mStreetView;
         private final TextView mPostalCodeView;
         private final TextView mTimeView;
+        private final TextView mDurationView;
+        private final TextView mInviteesNumberView;
 
         public ViewHolder(View itemView) {
             view = itemView;
@@ -69,6 +71,8 @@ public class EventDetailsAdapter implements View.OnClickListener {
             mStreetView = view.findViewById(R.id.tv_event_details_street);
             mPostalCodeView = view.findViewById(R.id.tv_event_details_postal_code);
             mTimeView = view.findViewById(R.id.tv_event_details_time);
+            mDurationView = view.findViewById(R.id.tv_event_details_duration);
+            mInviteesNumberView = view.findViewById(R.id.tv_event_details_invitees_number);
         }
 
         public Button getJoinButton() {
@@ -85,8 +89,11 @@ public class EventDetailsAdapter implements View.OnClickListener {
         String postCode = event.getAddressPostCode();
         String startTime = event.getStartTime();
         String stopTime = event.getStopTime();
+        String inviteesNumber = String.valueOf(event.getInviteesNumber());
 
         String time = startTime + " - " + stopTime;
+        //TODO Add duration calculation
+        String duration = "6 Hrs";
 
         viewHolder.mNameView.setText(eventName);
         viewHolder.mHostsView.setText(hosts);
@@ -94,6 +101,8 @@ public class EventDetailsAdapter implements View.OnClickListener {
         viewHolder.mStreetView.setText(street);
         viewHolder.mPostalCodeView.setText(postCode);
         viewHolder.mTimeView.setText(time);
+        viewHolder.mDurationView.setText(duration);
+        viewHolder.mInviteesNumberView.setText(inviteesNumber);
     }
 
     public void bindOnClickListeners() {

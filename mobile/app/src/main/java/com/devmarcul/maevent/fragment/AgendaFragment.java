@@ -104,14 +104,6 @@ public class AgendaFragment extends Fragment implements
     }
 
     @Override
-    public Maevent onClickRsvp(Maevent eventData) {
-        Maevent data = eventData;
-        Prompt.displayShort("TODO Presence confirmed", parent);
-        data.confirm(true);
-        return data;
-    }
-
-    @Override
     public void onClickCall(Maevent eventData) {
         Prompt.displayShort("TODO Add call organizer", parent);
     }

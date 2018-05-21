@@ -76,7 +76,6 @@ public class InvitationAdapter
         final View view;
         final TextView eventNameView;
         final TextView eventPlaceView;
-        final TextView eventHostView;
         final TextView eventTimeView;
 
         public InvitationAdapterViewHolder(View itemView) {
@@ -84,7 +83,6 @@ public class InvitationAdapter
             view = itemView;
             eventNameView = view.findViewById(R.id.tv_main_invitation_event_name);
             eventPlaceView = view.findViewById(R.id.tv_main_invitation_event_place);
-            eventHostView =  view.findViewById(R.id.tv_main_invitation_host);
             eventTimeView = view.findViewById(R.id.tv_main_invitation_event_time);
 
             view.setOnClickListener(this);
@@ -107,7 +105,6 @@ public class InvitationAdapter
 
         holder.eventNameView.setText(eventName);
         holder.eventPlaceView.setText(place);
-        holder.eventHostView.setText(hosts);
         holder.eventTimeView.setText(time);
     }
 }

@@ -23,7 +23,6 @@ public class IncomingEventAdapter
 
     public interface IncomingEventAdapterOnClickHandler {
         void onClick(Maevent eventData);
-        Maevent onClickRsvp(Maevent eventData);
         void onClickCall(Maevent eventData);
         void onClickLocation(Maevent eventData);
     }
@@ -78,7 +77,6 @@ public class IncomingEventAdapter
             implements View.OnClickListener {
 
         final View view;
-        final ImageButton rsvpView;
         final ImageButton locationView;
         final ImageButton callView;
         final TextView eventNameView;
@@ -88,7 +86,6 @@ public class IncomingEventAdapter
         IncomingEventAdapterViewHolder(View itemView) {
             super(itemView);
             view = itemView;
-            rsvpView = view.findViewById(R.id.btn_main_incoming_event_rsvp);
             callView = view.findViewById(R.id.btn_main_incoming_event_call);
             locationView = view.findViewById(R.id.btn_main_incoming_event_location);
             eventNameView = view.findViewById(R.id.tv_main_incoming_event_name);
@@ -96,7 +93,6 @@ public class IncomingEventAdapter
             eventTimeView = view.findViewById(R.id.tv_main_incoming_event_time);
 
             view.setOnClickListener(this);
-            rsvpView.setOnClickListener(this);
             callView.setOnClickListener(this);
             locationView.setOnClickListener(this);
         }
@@ -106,11 +102,7 @@ public class IncomingEventAdapter
             int adapterPosition = getAdapterPosition();
             Maevent event = mIncomingEvents.get(adapterPosition);
 
-            if (v == rsvpView) {
-                event = mClickHandler.onClickRsvp(event);
-                mIncomingEvents = updateIncomingEventsData(adapterPosition, event);
-            }
-            else if (v == callView) {
+            if (v == callView) {
                 mClickHandler.onClickCall(event);
             }
             else if (v == locationView) {
@@ -124,21 +116,12 @@ public class IncomingEventAdapter
 
     private void adaptContent(IncomingEventAdapterViewHolder holder, Maevent event) {
         String eventName = getEventName(event);
-        boolean rsvp = event.hasRsvp();
-        boolean confirmed = event.wasConfirmed();
         String place = event.getPlace();
         String time = getEventTime(event);
 
         holder.eventNameView.setText(eventName);
         holder.eventPlaceView.setText(place);
         holder.eventTimeView.setText(time);
-
-        if (rsvp && !confirmed) {
-            holder.rsvpView.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.rsvpView.setVisibility(View.GONE);
-        }
     }
 
     private String getEventName(Maevent event) {

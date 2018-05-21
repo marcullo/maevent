@@ -6,27 +6,17 @@
     android:background="@drawable/touch_selector"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageButton
-        android:id="@+id/btn_main_incoming_event_rsvp"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="@dimen/main_agenda_margin_size"
-        android:background="@drawable/ic_rsvp"
-        android:backgroundTint="@color/colorPrimary"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/main_incoming_event_guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline" />
+
 
     <TextView
         android:id="@+id/tv_main_incoming_event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/default_horizontal_margin"
         android:layout_marginTop="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         app:layout_constraintBottom_toTopOf="@+id/main_incoming_event_guideline"
-        app:layout_constraintStart_toEndOf="@+id/btn_main_incoming_event_rsvp"
+        app:layout_constraintStart_toStartOf="parent"
         tools:text="Presidential Banquet" />
 
     <TextView
