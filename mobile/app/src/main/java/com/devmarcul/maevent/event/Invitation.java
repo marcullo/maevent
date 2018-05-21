@@ -6,6 +6,10 @@ public class Invitation implements InvitationStaticData {
 
     private InvitationContent content = new InvitationContent();
 
+    public Maevent getEvent() {
+        return content.event;
+    }
+
     public String getEventName() {
         return content.event.getName();
     }

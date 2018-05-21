@@ -62,6 +62,12 @@ public class IncomingEventAdapter
         notifyDataSetChanged();
     }
 
+    public Maevents appendIncomingEventsData(Maevent event) {
+        mIncomingEvents.add(event);
+        notifyDataSetChanged();
+        return mIncomingEvents;
+    }
+
     public Maevents updateIncomingEventsData(int pos, Maevent event) {
         mIncomingEvents.set(pos, event);
         notifyDataSetChanged();

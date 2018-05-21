@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.devmarcul.maevent.event.Invitations;
 import com.devmarcul.maevent.event.Maevent;
 import com.devmarcul.maevent.event.Maevents;
 import com.devmarcul.maevent.interfaces.ViewScroller;
+import com.devmarcul.maevent.utils.SwipeAcceptDeleteCallback;
 import com.devmarcul.maevent.utils.tools.Prompt;
 
 public class AgendaFragment extends Fragment implements
@@ -152,10 +155,53 @@ public class AgendaFragment extends Fragment implements
         }
 
         mInvitationsRecyclerView = view.findViewById(R.id.rv_invitations);
+        mInvitationsRecyclerView.addItemDecoration(new DividerItemDecoration(parent, DividerItemDecoration.VERTICAL));
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(parent, LinearLayoutManager.VERTICAL, false);
         mInvitationsRecyclerView.setLayoutManager(layoutManager);
         mInvitationsRecyclerView.setHasFixedSize(false);
+
+        SwipeAcceptDeleteCallback swipeHandler = new SwipeAcceptDeleteCallback(parent, new SwipeAcceptDeleteCallback.SwipedCallback() {
+            @Override
+            public void onAccept(RecyclerView.ViewHolder viewHolder) {
+                InvitationAdapter invitationAdapter = (InvitationAdapter) mInvitationsRecyclerView.getAdapter();
+                int pos = viewHolder.getAdapterPosition();
+
+                Invitation invitation = mInvitationsData.get(pos);
+                Maevent event = invitation.getEvent();
+
+
+                IncomingEventAdapter incomingEventAdapter = (IncomingEventAdapter) mIncomingEventsRecyclerView.getAdapter();
+                mIncomingEventsData = incomingEventAdapter.appendIncomingEventsData(event);
+
+                String size = String.valueOf(mIncomingEventsData.size());
+                TextView incomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
+                incomingEventsNumberView.setText(size);
+                incomingEventsNumberView.setVisibility(View.VISIBLE);
+
+
+                mInvitationsData = invitationAdapter.removeIntivation(pos);
+
+                size = String.valueOf(mInvitationsData.size());
+                TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
+                invitationsNumberView.setText(size);
+                invitationsNumberView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onDelete(RecyclerView.ViewHolder viewHolder) {
+                InvitationAdapter adapter = (InvitationAdapter) mInvitationsRecyclerView.getAdapter();
+                int pos = viewHolder.getAdapterPosition();
+                mInvitationsData = adapter.removeIntivation(pos);
+
+                String size = String.valueOf(mInvitationsData.size());
+                TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
+                invitationsNumberView.setText(size);
+                invitationsNumberView.setVisibility(View.VISIBLE);
+            }
+        });
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHandler);
+        itemTouchHelper.attachToRecyclerView(mInvitationsRecyclerView);
 
         mInvitationAdapter = new InvitationAdapter(this);
         mInvitationsRecyclerView.setAdapter(mInvitationAdapter);

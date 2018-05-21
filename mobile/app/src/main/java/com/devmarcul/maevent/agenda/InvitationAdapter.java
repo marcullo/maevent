@@ -63,6 +63,12 @@ public class InvitationAdapter
         return mInvitations;
     }
 
+    public Invitations removeIntivation(int pos) {
+        mInvitations.remove(pos);
+        notifyItemRemoved(pos);
+        return mInvitations;
+    }
+
     public class InvitationAdapterViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
