@@ -1,4 +1,4 @@
-package com.devmarcul.maevent.utils;
+package com.devmarcul.maevent.helper;
 
 import android.content.Context;
 import android.graphics.Canvas;

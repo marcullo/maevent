@@ -12,9 +12,11 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.agenda.IncomingEventAdapter;
 import com.devmarcul.maevent.agenda.InvitationAdapter;
@@ -26,7 +28,7 @@ import com.devmarcul.maevent.event.Invitations;
 import com.devmarcul.maevent.event.Maevent;
 import com.devmarcul.maevent.event.Maevents;
 import com.devmarcul.maevent.interfaces.ViewScroller;
-import com.devmarcul.maevent.utils.SwipeAcceptDeleteCallback;
+import com.devmarcul.maevent.helper.SwipeAcceptDeleteCallback;
 import com.devmarcul.maevent.utils.tools.Prompt;
 
 public class AgendaFragment extends Fragment implements
@@ -36,6 +38,9 @@ public class AgendaFragment extends Fragment implements
 
     private View view;
     private Activity parent;
+
+    private Maevent mFocusedEvent;
+    private Invitation mFocusedInvitation;
 
     private Maevents mIncomingEventsData;
     private Handler mIncomingEventsHandler;
@@ -47,6 +52,7 @@ public class AgendaFragment extends Fragment implements
     private Handler mInvitationsHandler;
     private RecyclerView mInvitationsRecyclerView;
     private InvitationAdapter mInvitationAdapter;
+    private ItemViewHolder mInvitationsLabel;
 
     private View mEventDetailsView;
     private EventDetailsDialog mEventDetailsDialog;
@@ -62,7 +68,7 @@ public class AgendaFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.main_agenda, container, false);
-        mEventDetailsView = inflater.inflate(R.layout.main_agenda_event_details, container, false);
+        mEventDetailsView = inflater.inflate(R.layout.main_event_details, container, false);
         parent = getActivity();
 
         initIncomingEvents();
@@ -80,6 +86,8 @@ public class AgendaFragment extends Fragment implements
 
     @Override
     public void onClick(Maevent event) {
+        mFocusedEvent = event;
+        mFocusedInvitation = null;
         mEventDetailsAdapter.adaptContent(event);
         mEventDetailsAdapter.bindOnClickListeners();
         mEventDetailsDialog.show();
@@ -87,7 +95,12 @@ public class AgendaFragment extends Fragment implements
 
     @Override
     public void onClick(Invitation invitationData) {
-        Prompt.displayTodo(parent);
+        Maevent event = invitationData.getEvent();
+        mFocusedEvent = null;
+        mFocusedInvitation = invitationData;
+        mEventDetailsAdapter.adaptContent(event);
+        mEventDetailsAdapter.bindOnClickListeners();
+        mEventDetailsDialog.show();
     }
 
     @Override
@@ -116,7 +129,11 @@ public class AgendaFragment extends Fragment implements
     private void initIncomingEvents() {
         //TODO Load content
         mIncomingEventsData = new Maevents();
-        for (int i = 0; i < 10; i++) {
+        Maevent otherEvent = new Maevent();
+        otherEvent.updateContent();
+        otherEvent.setName("Kate's birthday");
+        mIncomingEventsData.add(otherEvent);
+        for (int i = 1; i < 10; i++) {
             mIncomingEventsData.add(new Maevent());
             mIncomingEventsData.get(i).updateContent();
         }
@@ -174,28 +191,7 @@ public class AgendaFragment extends Fragment implements
         SwipeAcceptDeleteCallback swipeHandler = new SwipeAcceptDeleteCallback(parent, new SwipeAcceptDeleteCallback.SwipedCallback() {
             @Override
             public void onAccept(RecyclerView.ViewHolder viewHolder) {
-                InvitationAdapter invitationAdapter = (InvitationAdapter) mInvitationsRecyclerView.getAdapter();
-                int pos = viewHolder.getAdapterPosition();
-
-                Invitation invitation = mInvitationsData.get(pos);
-                Maevent event = invitation.getEvent();
-
-
-                IncomingEventAdapter incomingEventAdapter = (IncomingEventAdapter) mIncomingEventsRecyclerView.getAdapter();
-                mIncomingEventsData = incomingEventAdapter.appendIncomingEventsData(event);
-
-                String size = String.valueOf(mIncomingEventsData.size());
-                TextView incomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
-                incomingEventsNumberView.setText(size);
-                incomingEventsNumberView.setVisibility(View.VISIBLE);
-
-
-                mInvitationsData = invitationAdapter.removeIntivation(pos);
-
-                size = String.valueOf(mInvitationsData.size());
-                TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
-                invitationsNumberView.setText(size);
-                invitationsNumberView.setVisibility(View.VISIBLE);
+                acceptInvitation(viewHolder);
             }
 
             @Override
@@ -215,6 +211,15 @@ public class AgendaFragment extends Fragment implements
 
         mInvitationAdapter = new InvitationAdapter(this);
         mInvitationsRecyclerView.setAdapter(mInvitationAdapter);
+
+        final View invitationsLabelView = view.findViewById(R.id.main_invitations_label);
+        mInvitationsLabel = new ItemViewHolder(invitationsLabelView, mInvitationsRecyclerView);
+        invitationsLabelView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mInvitationsLabel.toggle();
+            }
+        });
 
         mInvitationsHandler = new Handler();
         mInvitationsHandler.postDelayed(new Runnable() {
@@ -253,10 +258,83 @@ public class AgendaFragment extends Fragment implements
             public void onClickCalendar() {
                 Prompt.displayTodo(parent);
             }
+
+            @Override
+            public void onClickJoin() {
+                EventDetailsAdapter.ViewHolder holder = mEventDetailsAdapter.getViewHolder();
+                Button joinButton = holder.getJoinButton();
+                joinButton.setVisibility(View.GONE);
+                if (mFocusedInvitation != null) {
+                    acceptInvitation(mFocusedInvitation);
+                }
+                //TODO Refactor
+                MainActivity.pendingEvent = mFocusedEvent;
+            }
         };
         mEventDetailsAdapter = new EventDetailsAdapter(onClickHandler, eventDetailsView);
         mEventDetailsViewHolder = mEventDetailsAdapter.getViewHolder();
         EventDetailsDialog.Builder builder = new EventDetailsDialog.Builder(parent, eventDetailsView);
         mEventDetailsDialog = builder.build();
+    }
+
+    private void acceptInvitation(RecyclerView.ViewHolder viewHolder) {
+        InvitationAdapter invitationAdapter = (InvitationAdapter) mInvitationsRecyclerView.getAdapter();
+        int pos = viewHolder.getAdapterPosition();
+
+        Invitation invitation = mInvitationsData.get(pos);
+        Maevent event = invitation.getEvent();
+
+
+        IncomingEventAdapter incomingEventAdapter = (IncomingEventAdapter) mIncomingEventsRecyclerView.getAdapter();
+        mIncomingEventsData = incomingEventAdapter.appendIncomingEventsData(event);
+
+        String size = String.valueOf(mIncomingEventsData.size());
+        TextView incomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
+        incomingEventsNumberView.setText(size);
+        incomingEventsNumberView.setVisibility(View.VISIBLE);
+
+
+        mInvitationsData = invitationAdapter.removeIntivation(pos);
+
+        size = String.valueOf(mInvitationsData.size());
+        TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
+        invitationsNumberView.setText(size);
+        invitationsNumberView.setVisibility(View.VISIBLE);
+    }
+
+    private void acceptInvitation(Invitation invitation) {
+        InvitationAdapter invitationAdapter = (InvitationAdapter) mInvitationsRecyclerView.getAdapter();
+
+        int pos = 0;
+        for (Invitation inv:
+                mInvitationsData
+             ) {
+            if (inv == mInvitationsData.get(pos)) {
+                break;
+            }
+            pos++;
+        }
+        if (pos == mInvitationsData.size()) {
+            return;
+        }
+
+        Maevent event = invitation.getEvent();
+
+
+        IncomingEventAdapter incomingEventAdapter = (IncomingEventAdapter) mIncomingEventsRecyclerView.getAdapter();
+        mIncomingEventsData = incomingEventAdapter.appendIncomingEventsData(event);
+
+        String size = String.valueOf(mIncomingEventsData.size());
+        TextView incomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
+        incomingEventsNumberView.setText(size);
+        incomingEventsNumberView.setVisibility(View.VISIBLE);
+
+
+        mInvitationsData = invitationAdapter.removeIntivation(pos);
+
+        size = String.valueOf(mInvitationsData.size());
+        TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
+        invitationsNumberView.setText(size);
+        invitationsNumberView.setVisibility(View.VISIBLE);
     }
 }

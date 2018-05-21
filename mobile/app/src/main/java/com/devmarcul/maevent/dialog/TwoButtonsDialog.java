@@ -34,6 +34,7 @@ public class TwoButtonsDialog {
         private Dialog dialog;
         private AlertDialog.Builder builder;
         private Context context;
+
         private String title;
         private String subtitle;
         private String confirmTitle;

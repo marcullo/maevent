@@ -16,8 +16,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.devmarcul.maevent.event.EventDetailsAdapter;
+import com.devmarcul.maevent.event.Maevent;
 import com.devmarcul.maevent.fragment.AgendaFragment;
 import com.devmarcul.maevent.fragment.LiveEventFragment;
+import com.devmarcul.maevent.fragment.MaeventFragment;
 import com.devmarcul.maevent.helper.BottomNavigationBehavior;
 import com.devmarcul.maevent.interfaces.ViewScroller;
 import com.devmarcul.maevent.profile.MaeventAccountManager;
@@ -29,8 +32,10 @@ import com.google.android.gms.tasks.Task;
 public class MainActivity extends AppCompatActivity
         implements MainActivityStaticData {
 
-    int lastLoadedFragmentId;
-    Fragment lastLoadedFragment;
+    public static Maevent pendingEvent = null;
+
+    private int lastLoadedFragmentId;
+    private Fragment lastLoadedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +50,12 @@ public class MainActivity extends AppCompatActivity
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomNavigation.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBehavior());
 
-        //TODO Load agenda if there is no live event
-        bottomNavigation.setSelectedItemId(R.id.main_live_event);
+        if (pendingEvent != null) {
+            bottomNavigation.setSelectedItemId(R.id.main_live_event);
+        }
+        else {
+            bottomNavigation.setSelectedItemId(R.id.main_agenda);
+        }
     }
 
     @Override
@@ -129,11 +138,16 @@ public class MainActivity extends AppCompatActivity
                     break;
 
                 case R.id.main_live_event:
+                    if (pendingEvent == null) {
+                        displayNoPendingEventPrompt();
+                        return false;
+                    }
+
                     fragment = new LiveEventFragment();
                     break;
 
                 case R.id.main_create_event:
-                    fragment = new AgendaFragment();
+                    fragment = new MaeventFragment();
                     break;
 
                 default:
@@ -146,6 +160,11 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
     };
+
+    private void displayNoPendingEventPrompt() {
+        String message = getString(R.string.text_no_pending_event);
+        Prompt.displayShort(message, this);
+    }
 
     private void animateScroll(NestedScrollView scrollView) {
         scrollView.fullScroll(View.FOCUS_DOWN);

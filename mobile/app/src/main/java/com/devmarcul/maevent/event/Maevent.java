@@ -62,6 +62,10 @@ public class Maevent implements MaeventStaticData {
         content.stopTime = stop;
     }
 
+    public void setName(String name) {
+        content.name = name;
+    }
+
     public void updateContent() {
         //TODO Replace dummy initialization with data base query
         initializeContent();

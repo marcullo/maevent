@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/_main_invitation_arrow_left"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
         app:srcCompat="@drawable/ic_arrow_left"
         app:layout_constraintBottom_toTopOf="@+id/main_incoming_event_guideline"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,12 +66,12 @@
 
     <ImageView
         android:id="@+id/_main_invitation_arrow_right"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:srcCompat="@drawable/ic_arrow_right"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
         app:layout_constraintBottom_toTopOf="@+id/main_incoming_event_guideline"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline"
+        app:srcCompat="@drawable/ic_arrow_right" />
 
     <android.support.constraint.Guideline
         android:id="@+id/main_incoming_event_guideline"

@@ -8,6 +8,7 @@
     <string name="text_support">Support</string>
     <string name="text_yes">Yes</string>
     <string name="text_no">No</string>
+    <string name="text_no_pending_event">No pending event! Join or create one.</string>
 
     <string name="configure_profile_save">SAVE</string>
     <string name="configure_profile_cancel">Cancel</string>
@@ -31,6 +32,7 @@
         <item>Phd.</item>
     </string-array>
 
+    <string name="main_join_event">Join</string>
     <string name="main_agenda_label">Agenda</string>
     <string name="main_live_event_label">Live</string>
     <string name="main_create_event_label">Mavent</string>
@@ -38,5 +40,7 @@
     <string name="main_invitations_label">Invitations</string>
     <string name="main_incoming_events_prompt">The list is empty. Uff!</string>
     <string name="main_invitations_prompt">No pending invitations.</string>
+
+    <string name="main_live_event_not_started">Event not started yet!</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.devmarcul.maevent.event;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ public class EventDetailsAdapter implements View.OnClickListener {
         void onClickCall();
         void onClickLocation();
         void onClickCalendar();
+        void onClickJoin();
     }
 
     public EventDetailsAdapter(OnClickHandler handler, View itemView) {
@@ -24,14 +26,17 @@ public class EventDetailsAdapter implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v == viewHolder.mCallView) {
+        if (v == viewHolder.mCallButton) {
             mClickHandler.onClickCall();
         }
-        else if (v == viewHolder.mLocationView) {
+        else if (v == viewHolder.mLocationButton) {
             mClickHandler.onClickLocation();
         }
-        else if (v == viewHolder.mCalendarView) {
+        else if (v == viewHolder.mCalendarButton) {
             mClickHandler.onClickCalendar();
+        }
+        else if (v == viewHolder.mJoinButton) {
+            mClickHandler.onClickJoin();
         }
     }
 
@@ -41,9 +46,10 @@ public class EventDetailsAdapter implements View.OnClickListener {
 
     public class ViewHolder {
         private View view;
-        private final ImageButton mLocationView;
-        private final ImageButton mCallView;
-        private final ImageButton mCalendarView;
+        private final ImageButton mLocationButton;
+        private final ImageButton mCallButton;
+        private final ImageButton mCalendarButton;
+        private final Button mJoinButton;
         private final TextView mNameView;
         private final TextView mHostsView;
         private final TextView mPlaceView;
@@ -53,9 +59,10 @@ public class EventDetailsAdapter implements View.OnClickListener {
 
         public ViewHolder(View itemView) {
             view = itemView;
-            mLocationView = view.findViewById(R.id.btn_main_event_details_location);
-            mCallView = view.findViewById(R.id.btn_main_event_details_call);
-            mCalendarView = view.findViewById(R.id.btn_main_event_details_calendar);
+            mLocationButton = view.findViewById(R.id.btn_main_event_details_location);
+            mCallButton = view.findViewById(R.id.btn_main_event_details_call);
+            mCalendarButton = view.findViewById(R.id.btn_main_event_details_calendar);
+            mJoinButton = view.findViewById(R.id.btn_main_event_details_join);
             mNameView = view.findViewById(R.id.tv_event_details_name);
             mHostsView = view.findViewById(R.id.tv_event_details_hosts);
             mPlaceView = view.findViewById(R.id.tv_event_details_place);
@@ -63,11 +70,14 @@ public class EventDetailsAdapter implements View.OnClickListener {
             mPostalCodeView = view.findViewById(R.id.tv_event_details_postal_code);
             mTimeView = view.findViewById(R.id.tv_event_details_time);
         }
+
+        public Button getJoinButton() {
+            return mJoinButton;
+        }
     }
 
     public void adaptContent(Maevent event) {
         //TODO Replace with Content Provider / etc.
-
         String eventName = event.getName();
         String hosts = event.getHosts();
         String place = event.getPlace();
@@ -87,15 +97,17 @@ public class EventDetailsAdapter implements View.OnClickListener {
     }
 
     public void bindOnClickListeners() {
-        viewHolder.mLocationView.setOnClickListener(this);
-        viewHolder.mCallView.setOnClickListener(this);
-        viewHolder.mCalendarView.setOnClickListener(this);
+        viewHolder.mLocationButton.setOnClickListener(this);
+        viewHolder.mCallButton.setOnClickListener(this);
+        viewHolder.mCalendarButton.setOnClickListener(this);
+        viewHolder.mJoinButton.setOnClickListener(this);
     }
 
     public void unbindOnClickListeners() {
-        viewHolder.mLocationView.setOnClickListener(null);
-        viewHolder.mCallView.setOnClickListener(null);
-        viewHolder.mCalendarView.setOnClickListener(null);
+        viewHolder.mLocationButton.setOnClickListener(null);
+        viewHolder.mCallButton.setOnClickListener(null);
+        viewHolder.mCalendarButton.setOnClickListener(null);
+        viewHolder.mJoinButton.setOnClickListener(null);
 
     }
 }
