@@ -21,14 +21,16 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ProfileActivity"
+            android:label="@string/text_profile"
+            android:windowSoftInputMode="stateHidden" />
+
         <activity android:name=".ConfigureProfileActivity"
             android:label="@string/text_config_profile"
-            android:windowSoftInputMode="stateHidden">
-        </activity>
+            android:windowSoftInputMode="stateHidden" />
 
         <activity android:name=".MainActivity"
-            android:windowSoftInputMode="stateHidden">
-        </activity>
+            android:windowSoftInputMode="stateHidden" />
 
     </application>
 

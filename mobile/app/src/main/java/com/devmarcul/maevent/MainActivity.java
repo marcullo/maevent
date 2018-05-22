@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.main_action_configure_profile) {
-            setConfigureProfileActivity();
+        if (id == R.id.main_action_profile) {
+            setProfileActivity();
             return true;
         }
         if (id == R.id.main_action_support) {
@@ -178,10 +178,9 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
-    private void setConfigureProfileActivity() {
+    private void setProfileActivity() {
         Log.d(LOG_TAG, "Setting configure profile activity.");
-        Intent intent = new Intent(this, ConfigureProfileActivity.class);
-        intent.putExtra(KEY_CONFIG_PROFILE_REQUESTED, true);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 }
