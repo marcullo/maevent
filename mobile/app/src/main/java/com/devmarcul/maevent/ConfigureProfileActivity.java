@@ -126,6 +126,14 @@ public class ConfigureProfileActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mIntroductionLabel.toggle();
+        mContactLabel.toggle();
+        mTagsLabel.toggle();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_configure_profile, menu);

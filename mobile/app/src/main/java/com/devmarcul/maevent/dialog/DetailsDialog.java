@@ -40,7 +40,6 @@ public class DetailsDialog {
     }
 
     public void show() {
-        Prompt.displayTodo(detailsView.getContext());
         dialog.show();
     }
 }

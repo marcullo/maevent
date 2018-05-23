@@ -22,7 +22,7 @@
             layout="@layout/main_live_event_toolbar" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_guests"
+            android:id="@+id/rv_attendees"
             android:visibility="visible"
             android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"

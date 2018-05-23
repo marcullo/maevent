@@ -9,13 +9,21 @@ import android.view.ViewGroup;
 
 import com.devmarcul.maevent.R;
 
-public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder> {
+public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder>
+        implements View.OnClickListener {
 
     //TODO Replace with Content Provider / etc.
     private Attendees mAttendees;
     private Context context;
 
-    public AttendeeViewAdapter(Context context, Attendees attendees) {
+    private OnClickHandler mClickHandler;
+
+    public interface OnClickHandler {
+        void onClick();
+    }
+
+    public AttendeeViewAdapter(OnClickHandler handler, Context context, Attendees attendees) {
+        this.mClickHandler = handler;
         this.context = context;
         this.mAttendees = attendees;
     }
@@ -25,16 +33,17 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
     public AttendeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_person, null);
         AttendeeViewHolder gvh = new AttendeeViewHolder(layoutView);
+        layoutView.setOnClickListener(this);
         return gvh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull AttendeeViewHolder holder, int position) {
         //TODO Replace with real profile after making it non-static
-        holder.mGuestFirstName.setText("Andrew");
-        holder.mGuestLastName.setText("Block");
-        holder.mGuestLocationView.setText("Warsaw");
-        holder.mGuestHeadlineView.setText("A person who never made a mistake never tried anything new.");
+        holder.mAttendeeFirstName.setText("Andrew");
+        holder.mAttendeeLastName.setText("Block");
+        holder.mAttendeeLocationView.setText("Warsaw");
+        holder.mAttendeeHeadlineView.setText("A person who never made a mistake never tried anything new.");
     }
 
     @Override
@@ -43,5 +52,10 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
             return 0;
         }
         return mAttendees.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        mClickHandler.onClick();
     }
 }

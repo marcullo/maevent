@@ -18,8 +18,8 @@ public class Invitation implements InvitationStaticData {
         return content.event.getHosts();
     }
 
-    public String getEventGuests() {
-        return content.guest;
+    public String getEventAttendees() {
+        return content.attendee;
     }
 
     public String getEventPlace() {
@@ -37,10 +37,10 @@ public class Invitation implements InvitationStaticData {
 
     private void initializeContent() {
         content.event.updateContent();
-        content.guest = "Andrew Block";
+        content.attendee = "Andrew Block";
     }
 
     private void initializeIncompleteContent() {
-        content.guest = "";
+        content.attendee = "";
     }
 }

@@ -6,31 +6,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.devmarcul.maevent.R;
-import com.devmarcul.maevent.utils.tools.Prompt;
 
-public class AttendeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class AttendeeViewHolder extends RecyclerView.ViewHolder {
 
     private View view;
 
-    public ImageView mGuestPhotoView;
-    public TextView mGuestFirstName;
-    public TextView mGuestLastName;
-    public TextView mGuestLocationView;
-    public TextView mGuestHeadlineView;
+    public ImageView mAttendeePhotoView;
+    public TextView mAttendeeFirstName;
+    public TextView mAttendeeLastName;
+    public TextView mAttendeeLocationView;
+    public TextView mAttendeeHeadlineView;
+
 
     public AttendeeViewHolder(View itemView) {
         super(itemView);
         view = itemView;
-        itemView.setOnClickListener(this);
-        mGuestPhotoView = view.findViewById(R.id.iv_person_photo);
-        mGuestFirstName = view.findViewById(R.id.tv_person_first_name);
-        mGuestLastName = view.findViewById(R.id.tv_person_last_name);
-        mGuestLocationView = view.findViewById(R.id.tv_person_location);
-        mGuestHeadlineView = view.findViewById(R.id.tv_person_headline);
-    }
-
-    @Override
-    public void onClick(View v) {
-        Prompt.displayTodo(view.getContext());
+        mAttendeePhotoView = view.findViewById(R.id.iv_person_photo);
+        mAttendeeFirstName = view.findViewById(R.id.tv_person_first_name);
+        mAttendeeLastName = view.findViewById(R.id.tv_person_last_name);
+        mAttendeeLocationView = view.findViewById(R.id.tv_person_location);
+        mAttendeeHeadlineView = view.findViewById(R.id.tv_person_headline);
     }
 }

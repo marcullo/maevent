@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.dialog.DetailsDialog;
 import com.devmarcul.maevent.event.EventDetailsAdapter;
 import com.devmarcul.maevent.interfaces.ViewScroller;
 import com.devmarcul.maevent.live_event.AttendeeViewAdapter;
@@ -29,8 +30,11 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
     private EventDetailsAdapter mEventDetailsAdapter;
 
     private Attendees mAttendeesData;
-    private RecyclerView mGuestRecyclerView;
+    private RecyclerView mAttendeeRecyclerView;
     private AttendeeViewAdapter mAttendeeViewAdapter;
+
+    private View mAttendeeDetailsView;
+    private DetailsDialog mAttendeeDetailsDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,10 +45,11 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.main_live_event, container, false);
+        mAttendeeDetailsView = inflater.inflate(R.layout.main_person_details, container, false);
         parent = getActivity();
 
         initEventDetails();
-        initGuests();
+        initAttendees();
 
         return view;
     }
@@ -88,7 +93,8 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
         joinButton.setVisibility(View.GONE);
     }
 
-    private void initGuests() {
+    private void initAttendees() {
+        View attendeeDetailsView = mAttendeeDetailsView.findViewById(R.id.main_person_details);
         //TODO Load content
         mAttendeesData = new Attendees();
         for (int i = 0; i < 10; i++) {
@@ -96,12 +102,22 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
             mAttendeesData.get(i).updateContent(null);
         }
 
-        GridLayoutManager guestGridLayoutManager = new GridLayoutManager(parent, 2);
-        mGuestRecyclerView = view.findViewById(R.id.rv_guests);
-        mGuestRecyclerView.setHasFixedSize(false);
-        mGuestRecyclerView.setLayoutManager(guestGridLayoutManager);
+        GridLayoutManager attendeeGridLayoutManager = new GridLayoutManager(parent, 2);
+        mAttendeeRecyclerView = view.findViewById(R.id.rv_attendees);
+        mAttendeeRecyclerView.setHasFixedSize(false);
+        mAttendeeRecyclerView.setLayoutManager(attendeeGridLayoutManager);
 
-        mAttendeeViewAdapter = new AttendeeViewAdapter(parent, mAttendeesData);
-        mGuestRecyclerView.setAdapter(mAttendeeViewAdapter);
+        AttendeeViewAdapter.OnClickHandler onClickHandler =  new AttendeeViewAdapter.OnClickHandler() {
+            @Override
+            public void onClick() {
+                Prompt.displayShort("TODO Add user details dialog", parent);
+                mAttendeeDetailsDialog.show();
+            }
+        };
+        mAttendeeViewAdapter = new AttendeeViewAdapter(onClickHandler, parent, mAttendeesData);
+        mAttendeeRecyclerView.setAdapter(mAttendeeViewAdapter);
+
+        DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, attendeeDetailsView);
+        mAttendeeDetailsDialog = builder.build();
     }
 }
