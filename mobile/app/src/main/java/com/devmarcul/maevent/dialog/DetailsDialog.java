@@ -9,12 +9,12 @@ import android.view.View;
 
 import com.devmarcul.maevent.utils.tools.Prompt;
 
-public class EventDetailsDialog {
+public class DetailsDialog {
 
     private Dialog dialog;
     private View detailsView;
 
-    private EventDetailsDialog(EventDetailsDialog.Builder builder) {
+    private DetailsDialog(DetailsDialog.Builder builder) {
         this.dialog = builder.dialog;
         this.detailsView = builder.detailsView;
     }
@@ -30,12 +30,12 @@ public class EventDetailsDialog {
             this.detailsView = detailsView;
         }
 
-        public EventDetailsDialog build() {
+        public DetailsDialog build() {
             builder = new AlertDialog.Builder(context);
             builder.setView(detailsView);
             dialog = builder.create();
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            return new EventDetailsDialog(this);
+            return new DetailsDialog(this);
         }
     }
 

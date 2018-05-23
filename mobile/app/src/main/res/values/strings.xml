@@ -25,8 +25,10 @@
     <string name="configure_profile_headline_label">HEADLINE</string>
     <string name="configure_profile_add_tag">Add Tag</string>
 
+    <string name="profile_title_label">Rank</string>
+
     <string-array name="configure_profile_titles">
-        <item>Rank</item>
+        <item>@string/profile_title_label</item>
         <item>B.Sc.</item>
         <item>M.Sc.</item>
         <item>Phd.</item>

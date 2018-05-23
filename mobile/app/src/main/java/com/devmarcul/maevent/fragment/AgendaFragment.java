@@ -21,7 +21,7 @@ import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.agenda.IncomingEventAdapter;
 import com.devmarcul.maevent.agenda.InvitationAdapter;
 import com.devmarcul.maevent.agenda.ItemViewHolder;
-import com.devmarcul.maevent.dialog.EventDetailsDialog;
+import com.devmarcul.maevent.dialog.DetailsDialog;
 import com.devmarcul.maevent.event.EventDetailsAdapter;
 import com.devmarcul.maevent.event.Invitation;
 import com.devmarcul.maevent.event.Invitations;
@@ -55,7 +55,7 @@ public class AgendaFragment extends Fragment implements
     private ItemViewHolder mInvitationsLabel;
 
     private View mEventDetailsView;
-    private EventDetailsDialog mEventDetailsDialog;
+    private DetailsDialog mEventDetailsDialog;
     private EventDetailsAdapter mEventDetailsAdapter;
     private EventDetailsAdapter.ViewHolder mEventDetailsViewHolder;
 
@@ -265,7 +265,7 @@ public class AgendaFragment extends Fragment implements
         };
         mEventDetailsAdapter = new EventDetailsAdapter(onClickHandler, eventDetailsView);
         mEventDetailsViewHolder = mEventDetailsAdapter.getViewHolder();
-        EventDetailsDialog.Builder builder = new EventDetailsDialog.Builder(parent, eventDetailsView);
+        DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, eventDetailsView);
         mEventDetailsDialog = builder.build();
     }
 

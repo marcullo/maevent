@@ -23,7 +23,7 @@ public class GuestViewAdapter extends RecyclerView.Adapter<GuestViewHolder> {
     @NonNull
     @Override
     public GuestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_guest, null);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_person, null);
         GuestViewHolder gvh = new GuestViewHolder(layoutView);
         return gvh;
     }

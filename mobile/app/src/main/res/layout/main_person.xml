@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_guest"
+    android:id="@+id/main_person"
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_guest_photo"
+            android:id="@+id/iv_person_photo"
             android:layout_width="68dp"
             android:layout_height="68dp"
             android:layout_marginStart="8dp"
@@ -26,37 +26,37 @@
             card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_guest_first_name"
+            android:id="@+id/tv_person_first_name"
             android:layout_width="wrap_content"
             android:layout_height="19dp"
             android:layout_marginStart="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            card_view:layout_constraintStart_toEndOf="@+id/iv_guest_photo"
-            card_view:layout_constraintTop_toTopOf="@+id/iv_guest_photo"
+            card_view:layout_constraintStart_toEndOf="@+id/iv_person_photo"
+            card_view:layout_constraintTop_toTopOf="@+id/iv_person_photo"
             tools:text="Andrew" />
 
         <TextView
-            android:id="@+id/tv_guest_last_name"
+            android:id="@+id/tv_person_last_name"
             android:layout_width="wrap_content"
             android:layout_height="21dp"
             android:layout_marginTop="2dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            card_view:layout_constraintStart_toStartOf="@+id/tv_guest_first_name"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_guest_first_name"
+            card_view:layout_constraintStart_toStartOf="@+id/tv_person_first_name"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_person_first_name"
             tools:text="Block" />
 
         <TextView
-            android:id="@+id/tv_guest_location"
+            android:id="@+id/tv_person_location"
             android:layout_width="wrap_content"
             android:layout_height="21dp"
             android:layout_marginTop="2dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            card_view:layout_constraintStart_toStartOf="@+id/tv_guest_first_name"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_guest_last_name"
+            card_view:layout_constraintStart_toStartOf="@+id/tv_person_first_name"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_person_last_name"
             tools:text="Warsaw" />
 
         <TextView
-            android:id="@+id/tv_guest_headline"
+            android:id="@+id/tv_person_headline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -67,8 +67,8 @@
             android:textSize="8dp"
             android:textStyle="italic"
             card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toStartOf="@+id/iv_guest_photo"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_guest_location"
+            card_view:layout_constraintStart_toStartOf="@+id/iv_person_photo"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_person_location"
             tools:text="A person who never made a mistake never tried anything new." />
 
     </android.support.constraint.ConstraintLayout>
