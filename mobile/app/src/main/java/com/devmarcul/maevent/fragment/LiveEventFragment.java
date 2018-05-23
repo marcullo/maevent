@@ -15,8 +15,8 @@ import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.event.EventDetailsAdapter;
 import com.devmarcul.maevent.interfaces.ViewScroller;
-import com.devmarcul.maevent.live_event.GuestViewAdapter;
-import com.devmarcul.maevent.live_event.Guests;
+import com.devmarcul.maevent.live_event.AttendeeViewAdapter;
+import com.devmarcul.maevent.live_event.Attendees;
 import com.devmarcul.maevent.profile.Profile;
 import com.devmarcul.maevent.utils.tools.Prompt;
 
@@ -28,9 +28,9 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
     private View mEventDetailsView;
     private EventDetailsAdapter mEventDetailsAdapter;
 
-    private Guests mGuestsData;
+    private Attendees mAttendeesData;
     private RecyclerView mGuestRecyclerView;
-    private GuestViewAdapter mGuestViewAdapter;
+    private AttendeeViewAdapter mAttendeeViewAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,10 +90,10 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
 
     private void initGuests() {
         //TODO Load content
-        mGuestsData = new Guests();
+        mAttendeesData = new Attendees();
         for (int i = 0; i < 10; i++) {
-            mGuestsData.add(new Profile());
-            mGuestsData.get(i).updateContent(null);
+            mAttendeesData.add(new Profile());
+            mAttendeesData.get(i).updateContent(null);
         }
 
         GridLayoutManager guestGridLayoutManager = new GridLayoutManager(parent, 2);
@@ -101,7 +101,7 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
         mGuestRecyclerView.setHasFixedSize(false);
         mGuestRecyclerView.setLayoutManager(guestGridLayoutManager);
 
-        mGuestViewAdapter = new GuestViewAdapter(parent, mGuestsData);
-        mGuestRecyclerView.setAdapter(mGuestViewAdapter);
+        mAttendeeViewAdapter = new AttendeeViewAdapter(parent, mAttendeesData);
+        mGuestRecyclerView.setAdapter(mAttendeeViewAdapter);
     }
 }

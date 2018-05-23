@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.utils.tools.Prompt;
 
-public class GuestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class AttendeeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private View view;
 
@@ -18,7 +18,7 @@ public class GuestViewHolder extends RecyclerView.ViewHolder implements View.OnC
     public TextView mGuestLocationView;
     public TextView mGuestHeadlineView;
 
-    public GuestViewHolder(View itemView) {
+    public AttendeeViewHolder(View itemView) {
         super(itemView);
         view = itemView;
         itemView.setOnClickListener(this);

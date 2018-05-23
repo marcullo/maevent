@@ -9,27 +9,27 @@ import android.view.ViewGroup;
 
 import com.devmarcul.maevent.R;
 
-public class GuestViewAdapter extends RecyclerView.Adapter<GuestViewHolder> {
+public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder> {
 
     //TODO Replace with Content Provider / etc.
-    private Guests mGuests;
+    private Attendees mAttendees;
     private Context context;
 
-    public GuestViewAdapter(Context context, Guests guests) {
+    public AttendeeViewAdapter(Context context, Attendees attendees) {
         this.context = context;
-        this.mGuests = guests;
+        this.mAttendees = attendees;
     }
 
     @NonNull
     @Override
-    public GuestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AttendeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_person, null);
-        GuestViewHolder gvh = new GuestViewHolder(layoutView);
+        AttendeeViewHolder gvh = new AttendeeViewHolder(layoutView);
         return gvh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GuestViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AttendeeViewHolder holder, int position) {
         //TODO Replace with real profile after making it non-static
         holder.mGuestFirstName.setText("Andrew");
         holder.mGuestLastName.setText("Block");
@@ -39,9 +39,9 @@ public class GuestViewAdapter extends RecyclerView.Adapter<GuestViewHolder> {
 
     @Override
     public int getItemCount() {
-        if (mGuests == null) {
+        if (mAttendees == null) {
             return 0;
         }
-        return mGuests.size();
+        return mAttendees.size();
     }
 }
