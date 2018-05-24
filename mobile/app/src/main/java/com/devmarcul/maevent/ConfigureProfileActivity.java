@@ -20,15 +20,14 @@ import com.devmarcul.maevent.dialog.TwoButtonsDialog;
 import com.devmarcul.maevent.interfaces.TwoButtonsDialogListener;
 import com.devmarcul.maevent.profile.MaeventAccountManager;
 import com.devmarcul.maevent.profile.Profile;
-import com.devmarcul.maevent.static_data.ConfigureProfileStaticData;
-import com.devmarcul.maevent.static_data.MainActivityStaticData;
 import com.devmarcul.maevent.utils.tools.Prompt;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class ConfigureProfileActivity extends AppCompatActivity
-        implements ConfigureProfileStaticData {
+public class ConfigureProfileActivity extends AppCompatActivity {
+
+    private static String LOG_TAG = "ConfigureProfileActivity";
 
     private ItemViewHolder mIntroductionLabel;
     private IntroductionViewHolder mIntroductionViewHolder;
@@ -46,7 +45,7 @@ public class ConfigureProfileActivity extends AppCompatActivity
         boolean configProfileRequested = false;
         Intent starter = getIntent();
         if (starter != null) {
-            final String configProfileRequestedKey = MainActivityStaticData.KEY_CONFIG_PROFILE_REQUESTED;
+            final String configProfileRequestedKey = MainActivity.KEY_CONFIG_PROFILE_REQUESTED;
             if (starter.hasExtra(configProfileRequestedKey)) {
                 configProfileRequested = starter.getBooleanExtra(configProfileRequestedKey, false);
             }

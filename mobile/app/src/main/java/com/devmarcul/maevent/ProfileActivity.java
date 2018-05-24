@@ -7,11 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.devmarcul.maevent.static_data.ProfileActivityStaticData;
-
 public class ProfileActivity extends AppCompatActivity
-        implements ProfileActivityStaticData,
-        View.OnClickListener {
+        implements View.OnClickListener {
+
+    public static String KEY_CONFIG_PROFILE_REQUESTED = "config-profile-requested";
+    private static String LOG_TAG = "ProfileActivity";
 
     private FloatingActionButton editProfileButton;
 

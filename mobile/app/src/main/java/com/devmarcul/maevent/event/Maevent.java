@@ -2,9 +2,9 @@ package com.devmarcul.maevent.event;
 
 import android.util.Log;
 
-import com.devmarcul.maevent.static_data.MaeventStaticData;
+public class Maevent {
 
-public class Maevent implements MaeventStaticData {
+    private static String LOG_TAG = "Maevent";
 
     private MaeventContent content = new MaeventContent();
 

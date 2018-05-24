@@ -1,8 +1,8 @@
 package com.devmarcul.maevent.event;
 
-import com.devmarcul.maevent.static_data.InvitationStaticData;
+public class Invitation {
 
-public class Invitation implements InvitationStaticData {
+    private static String LOG_TAG = "Invitation";
 
     private InvitationContent content = new InvitationContent();
 

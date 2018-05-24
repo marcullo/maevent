@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.devmarcul.maevent.event.EventDetailsAdapter;
 import com.devmarcul.maevent.event.Maevent;
 import com.devmarcul.maevent.fragment.AgendaFragment;
 import com.devmarcul.maevent.fragment.LiveEventFragment;
@@ -24,13 +23,14 @@ import com.devmarcul.maevent.fragment.MaeventFragment;
 import com.devmarcul.maevent.helper.BottomNavigationBehavior;
 import com.devmarcul.maevent.interfaces.ViewScroller;
 import com.devmarcul.maevent.profile.MaeventAccountManager;
-import com.devmarcul.maevent.static_data.MainActivityStaticData;
 import com.devmarcul.maevent.utils.tools.Prompt;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class MainActivity extends AppCompatActivity
-        implements MainActivityStaticData {
+public class MainActivity extends AppCompatActivity {
+
+    public static String KEY_CONFIG_PROFILE_REQUESTED = "config-profile-requested";
+    private static String LOG_TAG = "MainActivity";
 
     public static Maevent pendingEvent = null;
 

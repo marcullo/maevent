@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devmarcul.maevent.profile.MaeventAccountManager;
-import com.devmarcul.maevent.static_data.WelcomeActivityStaticData;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -26,8 +25,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 public class WelcomeActivity extends AppCompatActivity
         implements  GoogleApiClient.OnConnectionFailedListener,
-                    WelcomeActivityStaticData,
                     Button.OnClickListener {
+
+    private static String LOG_TAG = "WelcomeActivity";
 
     private int mScreenOrientation;
     private boolean mAnimationFinished;
