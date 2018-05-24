@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String KEY_CONFIG_PROFILE_REQUESTED = "config-profile-requested";
     private static String LOG_TAG = "MainActivity";
+    public static final int PLACE_PICKER_REQUEST = 1;
 
     public static Maevent pendingEvent = null;
 
@@ -110,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
         //TODO Add proper back button behavior
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        lastLoadedFragment.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame_container, fragment);
@@ -124,10 +130,12 @@ public class MainActivity extends AppCompatActivity {
 
             int newFragmentId = item.getItemId();
             if (newFragmentId == lastLoadedFragmentId) {
-                NestedScrollView scrollView = ((ViewScroller)lastLoadedFragment).getScrollView();
-                if (scrollView != null) {
-                    animateScroll(scrollView);
-                }
+                try {
+                    NestedScrollView scrollView = ((ViewScroller) lastLoadedFragment).getScrollView();
+                    if (scrollView != null) {
+                        animateScroll(scrollView);
+                    }
+                } catch (Exception e) {}
                 return true;
             }
 

@@ -119,6 +119,6 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
         mAttendeeRecyclerView.setAdapter(mAttendeeViewAdapter);
 
         DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, attendeeDetailsView);
-        mAttendeeDetailsDialog = builder.build();
+        mAttendeeDetailsDialog = builder.build(true);
     }
 }

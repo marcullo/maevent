@@ -9,10 +9,10 @@ import android.view.View;
 
 public class DetailsDialog {
 
-    private Dialog dialog;
-    private View detailsView;
+    protected Dialog dialog;
+    protected View detailsView;
 
-    private DetailsDialog(DetailsDialog.Builder builder) {
+    protected DetailsDialog(DetailsDialog.Builder builder) {
         this.dialog = builder.dialog;
         this.detailsView = builder.detailsView;
     }
@@ -28,16 +28,22 @@ public class DetailsDialog {
             this.detailsView = detailsView;
         }
 
-        public DetailsDialog build() {
+        public DetailsDialog build(boolean transparentBackground) {
             builder = new AlertDialog.Builder(context);
             builder.setView(detailsView);
             dialog = builder.create();
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            if (transparentBackground) {
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
             return new DetailsDialog(this);
         }
     }
 
     public void show() {
         dialog.show();
+    }
+
+    public void hide() {
+        dialog.hide();
     }
 }

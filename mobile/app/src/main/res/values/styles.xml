@@ -32,4 +32,9 @@
         <item name="android:backgroundTint">@color/colorPrimary</item>
     </style>
 
+    <style name="CreateEventButtonTheme" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+    </style>
+
 </resources>

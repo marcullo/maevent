@@ -264,7 +264,7 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsAdapter = new EventDetailsAdapter(onClickHandler, eventDetailsView);
         mEventDetailsViewHolder = mEventDetailsAdapter.getViewHolder();
         DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, eventDetailsView);
-        mEventDetailsDialog = builder.build();
+        mEventDetailsDialog = builder.build(true);
     }
 
     private void acceptInvitation(RecyclerView.ViewHolder viewHolder) {

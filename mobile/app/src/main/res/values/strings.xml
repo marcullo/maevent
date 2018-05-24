@@ -47,4 +47,9 @@
 
     <string name="main_live_event_not_started">Event not started yet!</string>
 
+    <string name="main_create_event_select_name">Select name</string>
+    <string name="main_create_event_select_time">Select time</string>
+    <string name="main_create_event_select_place">Select place</string>
+    <string name="main_create_event_button_tooltip">Create event</string>
+
 </resources>

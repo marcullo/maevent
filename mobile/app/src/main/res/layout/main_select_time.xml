@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.archit.calendardaterangepicker.customviews.DateRangeCalendarView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dr_create_event_calendar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    custom:disable_date_color="@color/colorDivider"
+    custom:enable_time_selection="true"
+    custom:header_bg="@color/colorPrimary"
+    custom:range_color="@color/colorPrimaryLight"
+    custom:selected_date_circle_color="@color/colorAccent"
+    custom:title_color="@color/colorTextIcons" />
