@@ -16,11 +16,12 @@ import com.devmarcul.maevent.configure_profile.ContactViewHolder;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;
 import com.devmarcul.maevent.configure_profile.TagsViewHolder;
-import com.devmarcul.maevent.dialog.TwoButtonsDialog;
-import com.devmarcul.maevent.interfaces.TwoButtonsDialogListener;
+import com.devmarcul.maevent.data.ThisUser;
+import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.utils.dialog.TwoButtonsDialog;
 import com.devmarcul.maevent.profile.MaeventAccountManager;
-import com.devmarcul.maevent.profile.Profile;
-import com.devmarcul.maevent.utils.tools.Prompt;
+import com.devmarcul.maevent.utils.Prompt;
+import com.devmarcul.maevent.utils.dialog.TwoButtonsDialogListener;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,8 +53,8 @@ public class ConfigureProfileActivity extends AppCompatActivity {
         }
 
         GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
-        Profile.updateContent(account);
-        if (Profile.isValid() && !configProfileRequested) {
+        ThisUser.updateContent(account);
+        if (ThisUser.isRegistered() && !configProfileRequested) {
             setMainActivity();
         }
 
@@ -137,7 +138,7 @@ public class ConfigureProfileActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_configure_profile, menu);
         //TODO Refactor cancel item
-        if (Profile.isValid()) {
+        if (ThisUser.isRegistered()) {
             MenuItem cancelItem = menu.findItem(R.id.configure_profile_action_cancel);
             cancelItem.setVisible(true);
         }

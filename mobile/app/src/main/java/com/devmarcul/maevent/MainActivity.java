@@ -16,14 +16,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.devmarcul.maevent.event.Maevent;
-import com.devmarcul.maevent.fragment.AgendaFragment;
-import com.devmarcul.maevent.fragment.LiveEventFragment;
-import com.devmarcul.maevent.fragment.MaeventFragment;
-import com.devmarcul.maevent.helper.BottomNavigationBehavior;
-import com.devmarcul.maevent.interfaces.ViewScroller;
+import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.main.AgendaFragment;
+import com.devmarcul.maevent.main.LiveEventFragment;
+import com.devmarcul.maevent.main.MaeventFragment;
+import com.devmarcul.maevent.utils.bottom_navig.BottomNavigationBehavior;
+import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.profile.MaeventAccountManager;
-import com.devmarcul.maevent.utils.tools.Prompt;
+import com.devmarcul.maevent.utils.Prompt;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 

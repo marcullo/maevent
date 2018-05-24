@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.devmarcul.maevent.R;
-import com.devmarcul.maevent.profile.Profile;
+import com.devmarcul.maevent.data.ThisUser;
 
 public class IntroductionViewHolder {
     private View view;
@@ -33,24 +33,24 @@ public class IntroductionViewHolder {
         initializeName();
         initializePhoto();
         initializeTitle(context);
-        mPoseEditText.setText(Profile.getPose());
-        mHeadlineEditText.setText(Profile.getHeadline());
+        mPoseEditText.setText(ThisUser.getProfile().pose);
+        mHeadlineEditText.setText(ThisUser.getProfile().headline);
     }
 
     private void initializeName() {
         mFirstNameEditText.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
         mLastNameEditText.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
-        String firstName = Profile.getFirstName();
-        String lastName = Profile.getLastName();
+        String firstName = ThisUser.getProfile().firstName;
+        String lastName = ThisUser.getProfile().lastName;
 
         mFirstNameEditText.setText(firstName);
         mLastNameEditText.setText(lastName);
     }
 
     private void initializePhoto() {
-        if (Profile.hasPhoto()) {
-            Bitmap image = Profile.getPhoto();
+        if (ThisUser.getProfile().hasPhoto) {
+            Bitmap image = ThisUser.getPhoto();
             mProfileImage.setImageBitmap(image);
         }
     }
@@ -66,7 +66,7 @@ public class IntroductionViewHolder {
     }
 
     private int wrapTitleFromProfile(Context context) {
-        String profileTitle = Profile.getTitle();
+        String profileTitle = ThisUser.getProfile().title;
         String titles[] = context.getResources().getStringArray(R.array.configure_profile_titles);
         for (int i = 1; i < titles.length; i++) {
             if (titles[i].equals(profileTitle)) {

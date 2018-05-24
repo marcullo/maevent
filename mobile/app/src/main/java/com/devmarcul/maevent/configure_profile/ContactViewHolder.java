@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.devmarcul.maevent.R;
-import com.devmarcul.maevent.profile.Profile;
+import com.devmarcul.maevent.data.ThisUser;
 
 public class ContactViewHolder {
     private View view;
@@ -22,9 +22,9 @@ public class ContactViewHolder {
         mLinkedinAccountEditText = view.findViewById(R.id.et_configure_project_linkedin);
         mLocationButton = view.findViewById(R.id.btn_configure_profile_location);
 
-        mPhoneEditText.setText(Profile.getPhone());
-        mEmailEditText.setText(Profile.getEmail());
-        mLinkedinAccountEditText.setText(Profile.getLinkedin());
-        mLocationButton.setText(Profile.getLocation());
+        mPhoneEditText.setText(ThisUser.getProfile().phone);
+        mEmailEditText.setText(ThisUser.getProfile().email);
+        mLinkedinAccountEditText.setText(ThisUser.getProfile().linkedin);
+        mLocationButton.setText(ThisUser.getProfile().location);
     }
 }

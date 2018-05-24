@@ -4,8 +4,8 @@ import android.content.Context;
 import android.view.View;
 
 import com.devmarcul.maevent.R;
-import com.devmarcul.maevent.profile.Profile;
-import com.devmarcul.maevent.utils.tools.Prompt;
+import com.devmarcul.maevent.data.ThisUser;
+import com.devmarcul.maevent.utils.Prompt;
 
 import me.originqiu.library.EditTag;
 
@@ -17,7 +17,7 @@ public class TagsViewHolder {
         view = itemView;
 
         editTagView = view.findViewById(R.id.et_configure_profile_tags);
-        editTagView.setTagList(Profile.getTags());
+        editTagView.setTagList(ThisUser.getProfile().tags);
         editTagView.setTagAddCallBack(new EditTag.TagAddCallback() {
             @Override
             public boolean onTagAdd(String tagValue) {

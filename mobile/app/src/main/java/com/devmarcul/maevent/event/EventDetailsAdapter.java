@@ -6,6 +6,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.data.MaeventParams;
 
 public class EventDetailsAdapter implements View.OnClickListener {
 
@@ -82,14 +84,15 @@ public class EventDetailsAdapter implements View.OnClickListener {
 
     public void adaptContent(Maevent event) {
         //TODO Replace with Content Provider / etc.
-        String eventName = event.getName();
-        String hosts = event.getHosts();
-        String place = event.getPlace();
-        String street = event.getAddressStreet();
-        String postCode = event.getAddressPostCode();
-        String startTime = event.getStartTime();
-        String stopTime = event.getStopTime();
-        String inviteesNumber = String.valueOf(event.getInviteesNumber());
+        MaeventParams params = event.getParams();
+        String eventName = params.name;
+        String hosts = "Michael Block";
+        String place = params.place;
+        String street = params.addressStreet;
+        String postCode = params.addressPostCode;
+        String startTime = params.startTime;
+        String stopTime = params.stopTime;
+        String inviteesNumber = String.valueOf(0);
 
         String time = startTime + " - " + stopTime;
         //TODO Add duration calculation

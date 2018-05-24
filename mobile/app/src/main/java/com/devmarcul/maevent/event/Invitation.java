@@ -1,5 +1,7 @@
 package com.devmarcul.maevent.event;
 
+import com.devmarcul.maevent.data.Maevent;
+
 public class Invitation {
 
     private static String LOG_TAG = "Invitation";
@@ -11,11 +13,11 @@ public class Invitation {
     }
 
     public String getEventName() {
-        return content.event.getName();
+        return content.event.getParams().name;
     }
 
     public String getEventHosts() {
-        return content.event.getHosts();
+        return "Michael Block";
     }
 
     public String getEventAttendees() {
@@ -23,11 +25,11 @@ public class Invitation {
     }
 
     public String getEventPlace() {
-        return content.event.getPlace();
+        return content.event.getParams().place;
     }
 
     public String getEventStartTime() {
-        return content.event.getStartTime();
+        return content.event.getParams().startTime;
     }
 
     public void updateContent() {
