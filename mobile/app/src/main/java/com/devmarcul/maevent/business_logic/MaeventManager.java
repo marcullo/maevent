@@ -4,6 +4,7 @@ import com.devmarcul.maevent.content_provider.hardcoded.MaeventParamsBuilder;
 import com.devmarcul.maevent.data.ContentUpdater;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.data.ThisUser;
 
 public class MaeventManager implements ContentUpdater<Maevent> {
 
@@ -17,5 +18,17 @@ public class MaeventManager implements ContentUpdater<Maevent> {
         if (Maevent.areParamsValid(params)) {
             event.setParams(params);
         }
+    }
+
+    public Maevent createEvent(MaeventParams params) {
+        if (Maevent.areParamsValid(params)) {
+            //TODO add api query
+
+            Maevent event = new Maevent();
+            event.setParams(params);
+            event.setHost(ThisUser.getProfile().id);
+            return event;
+        }
+        return null;
     }
 }

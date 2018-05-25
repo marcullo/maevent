@@ -8,6 +8,7 @@ public class Maevent implements DataValidator {
     private static String LOG_TAG = "Maevent";
 
     public MaeventParams params;
+    public int hostId;
 
     public MaeventParams getParams() {
         return params;
@@ -19,6 +20,10 @@ public class Maevent implements DataValidator {
 
     public void setName(String name) {
         params.name = name;
+    }
+
+    public void setHost(int hostId) {
+        this.hostId = hostId;
     }
 
     @Override

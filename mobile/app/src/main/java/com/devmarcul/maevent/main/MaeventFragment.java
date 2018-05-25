@@ -19,6 +19,8 @@ import com.archit.calendardaterangepicker.customviews.DateRangeCalendarView;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.data.ThisUser;
 import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.Utils;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
@@ -188,7 +190,16 @@ public class MaeventFragment extends Fragment {
     }
 
     public void createEvent() {
-        Prompt.displayTodo(parent);
+        MaeventParams params = new MaeventParams();
+        params.name = mCreateEventNameView.getText().toString();
+        params.place = mCreateEventPlaceSelectedTextView.getText().toString();
+        params.addressStreet = "todsdasdo";
+        params.addressPostCode = "1212312123";
+        params.startTime = mCreateEventPlaceSelectedTextView.getText().toString();
+        params.stopTime = "1231231";
+        Maevent event = ThisUser.createEvent(params);
+        Prompt.displayShort("TODO Create event. " + event.getParams().name, parent);
+
         mLoadingDialog.hide();
     }
 

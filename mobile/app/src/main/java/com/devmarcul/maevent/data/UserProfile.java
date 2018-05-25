@@ -8,6 +8,7 @@ public class UserProfile {
 
     private static String LOG_TAG = "UserProfile";
 
+    public int id;
     public String firstName;
     public String lastName;
     public String title;

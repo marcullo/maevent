@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
@@ -85,6 +86,13 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
             }
 
         };
+
+        View progressBarView = mEventDetailsView.findViewById(R.id.pb_event_details_loading);
+        progressBarView.setVisibility(View.INVISIBLE);
+
+        View eventdetailsContentView = mEventDetailsView.findViewById(R.id.event_details);
+        eventdetailsContentView.setVisibility(View.VISIBLE);
+
         mEventDetailsAdapter = new EventDetailsAdapter(onClickHandler, mEventDetailsView);
         mEventDetailsAdapter.adaptContent(MainActivity.pendingEvent);
         mEventDetailsAdapter.bindOnClickListeners();

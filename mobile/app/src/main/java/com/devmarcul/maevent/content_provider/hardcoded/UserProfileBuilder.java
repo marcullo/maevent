@@ -60,6 +60,7 @@ public class UserProfileBuilder {
     }
 
     private static void initialize() {
+        object0.id = 100;
         object0.email = "test.maevent@gmail.com";
         object0.firstName = "Andrew";
         object0.lastName = "Block";
@@ -75,6 +76,7 @@ public class UserProfileBuilder {
         object0.tags.add("Python");
         object0.tags.add("SOLID");
 
+        object1.id = 101;
         object1.email = "mr-nobody@nobody.com";
         object1.firstName = "Mr.";
         object1.lastName = "Nobody";
@@ -88,6 +90,7 @@ public class UserProfileBuilder {
         object1.tags.add("Loop");
         object1.tags.add("Fast cars");
 
+        object2.id = 102;
         object2.email = "hey.me@gmail.com";
         object2.firstName = "Michael";
         object2.lastName = "Block";
@@ -106,6 +109,7 @@ public class UserProfileBuilder {
         object2.tags.add("TDD");
         object2.tags.add("Maevent");
 
+        object3.id = 103;
         object3.email = "jsklansky@gmail.com";
         object3.firstName = "Justine";
         object3.lastName = "Sklansky";
@@ -117,6 +121,7 @@ public class UserProfileBuilder {
         object3.location = "New York";
         object3.tags = new ArrayList<>();
 
+        object4.id = 104;
         object4.email = "blockandregmail.com";
         object4.firstName = "Andre";
         object4.lastName = "Blockings";

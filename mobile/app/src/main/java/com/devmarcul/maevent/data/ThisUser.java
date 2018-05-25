@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.content_provider.hardcoded.UserProfileBuilder;
 import com.devmarcul.maevent.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,6 +26,19 @@ public class ThisUser {
 
     //TODO Refactor photo storage in order not to load from the internet constantly
     private static Bitmap photo;
+
+    public static Maevent createEvent(MaeventParams params) {
+        MaeventManager mm = new MaeventManager();
+        return mm.createEvent(params);
+    }
+
+    public static void closeEvent(Maevent event) {
+
+    }
+
+    public static void addAttendee(User attendee) {
+
+    }
 
     public static UserProfile getProfile() {
         return profile;
