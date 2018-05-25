@@ -13,16 +13,18 @@ public class ProfileActivity extends AppCompatActivity
     public static String KEY_CONFIG_PROFILE_REQUESTED = "config-profile-requested";
     private static String LOG_TAG = "ProfileActivity";
 
-    private FloatingActionButton editProfileButton;
+    private FloatingActionButton mEditProfileButton;
+    private View mPersonDetailsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        editProfileButton = findViewById(R.id.btn_main_profile_edit);
+        mEditProfileButton = findViewById(R.id.btn_main_profile_edit);
+        mEditProfileButton.setOnClickListener(this);
 
-        editProfileButton.setOnClickListener(this);
+        mPersonDetailsView = findViewById(R.id.main_profile_person_details);
     }
 
     private void setConfigureProfileActivity() {

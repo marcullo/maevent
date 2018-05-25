@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,14 +21,15 @@ import android.widget.TextView;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.content_provider.hardcoded.MaeventBuilder;
-import com.devmarcul.maevent.content_provider.hardcoded.MaeventParamsBuilder;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.Maevents;
 import com.devmarcul.maevent.main.agenda.IncomingEventAdapter;
 import com.devmarcul.maevent.main.agenda.InvitationAdapter;
 import com.devmarcul.maevent.main.agenda.ItemViewHolder;
+import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;
+import com.devmarcul.maevent.main.common.EventDetailsViewHolder;
+import com.devmarcul.maevent.utils.CustomTittleSetter;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
-import com.devmarcul.maevent.event.EventDetailsAdapter;
 import com.devmarcul.maevent.event.Invitation;
 import com.devmarcul.maevent.event.Invitations;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
@@ -36,7 +39,8 @@ import com.devmarcul.maevent.utils.Prompt;
 public class AgendaFragment extends Fragment implements
         IncomingEventAdapter.IncomingEventAdapterOnClickHandler,
         InvitationAdapter.InvitationAdapterOnClickHandler,
-        ViewScroller {
+        ViewScroller,
+        CustomTittleSetter {
 
     private View view;
     private Activity parent;
@@ -60,8 +64,8 @@ public class AgendaFragment extends Fragment implements
     private View mEventDetailsView;
     private View mEventDetailsContentView;
     private DetailsDialog mEventDetailsDialog;
-    private EventDetailsAdapter mEventDetailsAdapter;
-    private EventDetailsAdapter.ViewHolder mEventDetailsViewHolder;
+    private EventDetailsViewAdapter mEventDetailsAdapter;
+    private EventDetailsViewHolder mEventDetailsViewHolder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,21 @@ public class AgendaFragment extends Fragment implements
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        setTitle();
+    }
+
+    @Override
+    public void setTitle() {
+        ActionBar bar = ((AppCompatActivity)parent).getSupportActionBar();
+        if (bar != null) {
+            int titleRes = R.string.toolbar_title_agenda;
+            bar.setTitle(titleRes);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mIncomingEventsHandler.removeCallbacksAndMessages(null);
@@ -90,12 +109,15 @@ public class AgendaFragment extends Fragment implements
 
     @Override
     public void onClick(Maevent event) {
+        boolean isPendingEvent = MainActivity.pendingEvent == event;
+
         mFocusedEvent = event;
         mFocusedInvitation = null;
         mEventDetailsLoading.setVisibility(View.VISIBLE);
         mEventDetailsContentView.setVisibility(View.INVISIBLE);
         mEventDetailsDialog.show();
         mEventDetailsAdapter.adaptContent(event);
+        mEventDetailsAdapter.adaptJoinButton(!isPendingEvent);
         mEventDetailsAdapter.bindOnClickListeners();
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
         mEventDetailsContentView.setVisibility(View.VISIBLE);
@@ -110,6 +132,7 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsContentView.setVisibility(View.INVISIBLE);
         mEventDetailsDialog.show();
         mEventDetailsAdapter.adaptContent(event);
+        mEventDetailsAdapter.adaptJoinButton(false);
         mEventDetailsAdapter.bindOnClickListeners();
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
         mEventDetailsContentView.setVisibility(View.VISIBLE);
@@ -243,7 +266,7 @@ public class AgendaFragment extends Fragment implements
 
     private void initEventDetailsDialog() {
         View eventDetailsView = mEventDetailsView.findViewById(R.id.main_event_details);
-        EventDetailsAdapter.OnClickHandler onClickHandler =  new EventDetailsAdapter.OnClickHandler() {
+        EventDetailsViewAdapter.OnClickHandler onClickHandler =  new EventDetailsViewAdapter.OnClickHandler() {
             @Override
             public void onClickCall() {
                 Prompt.displayTodo(parent);
@@ -261,23 +284,25 @@ public class AgendaFragment extends Fragment implements
 
             @Override
             public void onClickJoin() {
-                EventDetailsAdapter.ViewHolder holder = mEventDetailsAdapter.getViewHolder();
-                Button joinButton = holder.getJoinButton();
-                joinButton.setVisibility(View.GONE);
-                if (mFocusedInvitation != null) {
-                    acceptInvitation(mFocusedInvitation);
-                }
-                //TODO Refactor
-                MainActivity.pendingEvent = mFocusedEvent;
+                mEventDetailsAdapter.adaptJoinButton(false);
+                joinEvent();
             }
         };
-        mEventDetailsAdapter = new EventDetailsAdapter(onClickHandler, eventDetailsView);
+        mEventDetailsAdapter = new EventDetailsViewAdapter(onClickHandler, eventDetailsView);
         mEventDetailsViewHolder = mEventDetailsAdapter.getViewHolder();
         DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, eventDetailsView);
         mEventDetailsDialog = builder.build(true);
 
         mEventDetailsLoading = eventDetailsView.findViewById(R.id.pb_event_details_loading);
         mEventDetailsContentView = eventDetailsView.findViewById(R.id.event_details);
+    }
+
+    private void joinEvent() {
+        if (mFocusedInvitation != null) {
+            acceptInvitation(mFocusedInvitation);
+        }
+        //TODO Refactor
+        MainActivity.pendingEvent = mFocusedEvent;
     }
 
     private void acceptInvitation(RecyclerView.ViewHolder viewHolder) {
@@ -287,7 +312,6 @@ public class AgendaFragment extends Fragment implements
         Invitation invitation = mInvitationsData.get(pos);
         Maevent event = invitation.getEvent();
 
-
         IncomingEventAdapter incomingEventAdapter = (IncomingEventAdapter) mIncomingEventsRecyclerView.getAdapter();
         mIncomingEventsData = incomingEventAdapter.appendIncomingEventsData(event);
 
@@ -295,7 +319,6 @@ public class AgendaFragment extends Fragment implements
         TextView incomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
         incomingEventsNumberView.setText(size);
         incomingEventsNumberView.setVisibility(View.VISIBLE);
-
 
         mInvitationsData = invitationAdapter.removeIntivation(pos);
 

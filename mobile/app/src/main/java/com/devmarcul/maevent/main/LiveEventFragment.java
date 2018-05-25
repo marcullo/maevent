@@ -4,32 +4,37 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.content_provider.hardcoded.UserBuilder;
 import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;
+import com.devmarcul.maevent.main.common.EventDetailsViewHolder;
+import com.devmarcul.maevent.utils.CustomTittleSetter;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
-import com.devmarcul.maevent.event.EventDetailsAdapter;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.main.live_event.AttendeeViewAdapter;
 import com.devmarcul.maevent.main.live_event.Attendees;
 import com.devmarcul.maevent.utils.Prompt;
 
-public class LiveEventFragment extends Fragment implements ViewScroller {
+public class LiveEventFragment extends Fragment implements
+        ViewScroller,
+        CustomTittleSetter {
 
     private View view;
     private Activity parent;
 
     private View mEventDetailsView;
-    private EventDetailsAdapter mEventDetailsAdapter;
+    private EventDetailsViewAdapter mEventDetailsAdapter;
 
     private Attendees mAttendeesData;
     private RecyclerView mAttendeeRecyclerView;
@@ -57,6 +62,21 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        setTitle();
+    }
+
+    @Override
+    public void setTitle() {
+        ActionBar bar = ((AppCompatActivity)parent).getSupportActionBar();
+        if (bar != null) {
+            int titleRes = R.string.toolbar_title_live_event;
+            bar.setTitle(titleRes);
+        }
+    }
+
+    @Override
     public NestedScrollView getScrollView() {
         NestedScrollView view = this.view.findViewById(R.id.sv_main_live_event);
         return view;
@@ -65,7 +85,7 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
     //TODO combine with @AgendaFragment.initEventDetailsDialog
     private void initEventDetails() {
         mEventDetailsView = view.findViewById(R.id.main_event_details);
-        EventDetailsAdapter.OnClickHandler onClickHandler =  new EventDetailsAdapter.OnClickHandler() {
+        EventDetailsViewAdapter.OnClickHandler onClickHandler =  new EventDetailsViewAdapter.OnClickHandler() {
             @Override
             public void onClickCall() {
                 Prompt.displayTodo(parent);
@@ -93,13 +113,10 @@ public class LiveEventFragment extends Fragment implements ViewScroller {
         View eventdetailsContentView = mEventDetailsView.findViewById(R.id.event_details);
         eventdetailsContentView.setVisibility(View.VISIBLE);
 
-        mEventDetailsAdapter = new EventDetailsAdapter(onClickHandler, mEventDetailsView);
+        mEventDetailsAdapter = new EventDetailsViewAdapter(onClickHandler, mEventDetailsView);
         mEventDetailsAdapter.adaptContent(MainActivity.pendingEvent);
+        mEventDetailsAdapter.adaptJoinButton(false);
         mEventDetailsAdapter.bindOnClickListeners();
-
-        EventDetailsAdapter.ViewHolder holder = mEventDetailsAdapter.getViewHolder();
-        Button joinButton = holder.getJoinButton();
-        joinButton.setVisibility(View.GONE);
     }
 
     private void initAttendees() {

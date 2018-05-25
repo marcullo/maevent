@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <include
-        android:id="@+id/main_person_details"
+        android:id="@+id/main_profile_person_details"
         layout="@layout/main_person_details" />
 
     <android.support.design.widget.FloatingActionButton

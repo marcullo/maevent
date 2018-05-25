@@ -127,15 +127,16 @@ public class MainActivity extends AppCompatActivity {
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
             int newFragmentId = item.getItemId();
             if (newFragmentId == lastLoadedFragmentId) {
+                NestedScrollView scrollView = null;
                 try {
-                    NestedScrollView scrollView = ((ViewScroller) lastLoadedFragment).getScrollView();
-                    if (scrollView != null) {
-                        animateScroll(scrollView);
-                    }
-                } catch (Exception e) {}
+                    scrollView = ((ViewScroller) lastLoadedFragment).getScrollView();
+                } catch (Exception e) {
+                }
+                if (scrollView != null) {
+                    animateScroll(scrollView);
+                }
                 return true;
             }
 

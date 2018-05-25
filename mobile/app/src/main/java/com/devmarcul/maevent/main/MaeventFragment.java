@@ -2,15 +2,20 @@ package com.devmarcul.maevent.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +26,7 @@ import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.ThisUser;
+import com.devmarcul.maevent.utils.CustomTittleSetter;
 import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.Utils;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
@@ -31,7 +37,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.Calendar;
 
-public class MaeventFragment extends Fragment {
+public class MaeventFragment extends Fragment implements CustomTittleSetter {
 
     private Activity parent;
 
@@ -57,6 +63,12 @@ public class MaeventFragment extends Fragment {
     private ImageView mCreateEventPlaceSelectedView;
     private TextView mCreateEventPlaceSelectedTextView;
     private DetailsDialog mLoadingDialog;
+
+    private View mMaeventSelectRsvpView;
+    private ImageView mCreateEventRsvpSelectedView;
+    private TextView mCreateEventRsvpSelectedTextView;
+    private TextView mMaeventSelectedRsvpView;
+    private CheckBox mCreateEventRsvpSelectView;
 
     private FloatingActionButton mCreateMaeventButton;
 
@@ -186,7 +198,39 @@ public class MaeventFragment extends Fragment {
             }
         });
 
+        mMaeventSelectRsvpView = view.findViewById(R.id.main_maevent_select_rsvp);
+        mMaeventSelectRsvpView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleRsvp();
+            }
+        });
+        mMaeventSelectedRsvpView = view.findViewById(R.id.tv_maevent_selected_rsvp);
+        mCreateEventRsvpSelectedView = view.findViewById(R.id.iv_create_event_rsvp_selected);
+        mCreateEventRsvpSelectedTextView = view.findViewById(R.id.tv_create_event_name_rsvp_label);
+        mCreateEventRsvpSelectView = view.findViewById(R.id.cb_maevent_rsvp);
+
         return view;
+    }
+
+    public void toggleRsvp() {
+        boolean rsvpChecked = mCreateEventRsvpSelectView.isChecked();
+        mCreateEventRsvpSelectView.setChecked(!rsvpChecked);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setTitle();
+    }
+
+    @Override
+    public void setTitle() {
+        ActionBar bar = ((AppCompatActivity)parent).getSupportActionBar();
+        if (bar != null) {
+            int titleRes = R.string.toolbar_title_create_event;
+            bar.setTitle(titleRes);
+        }
     }
 
     public void createEvent() {
@@ -198,7 +242,8 @@ public class MaeventFragment extends Fragment {
         params.startTime = mCreateEventPlaceSelectedTextView.getText().toString();
         params.stopTime = "1231231";
         Maevent event = ThisUser.createEvent(params);
-        Prompt.displayShort("TODO Create event. " + event.getParams().name, parent);
+        Prompt.displayShort("TODO Create event. " + event.getParams().name +
+                ". RSVP: " + (mCreateEventRsvpSelectView.isChecked() ? "yes" : "no"), parent);
 
         mLoadingDialog.hide();
     }
