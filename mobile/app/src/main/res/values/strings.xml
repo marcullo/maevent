@@ -9,6 +9,17 @@
     <string name="text_yes">Yes</string>
     <string name="text_no">No</string>
     <string name="text_no_pending_event">No pending event! Join or create one.</string>
+    <string name="text_rsvp">RSVP</string>
+    <string name="text_end">End</string>
+    <string name="text_live">Live</string>
+    <string name="text_in_a_while">In a while</string>
+    <string name="text_hours">hours</string>
+    <string name="text_in">In</string>
+    <string name="text_tomorrow">Next day</string>
+
+    <string name="abbrev_mins">MINS</string>
+    <string name="abbrev_hours">HRS</string>
+    <string name="abbrev_days">DAYS</string>
 
     <string name="toolbar_title_agenda">Join event</string>
     <string name="toolbar_title_live_event">Networking</string>
@@ -39,14 +50,18 @@
     </string-array>
 
     <string name="main_join_event">Join</string>
+
     <string name="main_agenda_label">Agenda</string>
     <string name="main_description_label">Description</string>
     <string name="main_event_wall_label">Wall</string>
     <string name="main_live_event_label">Live</string>
     <string name="main_create_event_label">Mavent</string>
+
+    <string name="main_incoming_events_starting_event">Starting</string>
+
     <string name="main_incoming_events_label">Incoming events</string>
-    <string name="main_invitations_label">Invitations</string>
     <string name="main_incoming_events_prompt">The list is empty. Uff!</string>
+    <string name="main_invitations_label">Invitations</string>
     <string name="main_invitations_prompt">No pending invitations.</string>
 
     <string name="main_live_event_not_started">Event not started yet!</string>
@@ -56,6 +71,6 @@
     <string name="main_create_event_select_place">Select place</string>
     <string name="main_create_event_select_rsvp">Select RSVP</string>
     <string name="main_create_event_button_tooltip">Create event</string>
-    <string name="main_create_event_rsvp">RSVP</string>
+    <string name="main_create_event_rsvp">@string/text_rsvp</string>
 
 </resources>

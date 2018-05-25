@@ -22,8 +22,9 @@ public class MaeventBuilder {
         Maevent object = new Maevent();
 
         object.setParams(objectCopy.getParams());
-        object.setHost(objectCopy.getHostId());
+        object.setHostId(objectCopy.getHostId());
         object.setId(objectCopy.getId());
+        object.setAttendeesNr(objectCopy.getAttendeesNr());
 
         cnt++;
         if (cnt == CNT) {
@@ -41,43 +42,48 @@ public class MaeventBuilder {
 
     private static void initialize() {
         MaeventParams params;
-        int hostId = 100;
+        int hostId = UserProfileBuilder.INTITIAL_USER_ID;
         int id;
 
         params = MaeventParamsBuilder.build();
         hostId++;
-        id = 3;
+        id = 0;
         object0.setParams(params);
-        object0.setHost(hostId);
+        object0.setHostId(hostId);
         object0.setId(id);
+        object0.setAttendeesNr(0);
+
+        params = MaeventParamsBuilder.build();
+        hostId++;
+        id = 1;
+        object1.setParams(params);
+        object1.setHostId(hostId);
+        object1.setId(id);
+        object1.setAttendeesNr(44);
+
+        params = MaeventParamsBuilder.build();
+        hostId++;
+        id = 2;
+        object2.setParams(params);
+        object2.setHostId(hostId);
+        object2.setId(id);
+        object2.setAttendeesNr(23);
+
+        params = MaeventParamsBuilder.build();
+        hostId++;
+        id = 3;
+        object3.setParams(params);
+        object3.setHostId(hostId);
+        object3.setId(id);
+        object3.setAttendeesNr(100);
 
         params = MaeventParamsBuilder.build();
         hostId++;
         id = 4;
-        object1.setParams(params);
-        object1.setHost(hostId);
-        object1.setId(id);
-
-        params = MaeventParamsBuilder.build();
-        hostId++;
-        id = 5;
-        object2.setParams(params);
-        object2.setHost(hostId);
-        object2.setId(id);
-
-        params = MaeventParamsBuilder.build();
-        hostId++;
-        id = 6;
-        object3.setParams(params);
-        object3.setHost(hostId);
-        object3.setId(id);
-
-        params = MaeventParamsBuilder.build();
-        hostId++;
-        id = 7;
         object4.setParams(params);
-        object4.setHost(hostId);
+        object4.setHostId(hostId);
         object4.setId(id);
+        object4.setAttendeesNr(60);
     }
 
     private static void assignObjects() {

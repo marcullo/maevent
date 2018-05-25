@@ -1,8 +1,11 @@
 package com.devmarcul.maevent.main;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.UserManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -19,6 +22,8 @@ import android.widget.TextView;
 
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.business_logic.MaeventSteward;
+import com.devmarcul.maevent.business_logic.MaeventUserManager;
 import com.devmarcul.maevent.content_provider.hardcoded.InvitationBuilder;
 import com.devmarcul.maevent.content_provider.hardcoded.MaeventBuilder;
 import com.devmarcul.maevent.data.Invitation;
@@ -118,6 +123,7 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsContentView.setVisibility(View.INVISIBLE);
         mEventDetailsDialog.show();
         mEventDetailsAdapter.adaptContent(event);
+        mEventDetailsAdapter.adaptUsersNumber(event, true);
         mEventDetailsAdapter.adaptJoinButton(!isPendingEvent);
         mEventDetailsAdapter.bindOnClickListeners();
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
@@ -125,14 +131,15 @@ public class AgendaFragment extends Fragment implements
     }
 
     @Override
-    public void onClick(Invitation invitationData) {
-        Maevent event = invitationData;
+    public void onClick(Invitation invitation) {
+        Maevent event = invitation;
         mFocusedEvent = null;
-        mFocusedInvitation = invitationData;
+        mFocusedInvitation = invitation;
         mEventDetailsLoading.setVisibility(View.VISIBLE);
         mEventDetailsContentView.setVisibility(View.INVISIBLE);
         mEventDetailsDialog.show();
         mEventDetailsAdapter.adaptContent(event);
+        mEventDetailsAdapter.adaptUsersNumber(event, false);
         mEventDetailsAdapter.adaptJoinButton(false);
         mEventDetailsAdapter.bindOnClickListeners();
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
@@ -140,12 +147,14 @@ public class AgendaFragment extends Fragment implements
     }
 
     @Override
-    public void onClickCall(Maevent eventData) {
-        Prompt.displayShort("TODO Add call organizer", parent);
+    public void onClickCall(Maevent event) {
+        int id = event.getHostId();
+        String phone = MaeventSteward.getHostPhone(id);
+        MaeventSteward.callHost(phone, parent);
     }
 
     @Override
-    public void onClickLocation(Maevent eventData) {
+    public void onClickLocation(Maevent event) {
         Prompt.displayShort("TODO Add show on map", parent);
     }
 
@@ -270,7 +279,18 @@ public class AgendaFragment extends Fragment implements
         EventDetailsViewAdapter.OnClickHandler onClickHandler =  new EventDetailsViewAdapter.OnClickHandler() {
             @Override
             public void onClickCall() {
-                Prompt.displayTodo(parent);
+                int hostId;
+                if (mFocusedEvent != null) {
+                    hostId = mFocusedEvent.getHostId();
+                }
+                else if (mFocusedInvitation != null) {
+                    hostId = mFocusedInvitation.getHostId();
+                }
+                else {
+                    return;
+                }
+                String phone = MaeventSteward.getHostPhone(hostId);
+                MaeventSteward.callHost(phone, parent);
             }
 
             @Override
@@ -280,7 +300,15 @@ public class AgendaFragment extends Fragment implements
 
             @Override
             public void onClickCalendar() {
-                Prompt.displayTodo(parent);
+                int hostId;
+                if (mFocusedEvent != null) {
+                    hostId = mFocusedEvent.getHostId();
+                    MaeventSteward.saveEventToCalendar(mFocusedEvent, hostId, parent);
+                }
+                else if (mFocusedInvitation != null) {
+                    hostId = mFocusedInvitation.getHostId();
+                    MaeventSteward.saveEventToCalendar(mFocusedInvitation, hostId, parent);
+                }
             }
 
             @Override
@@ -319,42 +347,6 @@ public class AgendaFragment extends Fragment implements
         TextView incomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
         incomingEventsNumberView.setText(size);
         incomingEventsNumberView.setVisibility(View.VISIBLE);
-
-        mInvitationsData = invitationAdapter.removeIntivation(pos);
-
-        size = String.valueOf(mInvitationsData.size());
-        TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
-        invitationsNumberView.setText(size);
-        invitationsNumberView.setVisibility(View.VISIBLE);
-    }
-
-    private void acceptInvitation(Invitation invitation) {
-        InvitationAdapter invitationAdapter = (InvitationAdapter) mInvitationsRecyclerView.getAdapter();
-
-        int pos = 0;
-        for (Invitation inv:
-                mInvitationsData
-             ) {
-            if (inv == mInvitationsData.get(pos)) {
-                break;
-            }
-            pos++;
-        }
-        if (pos == mInvitationsData.size()) {
-            return;
-        }
-
-        Maevent event = invitation;
-
-
-        IncomingEventAdapter incomingEventAdapter = (IncomingEventAdapter) mIncomingEventsRecyclerView.getAdapter();
-        mIncomingEventsData = incomingEventAdapter.appendIncomingEventsData(event);
-
-        String size = String.valueOf(mIncomingEventsData.size());
-        TextView incomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
-        incomingEventsNumberView.setText(size);
-        incomingEventsNumberView.setVisibility(View.VISIBLE);
-
 
         mInvitationsData = invitationAdapter.removeIntivation(pos);
 

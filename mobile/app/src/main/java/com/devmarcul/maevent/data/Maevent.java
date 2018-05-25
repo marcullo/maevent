@@ -1,14 +1,14 @@
 package com.devmarcul.maevent.data;
 
-import com.devmarcul.maevent.content_provider.hardcoded.MaeventParamsBuilder;
 import com.devmarcul.maevent.utils.Utils;
 
 public class Maevent implements DataValidator {
 
     private static String LOG_TAG = "Maevent";
 
-    protected int hostId;
     protected int id;
+    protected int hostId;
+    protected int attendeesNr;
     protected MaeventParams params;
 
     public MaeventParams getParams() {
@@ -23,6 +23,10 @@ public class Maevent implements DataValidator {
         return hostId;
     }
 
+    public int getAttendeesNr() {
+        return attendeesNr;
+    }
+
     public void setParams(MaeventParams params) {
         this.params = params;
     }
@@ -35,8 +39,12 @@ public class Maevent implements DataValidator {
         this.id = id;
     }
 
-    public void setHost(int hostId) {
+    public void setHostId(int hostId) {
         this.hostId = hostId;
+    }
+
+    public void setAttendeesNr(int attendeesNr) {
+        this.attendeesNr = attendeesNr;
     }
 
     @Override
@@ -48,10 +56,10 @@ public class Maevent implements DataValidator {
         boolean valid = isNameValid(params.name)
                 && isPlaceValid(params)
                 && isAddressValid(params)
-                && params.startTime != null
-                && params.startTime.length() > 5
-                && params.stopTime != null
-                && params.stopTime.length() > 5;
+                && params.beginTime != null
+                && params.beginTime.length() > 5
+                && params.endTime != null
+                && params.endTime.length() > 5;
         return valid;
     }
 
@@ -68,8 +76,8 @@ public class Maevent implements DataValidator {
         sb.append(params.place).append(" (")
                 .append(params.addressStreet).append(", ")
                 .append(params.addressPostCode).append(")").append(ENDL);
-        sb.append(params.startTime).append(" - ")
-                .append(params.stopTime).append(" rsvp ")
+        sb.append(params.beginTime).append(" - ")
+                .append(params.endTime).append(" rsvp ")
                 .append(params.rsvp ? "yes" : "not required").append(ENDL);
 
         return sb.toString();

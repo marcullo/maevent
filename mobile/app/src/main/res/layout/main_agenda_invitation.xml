@@ -37,7 +37,7 @@
 
     <TextView
         android:id="@+id/tv_main_invitation_event_time"
-        android:layout_width="120dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/main_agenda_margin_size"
         android:paddingEnd="@dimen/main_agenda_margin_size"
@@ -47,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/main_incoming_event_guideline"
         app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline"
         android:textAllCaps="true"
-        tools:text="In 2 hours"/>
+        tools:text="05:00 AM 20.05"/>
 
     <ImageView
         android:id="@+id/_main_invitation_arrow_right"

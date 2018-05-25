@@ -106,7 +106,7 @@
             tools:text="00-001 Warszawa" />
 
         <TextView
-            android:id="@+id/tv_event_details_hosts"
+            android:id="@+id/tv_event_details_host"
             android:layout_width="86dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -125,9 +125,9 @@
             android:background="@drawable/ic_call"
             android:backgroundTint="@color/colorPrimary"
             android:gravity="end"
-            card_view:layout_constraintBottom_toBottomOf="@+id/tv_event_details_hosts"
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_event_details_host"
             card_view:layout_constraintStart_toStartOf="@+id/btn_main_event_details_location"
-            card_view:layout_constraintTop_toTopOf="@+id/tv_event_details_hosts" />
+            card_view:layout_constraintTop_toTopOf="@+id/tv_event_details_host" />
 
         <ImageView
             android:id="@+id/iv_event_details_time_icon"
@@ -156,19 +156,19 @@
             tools:text="8 Hrs" />
 
         <ImageView
-            android:id="@+id/iv_event_details_invitees_number_icon"
+            android:id="@+id/iv_event_details_users_number_icon"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_marginStart="4dp"
             android:background="@drawable/ic_people"
             android:backgroundTint="@color/colorPrimary"
             android:gravity="end"
-            card_view:layout_constraintBottom_toBottomOf="@+id/tv_event_details_invitees_number"
-            card_view:layout_constraintStart_toEndOf="@+id/tv_event_details_invitees_number"
-            card_view:layout_constraintTop_toTopOf="@+id/tv_event_details_invitees_number" />
+            card_view:layout_constraintBottom_toBottomOf="@+id/tv_event_details_users_number"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_event_details_users_number"
+            card_view:layout_constraintTop_toTopOf="@+id/tv_event_details_users_number" />
 
         <TextView
-            android:id="@+id/tv_event_details_invitees_number"
+            android:id="@+id/tv_event_details_users_number"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="8dp"

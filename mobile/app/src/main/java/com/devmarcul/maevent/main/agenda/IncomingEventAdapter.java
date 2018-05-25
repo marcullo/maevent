@@ -14,7 +14,13 @@ import android.widget.TextView;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.Maevents;
+import com.devmarcul.maevent.utils.Utils;
+
+import java.security.InvalidParameterException;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class IncomingEventAdapter
         extends RecyclerView.Adapter<IncomingEventAdapter.IncomingEventAdapterViewHolder> {
@@ -24,9 +30,9 @@ public class IncomingEventAdapter
     private final IncomingEventAdapterOnClickHandler mClickHandler;
 
     public interface IncomingEventAdapterOnClickHandler {
-        void onClick(Maevent eventData);
-        void onClickCall(Maevent eventData);
-        void onClickLocation(Maevent eventData);
+        void onClick(Maevent event);
+        void onClickCall(Maevent event);
+        void onClickLocation(Maevent event);
     }
 
     public IncomingEventAdapter(IncomingEventAdapterOnClickHandler clickHandler) {
@@ -124,7 +130,7 @@ public class IncomingEventAdapter
     private void adaptContent(IncomingEventAdapterViewHolder holder, Maevent event) {
         String eventName = getEventName(event);
         String place = event.getParams().place;
-        String time = getEventTime(event);
+        String time = getEventTime(holder, event);
 
         holder.eventNameView.setText(eventName);
         holder.eventPlaceView.setText(place);
@@ -141,8 +147,61 @@ public class IncomingEventAdapter
         return event.getParams().name;
     }
 
-    private String getEventTime(Maevent event) {
-        //TODO Get event time
-        return "IN 2 HOURS";
+    private String getEventTime(IncomingEventAdapterViewHolder holder, Maevent event) {
+        Context context =holder.view.getContext();
+
+        MaeventParams params = event.getParams();
+        Calendar cal = Calendar.getInstance();
+        Calendar beginCal = Utils.getCalendarFromString(params.beginTime, MaeventParams.TIME_FORMAT);
+        Calendar endCal = Utils.getCalendarFromString(params.endTime, MaeventParams.TIME_FORMAT);
+
+        long currentTimestamp = cal.getTimeInMillis();
+        long beginEventTimestamp = beginCal.getTimeInMillis();
+        long endEventTimestamp = endCal.getTimeInMillis();
+
+        StringBuilder sb = new StringBuilder();
+        String ENDL = Utils.getNewLine();
+
+        if (beginEventTimestamp > endEventTimestamp) {
+            throw new InvalidParameterException("It is impossible to have negative event duration");
+        }
+        if (currentTimestamp > endEventTimestamp) {
+            String suffix = context.getString(R.string.text_end);
+            sb.append(suffix);
+        }
+        else if (currentTimestamp > beginEventTimestamp) {
+            String suffix = context.getString(R.string.text_live);
+            sb.append(suffix);
+        }
+        else {
+            long duration = beginEventTimestamp - currentTimestamp;
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+            if (minutes < 2) {
+                String suffix = context.getString(R.string.text_in_a_while);
+                sb.append(suffix);
+            }
+            else if (minutes < 30) {
+                String prefix = context.getString(R.string.text_in);
+                String suffix = context.getString(R.string.abbrev_mins);
+                sb.append(prefix).append(" ").append(minutes).append(ENDL).append(suffix);
+            }
+            else if (minutes < 120) {
+                if (minutes < 60) {
+                    sb.append("<");
+                }
+                String suffix = context.getString(R.string.text_hours);
+                sb.append("1").append(ENDL).append(suffix);
+            }
+            else if (minutes < 2 * 60 * 24) {
+                String suffix = context.getString(R.string.text_tomorrow);
+                sb.append(suffix);
+            }
+            else {
+                String suffix = Utils.getStringFromCalendar(beginCal, "dd.MM");
+                sb.append(suffix);
+            }
+        }
+
+        return sb.toString();
     }
 }

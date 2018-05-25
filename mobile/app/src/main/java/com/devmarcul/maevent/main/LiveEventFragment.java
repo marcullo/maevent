@@ -1,7 +1,15 @@
 package com.devmarcul.maevent.main;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -15,6 +23,7 @@ import android.widget.Button;
 
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.business_logic.MaeventSteward;
 import com.devmarcul.maevent.content_provider.hardcoded.UserBuilder;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;
@@ -25,6 +34,8 @@ import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.main.live_event.AttendeeViewAdapter;
 import com.devmarcul.maevent.main.live_event.Attendees;
 import com.devmarcul.maevent.utils.Prompt;
+
+import java.util.Calendar;
 
 public class LiveEventFragment extends Fragment implements
         ViewScroller,
@@ -69,7 +80,7 @@ public class LiveEventFragment extends Fragment implements
 
     @Override
     public void setTitle() {
-        ActionBar bar = ((AppCompatActivity)parent).getSupportActionBar();
+        ActionBar bar = ((AppCompatActivity) parent).getSupportActionBar();
         if (bar != null) {
             int titleRes = R.string.toolbar_title_live_event;
             bar.setTitle(titleRes);
@@ -85,7 +96,7 @@ public class LiveEventFragment extends Fragment implements
     //TODO combine with @AgendaFragment.initEventDetailsDialog
     private void initEventDetails() {
         mEventDetailsView = view.findViewById(R.id.main_event_details);
-        EventDetailsViewAdapter.OnClickHandler onClickHandler =  new EventDetailsViewAdapter.OnClickHandler() {
+        EventDetailsViewAdapter.OnClickHandler onClickHandler = new EventDetailsViewAdapter.OnClickHandler() {
             @Override
             public void onClickCall() {
                 Prompt.displayTodo(parent);

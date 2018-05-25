@@ -26,7 +26,7 @@ public class MaeventManager implements ContentUpdater<Maevent> {
 
             Maevent event = new Maevent();
             event.setParams(params);
-            event.setHost(ThisUser.getProfile().id);
+            event.setHostId(ThisUser.getProfile().id);
             return event;
         }
         return null;

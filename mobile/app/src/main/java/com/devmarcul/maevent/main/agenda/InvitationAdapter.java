@@ -11,9 +11,14 @@ import android.widget.TextView;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Invitations;
+import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.main.common.EventDetailsViewHolder;
+import com.devmarcul.maevent.utils.Utils;
 
 public class InvitationAdapter
         extends RecyclerView.Adapter<InvitationAdapter.InvitationAdapterViewHolder> {
+
+    public static final String TIME_FORMAT = EventDetailsViewHolder.TIME_FORMAT;
 
     //TODO Replace with Content Provider / etc.
     private Invitations mInvitations;
@@ -21,7 +26,7 @@ public class InvitationAdapter
     private final InvitationAdapter.InvitationAdapterOnClickHandler mClickHandler;
 
     public interface InvitationAdapterOnClickHandler {
-        void onClick(Invitation invitationData);
+        void onClick(Invitation invitation);
     }
 
     public InvitationAdapter(InvitationAdapter.InvitationAdapterOnClickHandler clickHandler) {
@@ -98,15 +103,12 @@ public class InvitationAdapter
 
     private void adaptContent(InvitationAdapterViewHolder holder, Invitation invitation) {
         String eventName = invitation.getParams().name;
-        //TODO Replace with array/list
         String place = invitation.getParams().place;
-        //TODO Event host String from Id or add new class MaeventHost
-        String hosts = "Michael Block";
-        //TODO
-        String time = invitation.getParams().startTime;
+        String startTime = Utils.convertTimeStringToOtherFormat(invitation.getParams().beginTime,
+            MaeventParams.TIME_FORMAT, InvitationAdapter.TIME_FORMAT);
 
         holder.eventNameView.setText(eventName);
         holder.eventPlaceView.setText(place);
-        holder.eventTimeView.setText(time);
+        holder.eventTimeView.setText(startTime);
     }
 }

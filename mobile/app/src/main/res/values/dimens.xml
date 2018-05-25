@@ -15,4 +15,6 @@
     <dimen name="main_live_event_card_corner_radius">16dp</dimen>
     <dimen name="empty_tall_divider_height">1dp</dimen>
 
+    <dimen name="main_create_event_card_view_text_size">14sp</dimen>
+
 </resources>

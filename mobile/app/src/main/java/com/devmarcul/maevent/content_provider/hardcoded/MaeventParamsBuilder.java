@@ -24,8 +24,8 @@ public class MaeventParamsBuilder {
         object.place = objectCopy.place;
         object.addressStreet = objectCopy.addressStreet;
         object.addressPostCode = objectCopy.addressPostCode;
-        object.startTime = objectCopy.startTime;
-        object.stopTime = objectCopy.stopTime;
+        object.beginTime = objectCopy.beginTime;
+        object.endTime = objectCopy.endTime;
         object.rsvp = objectCopy.rsvp;
 
         cnt++;
@@ -39,7 +39,7 @@ public class MaeventParamsBuilder {
     public static MaeventParams buildIncomplete() {
         MaeventParams object = new MaeventParams();
         object.name = "Incomplete Event";
-        object.startTime = "1500230518";
+        object.beginTime = "0300PM230518";
         object.rsvp = true;
         return object;
     }
@@ -49,41 +49,41 @@ public class MaeventParamsBuilder {
         object0.place = "Belveder";
         object0.addressStreet = "ul. Belwederska 54/56";
         object0.addressPostCode = "00-001 Warszawa";
-        object0.startTime   = "1700200518";
-        object0.stopTime    = "2300200518";
+        object0.beginTime   = "0600PM060618";
+        object0.endTime     = "1200AM070618";
         object0.rsvp = true;
 
         object1.name = "Young Leaders Conference";
         object1.place = "Palladium";
         object1.addressStreet = "ul. Zlota 9";
         object1.addressPostCode = "00-019 Warszawa";
-        object1.startTime   = "0900240518";
-        object1.stopTime    = "1800250518";
+        object1.beginTime   = "0900AM240518";
+        object1.endTime     = "0600PM250518";
         object1.rsvp = false;
 
         object2.name = "Google I/O";
         object2.place = "Shoreline Amphitheatre";
         object2.addressStreet = "1 Amphitheatre Pkwy";
         object2.addressPostCode = "Mountain View, Ca 94043";
-        object2.startTime   = "0900080518";
-        object2.stopTime    = "1800110518";
-        object2.rsvp = false;
+        object2.beginTime   = "1900AM250518";
+        object2.endTime     = "0400PM280518";
+        object2.rsvp = true;
 
         object3.name = "Software Specialists Summit";
         object3.place = "ICE Cracow";
         object3.addressStreet = "ul. Marii Konopnickiej 17";
         object3.addressPostCode = "30-302 Krakow";
-        object3.startTime   = "0900280518";
-        object3.stopTime    = "1600280518";
+        object3.beginTime   = "0524AM260518";
+        object3.endTime     = "2200PM260518";
         object3.rsvp = false;
 
         object4.name = "Android Day";
         object4.place = "Conference Center NIMBUS";
         object4.addressStreet = "Al. Jerozolimskie 98";
         object4.addressPostCode = "00-807 Warszawa";
-        object4.startTime   = "0000300518";
-        object4.stopTime    = "2359300518";
-        object4.rsvp = false;
+        object4.beginTime   = "0500AM260518";
+        object4.endTime     = "2200PM250518";
+        object4.rsvp = true;
     }
 
     private static void assignObjects() {

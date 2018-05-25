@@ -41,6 +41,7 @@
         android:paddingEnd="@dimen/main_agenda_margin_size"
         android:fontFamily="sans-serif-light"
         android:gravity="right"
+        android:textAllCaps="true"
         app:layout_constraintBottom_toBottomOf="@+id/main_incoming_event_guideline"
         app:layout_constraintRight_toLeftOf="@+id/btn_main_incoming_event_call"
         app:layout_constraintTop_toTopOf="@+id/main_incoming_event_guideline"

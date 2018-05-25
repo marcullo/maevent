@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class UserProfileBuilder {
 
+    public static final int INTITIAL_USER_ID = 100;
     public static final int CNT = 5;
     private static int cnt = 0;
     private static UserProfile object0 = new UserProfile();
@@ -14,6 +15,10 @@ public class UserProfileBuilder {
     private static UserProfile object3 = new UserProfile();
     private static UserProfile object4 = new UserProfile();
     private static UserProfile[] objects;
+
+    public static UserProfile[] getObjects() {
+        return objects;
+    }
 
     public static void setCnt(int cnt) {
         if (cnt >= CNT) {
@@ -60,14 +65,17 @@ public class UserProfileBuilder {
     }
 
     private static void initialize() {
-        object0.id = 100;
+        int id = INTITIAL_USER_ID;
+
+        id++;
+        object0.id = id;
         object0.email = "test.maevent@gmail.com";
         object0.firstName = "Andrew";
         object0.lastName = "Block";
         object0.title = "Phd.";
         object0.pose = "Embedded Software Architect";
         object0.headline = "Looking for 2 well-experienced dev-ops for collaboration.";
-        object0.phone = "+48123456789";
+        object0.phone = "++48123456789";
         object0.linkedin = "maeventTest";
         object0.location = "Warsaw";
         object0.tags = new ArrayList<>();
@@ -76,28 +84,30 @@ public class UserProfileBuilder {
         object0.tags.add("Python");
         object0.tags.add("SOLID");
 
-        object1.id = 101;
+        id++;
+        object1.id = id;
         object1.email = "mr-nobody@nobody.com";
         object1.firstName = "Mr.";
         object1.lastName = "Nobody";
         object1.title = "Phd.";
         object1.pose = "Taxi Rider";
         object1.headline = "Everything matters";
-        object1.phone = "+48123456789";
+        object1.phone = "+22195332004";
         object1.linkedin = "noempty";
         object1.location = "Cracow";
         object1.tags = new ArrayList<>();
         object1.tags.add("Loop");
         object1.tags.add("Fast cars");
 
-        object2.id = 102;
+        id++;
+        object2.id = id;
         object2.email = "hey.me@gmail.com";
         object2.firstName = "Michael";
         object2.lastName = "Block";
         object2.title = "Eng.";
         object2.pose = "Cross-platform Dev-Ops";
         object2.headline = "Looking for 2 new field of experience.";
-        object2.phone = "+48987654321";
+        object2.phone = "+02 20041 22";
         object2.linkedin = "medevop";
         object2.location = "Warsaw";
         object2.tags = new ArrayList<>();
@@ -109,26 +119,28 @@ public class UserProfileBuilder {
         object2.tags.add("TDD");
         object2.tags.add("Maevent");
 
-        object3.id = 103;
+        id++;
+        object3.id = id;
         object3.email = "jsklansky@gmail.com";
         object3.firstName = "Justine";
         object3.lastName = "Sklansky";
         object3.title = "M.Eng.";
         object3.pose = "Android Developer";
         object3.headline = "Androids eats only apples.";
-        object3.phone = "+48987654321";
+        object3.phone = "+4212234055";
         object3.linkedin = "Jusklansky";
         object3.location = "New York";
         object3.tags = new ArrayList<>();
 
-        object4.id = 104;
+        id++;
+        object4.id = id;
         object4.email = "blockandregmail.com";
         object4.firstName = "Andre";
         object4.lastName = "Blockings";
         object4.title = "Phd.";
         object4.pose = "Full-stack Developer";
         object4.headline = "I give only negative feedback.";
-        object4.phone = "+48987654321";
+        object4.phone = "+08 03 02 05 04";
         object4.linkedin = "blockandre";
         object4.location = "Gdansk";
         object4.tags = new ArrayList<>();
