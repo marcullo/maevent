@@ -1,11 +1,8 @@
 package com.devmarcul.maevent.data;
 
-import android.util.Log;
-
-import com.devmarcul.maevent.content_provider.hardcoded.UserProfileBuilder;
 import com.devmarcul.maevent.utils.Utils;
 
-public class User implements ContentUpdater, DataValidator {
+public class User implements DataValidator {
 
     private static String LOG_TAG = "User";
 
@@ -20,18 +17,16 @@ public class User implements ContentUpdater, DataValidator {
         this.profile = profile;
     }
 
-    @Override
-    public void updateContent() {
-        //TODO Replace dummy initialization with data base query
-        profile = UserProfileBuilder.build();
-        registered = true;
-
-        final String debugContent = getContentForDebug();
-        Log.d(LOG_TAG, "Profile: " + debugContent);
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
     }
 
     @Override
-    public boolean checkValidity() {
+    public boolean isValid() {
+        return isProfileValid(profile);
+    }
+
+    public static boolean isProfileValid(UserProfile profile) {
         boolean valid = profile.firstName != null
                 && profile.lastName != null
                 && profile.firstName.length() > 1

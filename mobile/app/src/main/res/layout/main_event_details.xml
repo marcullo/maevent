@@ -10,7 +10,18 @@
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="@dimen/main_event_details_corner_radius">
 
+    <include
+        android:id="@+id/pb_event_details_loading"
+        layout="@layout/item_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:layout_constraintBottom_toBottomOf="parent"/>
+
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/event_details"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

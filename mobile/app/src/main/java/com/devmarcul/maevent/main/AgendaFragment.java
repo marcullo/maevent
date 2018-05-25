@@ -56,7 +56,9 @@ public class AgendaFragment extends Fragment implements
     private InvitationAdapter mInvitationAdapter;
     private ItemViewHolder mInvitationsLabel;
 
+    private ProgressBar mEventDetailsLoading;
     private View mEventDetailsView;
+    private View mEventDetailsContentView;
     private DetailsDialog mEventDetailsDialog;
     private EventDetailsAdapter mEventDetailsAdapter;
     private EventDetailsAdapter.ViewHolder mEventDetailsViewHolder;
@@ -90,9 +92,13 @@ public class AgendaFragment extends Fragment implements
     public void onClick(Maevent event) {
         mFocusedEvent = event;
         mFocusedInvitation = null;
+        mEventDetailsLoading.setVisibility(View.VISIBLE);
+        mEventDetailsContentView.setVisibility(View.INVISIBLE);
+        mEventDetailsDialog.show();
         mEventDetailsAdapter.adaptContent(event);
         mEventDetailsAdapter.bindOnClickListeners();
-        mEventDetailsDialog.show();
+        mEventDetailsLoading.setVisibility(View.INVISIBLE);
+        mEventDetailsContentView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -100,9 +106,13 @@ public class AgendaFragment extends Fragment implements
         Maevent event = invitationData.getEvent();
         mFocusedEvent = null;
         mFocusedInvitation = invitationData;
+        mEventDetailsLoading.setVisibility(View.VISIBLE);
+        mEventDetailsContentView.setVisibility(View.INVISIBLE);
+        mEventDetailsDialog.show();
         mEventDetailsAdapter.adaptContent(event);
         mEventDetailsAdapter.bindOnClickListeners();
-        mEventDetailsDialog.show();
+        mEventDetailsLoading.setVisibility(View.INVISIBLE);
+        mEventDetailsContentView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -265,6 +275,9 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsViewHolder = mEventDetailsAdapter.getViewHolder();
         DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, eventDetailsView);
         mEventDetailsDialog = builder.build(true);
+
+        mEventDetailsLoading = eventDetailsView.findViewById(R.id.pb_event_details_loading);
+        mEventDetailsContentView = eventDetailsView.findViewById(R.id.event_details);
     }
 
     private void acceptInvitation(RecyclerView.ViewHolder viewHolder) {

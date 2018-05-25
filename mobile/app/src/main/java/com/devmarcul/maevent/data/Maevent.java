@@ -3,7 +3,7 @@ package com.devmarcul.maevent.data;
 import com.devmarcul.maevent.content_provider.hardcoded.MaeventParamsBuilder;
 import com.devmarcul.maevent.utils.Utils;
 
-public class Maevent implements ContentUpdater, DataValidator {
+public class Maevent implements DataValidator {
 
     private static String LOG_TAG = "Maevent";
 
@@ -13,23 +13,23 @@ public class Maevent implements ContentUpdater, DataValidator {
         return params;
     }
 
+    public void setParams(MaeventParams params) {
+        this.params = params;
+    }
+
     public void setName(String name) {
         params.name = name;
     }
 
     @Override
-    public void updateContent() {
-        //TODO Replace dummy initialization with data base query
-        params = MaeventParamsBuilder.build();
-        checkValidity();
+    public boolean isValid() {
+        return areParamsValid(params);
     }
 
-    @Override
-    public boolean checkValidity() {
-        boolean valid = params.name != null
-                && params.name.length() > 5
-                && isPlaceValid()
-                && isAddressValid()
+    public static boolean areParamsValid(MaeventParams params) {
+        boolean valid = isNameValid(params.name)
+                && isPlaceValid(params)
+                && isAddressValid(params)
                 && params.startTime != null
                 && params.startTime.length() > 5
                 && params.stopTime != null
@@ -57,19 +57,23 @@ public class Maevent implements ContentUpdater, DataValidator {
         return sb.toString();
     }
 
-    private boolean isPlaceValid() {
+    public static boolean isNameValid(String name) {
+        return name != null && name.length() > 5;
+    }
+
+    private static boolean isPlaceValid(MaeventParams params) {
         return params.place != null && params.place.length() > 2;
     }
 
-    private boolean isAddressValid() {
-        return isAddressStreetValid() && isAddressPostCodeValid();
+    private static boolean isAddressValid(MaeventParams params) {
+        return isAddressStreetValid(params) && isAddressPostCodeValid(params);
     }
 
-    private boolean isAddressStreetValid() {
+    private static boolean isAddressStreetValid(MaeventParams params) {
         return params.addressStreet != null && params.addressPostCode.length() > 6;
     }
 
-    private boolean isAddressPostCodeValid() {
-        return params.addressPostCode != null && params.addressPostCode.length() == 6;
+    private static boolean isAddressPostCodeValid(MaeventParams params) {
+        return params.addressPostCode != null && params.addressPostCode.length() > 6;
     }
 }

@@ -1,4 +1,4 @@
-package com.devmarcul.maevent.profile;
+package com.devmarcul.maevent.business_logic;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,7 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class MaeventAccountManager {
-    private static final String LOG_TAG = "SW/ACCOUNT";
+    private static final String LOG_TAG = "MaeventAccountManager";
     private static int RC_SIGN_IN = 9001;
 
     private static GoogleSignInClient mSignInClient;

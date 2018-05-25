@@ -1,5 +1,6 @@
 package com.devmarcul.maevent.event;
 
+import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.data.Maevent;
 
 public class Invitation {
@@ -38,7 +39,8 @@ public class Invitation {
     }
 
     private void initializeContent() {
-        content.event.updateContent();
+        MaeventManager mm = new MaeventManager();
+        mm.updateContent(content.event);
         content.attendee = "Andrew Block";
     }
 

@@ -2,13 +2,10 @@ package com.devmarcul.maevent.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,21 +14,19 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.archit.calendardaterangepicker.customviews.DateRangeCalendarView;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.Utils;
-import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import java.text.DateFormat;
 import java.util.Calendar;
 
 public class MaeventFragment extends Fragment {
@@ -55,11 +50,11 @@ public class MaeventFragment extends Fragment {
     private DetailsDialog mSelectTimeDialog;
     private DateRangeCalendarView mSelectTimeCalendarView;
 
-    private View mSelectPlaceView;
+    private View mLoadingView;
     private TextView mSelectedPlaceNameView;
     private ImageView mCreateEventPlaceSelectedView;
     private TextView mCreateEventPlaceSelectedTextView;
-    private DetailsDialog mSelectPlaceDialog;
+    private DetailsDialog mLoadingDialog;
 
     private FloatingActionButton mCreateMaeventButton;
 
@@ -74,7 +69,7 @@ public class MaeventFragment extends Fragment {
         parent = getActivity();
 
         mSelectTimeView = inflater.inflate(R.layout.main_select_time, container, false);
-        mSelectPlaceView =inflater.inflate(R.layout.main_select_place, container, false);
+        mLoadingView =inflater.inflate(R.layout.main_maevent_loading, container, false);
         view = inflater.inflate(R.layout.main_maevent, container, false);
 
         calendarTimeSelectedView = view.findViewById(R.id.iv_calendar_time_selected);
@@ -125,12 +120,12 @@ public class MaeventFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 5) {
+                if (Maevent.isNameValid(s.toString())) {
                     mCreateEventNameSelectedTextView.setText(s);
                     textNameChangedProperly();
                 }
                 else {
-                    textNameChangedInproperly();
+                    textNameChangedImproperly();
                 }
                 updateCreateEventButtonVisibility();
             }
@@ -161,7 +156,7 @@ public class MaeventFragment extends Fragment {
         mMaeventSelectPlaceView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSelectPlaceDialog.show();
+                mLoadingDialog.show();
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
                     parent.startActivityForResult(builder.build(parent), MainActivity.PLACE_PICKER_REQUEST);
@@ -172,8 +167,8 @@ public class MaeventFragment extends Fragment {
                 }
             }
         });
-        builder = new DetailsDialog.Builder(view.getContext(), mSelectPlaceView);
-        mSelectPlaceDialog = builder.build(true);
+        builder = new DetailsDialog.Builder(view.getContext(), mLoadingView);
+        mLoadingDialog = builder.build(true);
 
         mCreateEventPlaceSelectedTextView = view.findViewById(R.id.tv_maevent_selected_name_place);
         mSelectedPlaceNameView = view.findViewById(R.id.tv_create_event_place_selected_label);
@@ -184,11 +179,17 @@ public class MaeventFragment extends Fragment {
         mCreateMaeventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Prompt.displayTodo(parent);
+                mLoadingDialog.show();
+                createEvent();
             }
         });
 
         return view;
+    }
+
+    public void createEvent() {
+        Prompt.displayTodo(parent);
+        mLoadingDialog.hide();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -202,11 +203,11 @@ public class MaeventFragment extends Fragment {
             }
             else {
                 if (mCreateEventPlaceSelectedView.getVisibility() != View.VISIBLE) {
-                    placeSelectedInproperly();
+                    placeSelectedImproperly();
                 }
             }
             updateCreateEventButtonVisibility();
-            mSelectPlaceDialog.hide();
+            mLoadingDialog.hide();
         }
     }
 
@@ -218,7 +219,7 @@ public class MaeventFragment extends Fragment {
         mCreateEventNameSelectedTextView.setVisibility(View.VISIBLE);
     }
 
-    private void textNameChangedInproperly() {
+    private void textNameChangedImproperly() {
         mCreateEventNameLabelView.setVisibility(View.GONE);
         mCreateEventNameSelectedView.setVisibility(View.GONE);
         mCreateEventNameView.setVisibility(View.VISIBLE);
@@ -232,7 +233,7 @@ public class MaeventFragment extends Fragment {
         mCreateEventPlaceSelectedTextView.setVisibility(View.VISIBLE);
     }
 
-    private void placeSelectedInproperly() {
+    private void placeSelectedImproperly() {
         mSelectedPlaceNameView.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorSecondaryText));
         mCreateEventPlaceSelectedView.setVisibility(View.GONE);
     }
