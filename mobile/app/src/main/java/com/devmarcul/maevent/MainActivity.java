@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int lastLoadedFragmentId;
     private Fragment lastLoadedFragment;
+    private BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         lastLoadedFragmentId = 0;
 
-        BottomNavigationView bottomNavigation = findViewById(R.id.main_navigation);
+        bottomNavigation = findViewById(R.id.main_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomNavigation.getLayoutParams();
@@ -116,11 +117,21 @@ public class MainActivity extends AppCompatActivity {
         lastLoadedFragment.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void loadFragment(Fragment fragment) {
+    public void loadLiveEventFragment() {
+        if (pendingEvent == null) {
+            return;
+        }
+        loadFragment(new LiveEventFragment(), R.id.main_live_event);
+    }
+
+    private void loadFragment(Fragment fragment, int newFragmentId) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_frame_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+        lastLoadedFragmentId = newFragmentId;
+        lastLoadedFragment = fragment;
+        bottomNavigation.setSelectedItemId(newFragmentId);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -163,9 +174,7 @@ public class MainActivity extends AppCompatActivity {
                     throw new IllegalArgumentException("Not implemented fragment!");
             }
 
-            loadFragment(fragment);
-            lastLoadedFragmentId = newFragmentId;
-            lastLoadedFragment = fragment;
+            loadFragment(fragment, newFragmentId);
             return true;
         }
     };

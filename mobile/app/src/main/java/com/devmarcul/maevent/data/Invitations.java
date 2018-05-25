@@ -1,4 +1,4 @@
-package com.devmarcul.maevent.event;
+package com.devmarcul.maevent.data;
 
 import java.util.LinkedList;
 

@@ -13,6 +13,10 @@ public class User implements DataValidator {
         return profile;
     }
 
+    public boolean isRegistered() {
+        return registered;
+    }
+
     public void setProfile(UserProfile profile) {
         this.profile = profile;
     }

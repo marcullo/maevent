@@ -7,11 +7,20 @@ public class Maevent implements DataValidator {
 
     private static String LOG_TAG = "Maevent";
 
-    public MaeventParams params;
-    public int hostId;
+    protected int hostId;
+    protected int id;
+    protected MaeventParams params;
 
     public MaeventParams getParams() {
         return params;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getHostId() {
+        return hostId;
     }
 
     public void setParams(MaeventParams params) {
@@ -20,6 +29,10 @@ public class Maevent implements DataValidator {
 
     public void setName(String name) {
         params.name = name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setHost(int hostId) {

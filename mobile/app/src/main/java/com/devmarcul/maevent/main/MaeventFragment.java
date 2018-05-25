@@ -237,10 +237,10 @@ public class MaeventFragment extends Fragment implements CustomTittleSetter {
         MaeventParams params = new MaeventParams();
         params.name = mCreateEventNameView.getText().toString();
         params.place = mCreateEventPlaceSelectedTextView.getText().toString();
-        params.addressStreet = "todsdasdo";
-        params.addressPostCode = "1212312123";
+        params.addressStreet = "Witolda Budryka 2";
+        params.addressPostCode = "30-072 Krakow";
         params.startTime = mCreateEventPlaceSelectedTextView.getText().toString();
-        params.stopTime = "1231231";
+        params.stopTime = "22:00 29.02";
         Maevent event = ThisUser.createEvent(params);
         Prompt.displayShort("TODO Create event. " + event.getParams().name +
                 ". RSVP: " + (mCreateEventRsvpSelectView.isChecked() ? "yes" : "no"), parent);

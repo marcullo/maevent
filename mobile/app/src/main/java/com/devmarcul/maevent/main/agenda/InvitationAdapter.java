@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.devmarcul.maevent.R;
-import com.devmarcul.maevent.event.Invitation;
-import com.devmarcul.maevent.event.Invitations;
+import com.devmarcul.maevent.data.Invitation;
+import com.devmarcul.maevent.data.Invitations;
 
 public class InvitationAdapter
         extends RecyclerView.Adapter<InvitationAdapter.InvitationAdapterViewHolder> {
@@ -97,11 +97,13 @@ public class InvitationAdapter
     }
 
     private void adaptContent(InvitationAdapterViewHolder holder, Invitation invitation) {
-        String eventName = invitation.getEventName();
+        String eventName = invitation.getParams().name;
         //TODO Replace with array/list
-        String place = invitation.getEventPlace();
-        String hosts = invitation.getEventHosts();
-        String time = invitation.getEventStartTime();
+        String place = invitation.getParams().place;
+        //TODO Event host String from Id or add new class MaeventHost
+        String hosts = "Michael Block";
+        //TODO
+        String time = invitation.getParams().startTime;
 
         holder.eventNameView.setText(eventName);
         holder.eventPlaceView.setText(place);

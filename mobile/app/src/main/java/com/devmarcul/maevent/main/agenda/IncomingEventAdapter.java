@@ -1,7 +1,9 @@
 package com.devmarcul.maevent.main.agenda;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.Maevents;
@@ -44,6 +47,9 @@ public class IncomingEventAdapter
     public void onBindViewHolder(@NonNull IncomingEventAdapterViewHolder holder, int position) {
         Maevent event = mIncomingEvents.get(position);
         adaptContent(holder, event);
+        //TODO refactor
+        adaptPendingEvent(holder,
+                MainActivity.pendingEvent != null && MainActivity.pendingEvent.getId() == event.getId());
     }
 
     @Override
@@ -76,6 +82,7 @@ public class IncomingEventAdapter
             implements View.OnClickListener {
 
         final View view;
+        final View pendingEventView;
         final ImageButton locationView;
         final ImageButton callView;
         final TextView eventNameView;
@@ -85,6 +92,7 @@ public class IncomingEventAdapter
         IncomingEventAdapterViewHolder(View itemView) {
             super(itemView);
             view = itemView;
+            pendingEventView = view.findViewById(R.id.v_agenda_pending_event);
             callView = view.findViewById(R.id.btn_main_incoming_event_call);
             locationView = view.findViewById(R.id.btn_main_incoming_event_location);
             eventNameView = view.findViewById(R.id.tv_main_incoming_event_name);
@@ -121,6 +129,12 @@ public class IncomingEventAdapter
         holder.eventNameView.setText(eventName);
         holder.eventPlaceView.setText(place);
         holder.eventTimeView.setText(time);
+    }
+
+    public void adaptPendingEvent(IncomingEventAdapterViewHolder holder, boolean pendingEvent) {
+        int pendingColor = ContextCompat.getColor(holder.view.getContext(), R.color.colorAccent);
+        int color = pendingEvent ? pendingColor : Color.TRANSPARENT;
+        holder.pendingEventView.setBackgroundColor(color);
     }
 
     private String getEventName(Maevent event) {
