@@ -1,15 +1,7 @@
 package com.devmarcul.maevent.main;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -19,23 +11,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.business_logic.MaeventSteward;
 import com.devmarcul.maevent.content_provider.hardcoded.UserBuilder;
+import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.main.common.EventDetailsHandler;
 import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;
-import com.devmarcul.maevent.main.common.EventDetailsViewHolder;
 import com.devmarcul.maevent.utils.CustomTittleSetter;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.main.live_event.AttendeeViewAdapter;
 import com.devmarcul.maevent.main.live_event.Attendees;
 import com.devmarcul.maevent.utils.Prompt;
-
-import java.util.Calendar;
 
 public class LiveEventFragment extends Fragment implements
         ViewScroller,
@@ -46,6 +36,7 @@ public class LiveEventFragment extends Fragment implements
 
     private View mEventDetailsView;
     private EventDetailsViewAdapter mEventDetailsAdapter;
+    private EventDetailsHandler mEventDetailsHandler;
 
     private Attendees mAttendeesData;
     private RecyclerView mAttendeeRecyclerView;
@@ -93,30 +84,12 @@ public class LiveEventFragment extends Fragment implements
         return view;
     }
 
-    //TODO combine with @AgendaFragment.initEventDetailsDialog
     private void initEventDetails() {
         mEventDetailsView = view.findViewById(R.id.main_event_details);
-        EventDetailsViewAdapter.OnClickHandler onClickHandler = new EventDetailsViewAdapter.OnClickHandler() {
-            @Override
-            public void onClickCall() {
-                Prompt.displayTodo(parent);
-            }
 
-            @Override
-            public void onClickLocation() {
-                Prompt.displayTodo(parent);
-            }
-
-            @Override
-            public void onClickCalendar() {
-                Prompt.displayTodo(parent);
-            }
-
-            @Override
-            public void onClickJoin() {
-            }
-
-        };
+        mEventDetailsHandler = MainActivity.eventDetailsHandler;
+        mEventDetailsHandler.focus(parent);
+        mEventDetailsHandler.focus(MainActivity.pendingEvent, null);
 
         View progressBarView = mEventDetailsView.findViewById(R.id.pb_event_details_loading);
         progressBarView.setVisibility(View.INVISIBLE);
@@ -124,7 +97,7 @@ public class LiveEventFragment extends Fragment implements
         View eventdetailsContentView = mEventDetailsView.findViewById(R.id.event_details);
         eventdetailsContentView.setVisibility(View.VISIBLE);
 
-        mEventDetailsAdapter = new EventDetailsViewAdapter(onClickHandler, mEventDetailsView);
+        mEventDetailsAdapter = new EventDetailsViewAdapter(mEventDetailsHandler, mEventDetailsView);
         mEventDetailsAdapter.adaptContent(MainActivity.pendingEvent);
         mEventDetailsAdapter.adaptJoinButton(false);
         mEventDetailsAdapter.bindOnClickListeners();

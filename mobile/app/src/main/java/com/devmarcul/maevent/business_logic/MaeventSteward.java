@@ -10,6 +10,7 @@ import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventCalendar;
 import com.devmarcul.maevent.data.MaeventCalendarParams;
 import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.Utils;
 
 import java.util.Calendar;
@@ -39,6 +40,25 @@ public class MaeventSteward {
         Intent intent = prepareBaseIntent(params);
         intent.putExtra(CalendarContract.Events.DESCRIPTION, params.description);
         activity.startActivity(intent);
+    }
+
+    public static void openEventLocation(Maevent event, Activity activity) {
+        StringBuilder sb = new StringBuilder();
+        MaeventParams params = event.getParams();
+
+        sb.append(params.place)
+                .append(", ").append(params.addressStreet)
+                .append(" ").append(params.addressPostCode);
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("geo")
+            .appendPath("0,0")
+            .appendQueryParameter("q", sb.toString());
+
+        Uri gmmIntentUri = builder.build();
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        activity.startActivity(mapIntent);
     }
 
     private static MaeventCalendarParams prepareBaseParams(Maevent event) {

@@ -3,6 +3,7 @@ package com.devmarcul.maevent.main.common;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.devmarcul.maevent.R;
@@ -25,6 +26,7 @@ public class EventDetailsViewHolder {
     public TextView mTimeView;
     public TextView mDurationView;
     public TextView mUsersNumberView;
+    public ImageView mUsersNumberIcon;
 
     public EventDetailsViewHolder(View view) {
         this.view = view;
@@ -40,6 +42,6 @@ public class EventDetailsViewHolder {
         mTimeView = view.findViewById(R.id.tv_event_details_time);
         mDurationView = view.findViewById(R.id.tv_event_details_duration);
         mUsersNumberView = view.findViewById(R.id.tv_event_details_users_number);
-
+        mUsersNumberIcon = view.findViewById(R.id.iv_event_details_users_number_icon);
     }
 }

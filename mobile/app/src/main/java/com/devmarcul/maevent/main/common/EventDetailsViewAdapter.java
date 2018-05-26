@@ -1,7 +1,9 @@
 package com.devmarcul.maevent.main.common;
 
+import android.graphics.ColorFilter;
 import android.view.View;
 
+import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.business_logic.MaeventSteward;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
@@ -55,13 +57,19 @@ public class EventDetailsViewAdapter
 
     public void adaptUsersNumber(Maevent event, boolean usersAreAttendees) {
         String usersNumber;
+        int usersNumberIconRes;
+
         if (usersAreAttendees) {
             usersNumber = String.valueOf(event.getAttendeesNr());
+            usersNumberIconRes = R.drawable.ic_people;
         }
         else {
             usersNumber = String.valueOf(((Invitation)event).getInviteesNr());
+            usersNumberIconRes = R.drawable.ic_confusion;
         }
+
         viewHolder.mUsersNumberView.setText(usersNumber);
+        viewHolder.mUsersNumberIcon.setBackgroundResource(usersNumberIconRes);
     }
 
     public void adaptJoinButton(boolean visible) {

@@ -16,10 +16,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.main.AgendaFragment;
 import com.devmarcul.maevent.main.LiveEventFragment;
 import com.devmarcul.maevent.main.MaeventFragment;
+import com.devmarcul.maevent.main.common.EventDetailsHandler;
 import com.devmarcul.maevent.utils.bottom_navig.BottomNavigationBehavior;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.business_logic.MaeventAccountManager;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int PLACE_PICKER_REQUEST = 1;
 
     public static Maevent pendingEvent = null;
+    //Fragment should call focus() before using this handler
+    public static EventDetailsHandler eventDetailsHandler = new EventDetailsHandler();
 
     private int lastLoadedFragmentId;
     private Fragment lastLoadedFragment;

@@ -51,7 +51,7 @@ public class MaeventBuilder {
         object0.setParams(params);
         object0.setHostId(hostId);
         object0.setId(id);
-        object0.setAttendeesNr(0);
+        object0.setAttendeesNr(220);
 
         params = MaeventParamsBuilder.build();
         hostId++;
