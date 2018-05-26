@@ -58,13 +58,12 @@ public class AgendaFragment extends Fragment implements
     private InvitationAdapter mInvitationAdapter;
     private ItemViewHolder mInvitationsLabel;
 
-    private ProgressBar mEventDetailsLoading;
     private View mEventDetailsView;
     private View mEventDetailsContentView;
     private DetailsDialog mEventDetailsDialog;
     private EventDetailsViewAdapter mEventDetailsAdapter;
-    private EventDetailsViewHolder mEventDetailsViewHolder;
     private EventDetailsHandler mEventDetailsHandler;
+    private ProgressBar mEventDetailsLoading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,10 +114,12 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsLoading.setVisibility(View.VISIBLE);
         mEventDetailsContentView.setVisibility(View.INVISIBLE);
         mEventDetailsDialog.show();
+
         mEventDetailsAdapter.adaptContent(event);
         mEventDetailsAdapter.adaptUsersNumber(event, true);
         mEventDetailsAdapter.adaptJoinButton(!isPendingEvent);
         mEventDetailsAdapter.bindOnClickListeners();
+
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
         mEventDetailsContentView.setVisibility(View.VISIBLE);
     }
@@ -129,10 +130,12 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsLoading.setVisibility(View.VISIBLE);
         mEventDetailsContentView.setVisibility(View.INVISIBLE);
         mEventDetailsDialog.show();
+
         mEventDetailsAdapter.adaptContent(invitation);
         mEventDetailsAdapter.adaptUsersNumber(invitation, false);
         mEventDetailsAdapter.adaptJoinButton(false);
         mEventDetailsAdapter.bindOnClickListeners();
+
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
         mEventDetailsContentView.setVisibility(View.VISIBLE);
     }
@@ -270,6 +273,11 @@ public class AgendaFragment extends Fragment implements
 
         mEventDetailsHandler = MainActivity.eventDetailsHandler;
 
+        DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, eventDetailsView);
+        mEventDetailsDialog = builder.build(true);
+
+        mEventDetailsAdapter = new EventDetailsViewAdapter(mEventDetailsHandler, eventDetailsView);
+
         mEventDetailsHandler.focus(parent);
         mEventDetailsHandler.setOnClickJoinHandler(new EventDetailsHandler.OnClickJoinHandler() {
             @Override
@@ -281,11 +289,6 @@ public class AgendaFragment extends Fragment implements
                 ((MainActivity)parent).loadLiveEventFragment();
             }
         });
-
-        mEventDetailsAdapter = new EventDetailsViewAdapter(mEventDetailsHandler, eventDetailsView);
-        mEventDetailsViewHolder = mEventDetailsAdapter.getViewHolder();
-        DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, eventDetailsView);
-        mEventDetailsDialog = builder.build(true);
 
         mEventDetailsLoading = eventDetailsView.findViewById(R.id.pb_event_details_loading);
         mEventDetailsContentView = eventDetailsView.findViewById(R.id.event_details);

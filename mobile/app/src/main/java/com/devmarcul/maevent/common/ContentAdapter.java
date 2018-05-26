@@ -1,4 +1,4 @@
-package com.devmarcul.maevent.main.common;
+package com.devmarcul.maevent.common;
 
 public interface ContentAdapter<T, VH> {
     void adaptContent(T obj);

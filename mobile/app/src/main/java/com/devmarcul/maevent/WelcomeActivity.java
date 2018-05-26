@@ -3,9 +3,11 @@ package com.devmarcul.maevent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,10 +16,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devmarcul.maevent.business_logic.MaeventAccountManager;
+import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -36,6 +40,9 @@ public class WelcomeActivity extends AppCompatActivity
     private TextView mWelcomeTextView;
     private SignInButton mSignInButton;
 
+    private DetailsDialog mNoInternetConnectionDialog;
+    private View mNoInternetConnectionView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +56,13 @@ public class WelcomeActivity extends AppCompatActivity
         mWelcomeImageView = findViewById(R.id.image_welcome);
         mWelcomeTextView = findViewById(R.id.message_welcome);
         mSignInButton = findViewById(R.id.btn_welcome_sign_in);
-
         mSignInButton.setOnClickListener(this);
+
+        View  noInternetConnectionLayout = getLayoutInflater().inflate(R.layout.no_internet_connection, null);
+        mNoInternetConnectionView = noInternetConnectionLayout.findViewById(R.id.no_internet_connection);
+
+        DetailsDialog.Builder builder = new DetailsDialog.Builder(this, mNoInternetConnectionView);
+        mNoInternetConnectionDialog = builder.build(false);
     }
 
     @Override
@@ -60,7 +72,8 @@ public class WelcomeActivity extends AppCompatActivity
                 MaeventAccountManager.signInForResult(this);
             }
             else {
-                showNoInternetPrompt();
+                //TODO Add task for checking network connection
+                mNoInternetConnectionDialog.show();
             }
         }
     }
@@ -100,11 +113,6 @@ public class WelcomeActivity extends AppCompatActivity
                 (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
         return info != null && info.isConnectedOrConnecting();
-    }
-
-    private void showNoInternetPrompt() {
-        Toast toast = Toast.makeText(this, "No internet connection!", Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     private void startAnimation() {

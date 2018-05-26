@@ -1,10 +1,10 @@
 package com.devmarcul.maevent.main.common;
 
-import android.graphics.ColorFilter;
 import android.view.View;
 
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.business_logic.MaeventSteward;
+import com.devmarcul.maevent.common.ContentAdapter;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
@@ -12,10 +12,11 @@ import com.devmarcul.maevent.utils.Utils;
 
 import java.util.Calendar;
 
-public class EventDetailsViewAdapter
-        implements ContentAdapter<Maevent, EventDetailsViewHolder>, View.OnClickListener {
+public class EventDetailsViewAdapter implements
+        ContentAdapter<Maevent, EventDetailsViewHolder>,
+        View.OnClickListener {
 
-    private EventDetailsViewHolder viewHolder;
+    private EventDetailsViewHolder mViewHolder;
     private OnClickHandler mClickHandler;
 
     public interface OnClickHandler {
@@ -27,7 +28,7 @@ public class EventDetailsViewAdapter
 
     public EventDetailsViewAdapter(OnClickHandler handler, View viewHolderView) {
         mClickHandler = handler;
-        viewHolder = new EventDetailsViewHolder(viewHolderView);
+        mViewHolder = new EventDetailsViewHolder(viewHolderView);
     }
 
     @Override
@@ -45,14 +46,14 @@ public class EventDetailsViewAdapter
         //TODO Consider replacing with remaining time
         String duration = getDurationString(params.beginTime, params.endTime);
 
-        viewHolder.mNameView.setText(eventName);
-        viewHolder.mHostView.setText(host);
-        viewHolder.mPlaceView.setText(place);
-        viewHolder.mStreetView.setText(street);
-        viewHolder.mPostalCodeView.setText(postCode);
-        viewHolder.mTimeView.setText(time);
-        viewHolder.mDurationView.setText(duration);
-        viewHolder.mUsersNumberView.setText(usersNumber);
+        mViewHolder.mNameView.setText(eventName);
+        mViewHolder.mHostView.setText(host);
+        mViewHolder.mPlaceView.setText(place);
+        mViewHolder.mStreetView.setText(street);
+        mViewHolder.mPostalCodeView.setText(postCode);
+        mViewHolder.mTimeView.setText(time);
+        mViewHolder.mDurationView.setText(duration);
+        mViewHolder.mUsersNumberView.setText(usersNumber);
     }
 
     public void adaptUsersNumber(Maevent event, boolean usersAreAttendees) {
@@ -68,16 +69,16 @@ public class EventDetailsViewAdapter
             usersNumberIconRes = R.drawable.ic_confusion;
         }
 
-        viewHolder.mUsersNumberView.setText(usersNumber);
-        viewHolder.mUsersNumberIcon.setBackgroundResource(usersNumberIconRes);
+        mViewHolder.mUsersNumberView.setText(usersNumber);
+        mViewHolder.mUsersNumberIcon.setBackgroundResource(usersNumberIconRes);
     }
 
     public void adaptJoinButton(boolean visible) {
         if (visible) {
-            viewHolder.mJoinButton.setVisibility(View.VISIBLE);
+            mViewHolder.mJoinButton.setVisibility(View.VISIBLE);
         }
         else {
-            viewHolder.mJoinButton.setVisibility(View.GONE);
+            mViewHolder.mJoinButton.setVisibility(View.GONE);
         }
     }
 
@@ -97,37 +98,37 @@ public class EventDetailsViewAdapter
 
     @Override
     public void bindOnClickListeners() {
-        viewHolder.mLocationButton.setOnClickListener(this);
-        viewHolder.mCallButton.setOnClickListener(this);
-        viewHolder.mCalendarButton.setOnClickListener(this);
-        viewHolder.mJoinButton.setOnClickListener(this);
+        mViewHolder.mLocationButton.setOnClickListener(this);
+        mViewHolder.mCallButton.setOnClickListener(this);
+        mViewHolder.mCalendarButton.setOnClickListener(this);
+        mViewHolder.mJoinButton.setOnClickListener(this);
     }
 
     @Override
     public void unbindOnClickListeners() {
-        viewHolder.mLocationButton.setOnClickListener(null);
-        viewHolder.mCallButton.setOnClickListener(null);
-        viewHolder.mCalendarButton.setOnClickListener(null);
-        viewHolder.mJoinButton.setOnClickListener(null);
+        mViewHolder.mLocationButton.setOnClickListener(null);
+        mViewHolder.mCallButton.setOnClickListener(null);
+        mViewHolder.mCalendarButton.setOnClickListener(null);
+        mViewHolder.mJoinButton.setOnClickListener(null);
     }
 
     @Override
     public EventDetailsViewHolder getViewHolder() {
-        return viewHolder;
+        return mViewHolder;
     }
 
     @Override
     public void onClick(View v) {
-        if (v == viewHolder.mCallButton) {
+        if (v == mViewHolder.mCallButton) {
             mClickHandler.onClickCall();
         }
-        else if (v == viewHolder.mLocationButton) {
+        else if (v == mViewHolder.mLocationButton) {
             mClickHandler.onClickLocation();
         }
-        else if (v == viewHolder.mCalendarButton) {
+        else if (v == mViewHolder.mCalendarButton) {
             mClickHandler.onClickCalendar();
         }
-        else if (v == viewHolder.mJoinButton) {
+        else if (v == mViewHolder.mJoinButton) {
             mClickHandler.onClickJoin();
         }
     }

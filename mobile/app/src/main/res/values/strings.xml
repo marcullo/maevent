@@ -16,6 +16,7 @@
     <string name="text_hours">hours</string>
     <string name="text_in">In</string>
     <string name="text_tomorrow">Next day</string>
+    <string name="text_location">City</string>
 
     <string name="abbrev_mins">MINS</string>
     <string name="abbrev_hours">HRS</string>
@@ -72,5 +73,8 @@
     <string name="main_create_event_select_rsvp">Select RSVP</string>
     <string name="main_create_event_button_tooltip">Create event</string>
     <string name="main_create_event_rsvp">@string/text_rsvp</string>
+
+    <string name="no_internet_connection_title">Internet connection disappeared</string>
+    <string name="no_internet_connection_description">How would you network without network connection?\nI am trying to reconnect to Maevent servers. </string>
 
 </resources>

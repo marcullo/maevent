@@ -38,7 +38,7 @@
     <include
         android:id="@+id/configure_profile_tags"
         android:visibility="visible"
-        layout="@layout/configure_profile_tags" />
+        layout="@layout/edit_tags" />
 
 </LinearLayout>
 </ScrollView>

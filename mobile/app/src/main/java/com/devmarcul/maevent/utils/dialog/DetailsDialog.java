@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.WindowManager;
 
 public class DetailsDialog {
 
@@ -32,6 +33,7 @@ public class DetailsDialog {
             builder = new AlertDialog.Builder(context);
             builder.setView(detailsView);
             dialog = builder.create();
+
             if (transparentBackground) {
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }

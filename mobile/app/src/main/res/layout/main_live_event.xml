@@ -21,6 +21,13 @@
             android:id="@+id/main_live_event_toolbar"
             layout="@layout/main_live_event_toolbar" />
 
+        <include
+            android:id="@+id/pb_attendees_loading"
+            layout="@layout/item_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_attendees"
             android:visibility="visible"

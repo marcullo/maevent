@@ -7,7 +7,8 @@ import android.widget.TextView;
 
 import com.devmarcul.maevent.R;
 
-public class AttendeeViewHolder extends RecyclerView.ViewHolder {
+public abstract class AttendeeViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener {
 
     private View view;
 
@@ -26,5 +27,7 @@ public class AttendeeViewHolder extends RecyclerView.ViewHolder {
         mAttendeeLastName = view.findViewById(R.id.tv_person_last_name);
         mAttendeeLocationView = view.findViewById(R.id.tv_person_location);
         mAttendeeHeadlineView = view.findViewById(R.id.tv_person_headline);
+
+        view.setOnClickListener(this);
     }
 }

@@ -12,10 +12,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.devmarcul.maevent.common.TagsViewAdapter;
+import com.devmarcul.maevent.common.TagsViewHolder;
 import com.devmarcul.maevent.configure_profile.ContactViewHolder;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;
-import com.devmarcul.maevent.configure_profile.TagsViewHolder;
 import com.devmarcul.maevent.data.ThisUser;
 import com.devmarcul.maevent.utils.dialog.TwoButtonsDialog;
 import com.devmarcul.maevent.business_logic.MaeventAccountManager;
@@ -34,7 +35,7 @@ public class ConfigureProfileActivity extends AppCompatActivity {
     private ItemViewHolder mContactLabel;
     private ContactViewHolder mContactViewHolder;
     private ItemViewHolder mTagsLabel;
-    private TagsViewHolder mTagsViewHolder;
+    private TagsViewAdapter mTagsViewAdapter;
 
     private TwoButtonsDialog mCancelDialog;
 
@@ -80,7 +81,10 @@ public class ConfigureProfileActivity extends AppCompatActivity {
 
         mIntroductionViewHolder = new IntroductionViewHolder(this, introductionView);
         mContactViewHolder = new ContactViewHolder(this, contactView);
-        mTagsViewHolder = new TagsViewHolder(this, tagsView);
+
+        mTagsViewAdapter = new TagsViewAdapter(tagsView, R.id.et_tags);
+        mTagsViewAdapter.adaptContent(ThisUser.getProfile().tags);
+        mTagsViewAdapter.adaptEditable(true);
 
         introductionLabelView.setOnClickListener(new View.OnClickListener() {
             @Override
