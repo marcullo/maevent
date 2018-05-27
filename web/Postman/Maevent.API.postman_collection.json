@@ -1,0 +1,30 @@
+{
+	"info": {
+		"_postman_id": "e8e16a88-20bf-4333-91a3-d7e8e6925a64",
+		"name": "Maevent.API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET values",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8088/api/values",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"values"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
