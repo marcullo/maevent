@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Maevent.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Maevent.API
 {
@@ -23,11 +26,25 @@ namespace Maevent.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            
+            services.AddDbContext<MaeventContext>(o => o.UseSqlServer(Configuration["Data:ConnectionString"]));
+            services.AddScoped<IMaeventRepository, MaeventRepository>();
+            services.AddTransient<MaeventDbInitializer>();
+
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Data.Entities.Event, Models.EventModel>();
+            });
+
+            services.AddMvc()
+                .AddJsonOptions(opt =>
+                {
+                    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MaeventDbInitializer seeder)
         {
             if (env.IsDevelopment())
             {
@@ -35,6 +52,8 @@ namespace Maevent.API
             }
 
             app.UseMvc();
+
+            seeder.Seed().Wait();
         }
     }
 }
