@@ -12,22 +12,24 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.devmarcul.maevent.api.MaeventApi;
+import com.android.volley.toolbox.Volley;
+import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.receivers.NetworkReceiver;
 import com.devmarcul.maevent.utils.network.NetworkManager;
 
 import org.json.JSONArray;
 
-public class NetworkService extends IntentService {
+public class NetworkService extends IntentService implements MaeventApi {
 
-    public static String LOG_TAG = "CreateEventIntentService";
-    private static String RESULT_RECEIVER_NAME = "RESULT_RECEIVER";
+    public static String LOG_TAG = "NetworkService";
+    private static final NetworkService instance = new NetworkService();
 
-    public NetworkService(String name) {
-        super(name);
+    public static synchronized NetworkService getInstance() {
+        return instance;
     }
 
+    // Do not use this constructor!
     public NetworkService() {
         super(NetworkService.class.getName());
     }
@@ -38,33 +40,33 @@ public class NetworkService extends IntentService {
             return;
         }
 
-        Log.d(LOG_TAG,  "Handling network intent service");
-
-        ResultReceiver receiver = intent.getParcelableExtra(RESULT_RECEIVER_NAME);
-
+        ResultReceiver receiver = intent.getParcelableExtra(RESULT_RECEIVER);
         final String action = intent.getAction();
 
-        if (MaeventApi.Action.GET_EVENTS.name().equals(action)) {
-            handleGettingEvents(receiver);
+        if (Action.GET_EVENTS.name().equals(action)) {
+            handleGetEvents(receiver);
         }
-        else if (MaeventApi.Action.CREATE_EVENT.name().equals(action)) {
-            final Maevent event = intent.getParcelableExtra(MaeventApi.Param.EVENT.name());
-            handleCreatingEvent(receiver, event);
+        else if (Action.CREATE_EVENT.name().equals(action)) {
+            final Maevent event = intent.getParcelableExtra(Param.EVENT.name());
+            handleCreateEvent(receiver, event);
         }
     }
 
-    public static void startService(Context context, MaeventApi.Action action, MaeventApi.Param param, Parcelable parcel, NetworkReceiver.Callback callback) {
+    public void startService(Context context, MaeventApi.Action action, MaeventApi.Param param, Parcelable parcel, NetworkReceiver.Callback callback) {
         NetworkReceiver receiver = new NetworkReceiver(new Handler(context.getMainLooper()));
         receiver.setReceiver(callback);
 
         Intent intent = new Intent(context, NetworkService.class);
         intent.setAction(action.name());
         intent.putExtra(param.name(), parcel);
-        intent.putExtra(RESULT_RECEIVER_NAME, receiver);
+        intent.putExtra(RESULT_RECEIVER, receiver);
         context.startService(intent);
+
+        Log.d(LOG_TAG, action.name() + " Handling network intent service");
     }
 
-    private void handleGettingEvents(final ResultReceiver receiver) {
+    @Override
+    public void handleGetEvents(final ResultReceiver receiver) {
         final Bundle bundle = new Bundle();
         final int code = NetworkReceiver.RESULT_CODE_OK;
 
@@ -89,7 +91,8 @@ public class NetworkService extends IntentService {
                 });
     }
 
-    private void handleCreatingEvent(final ResultReceiver receiver, Maevent event) {
+    @Override
+    public void handleCreateEvent(final ResultReceiver receiver, Maevent event) {
         //TODO
     }
 }

@@ -24,12 +24,12 @@ public class NetworkReceiver<T> extends ResultReceiver {
 
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
+        Log.i(LOG_TAG, "Server answered");
+
         if (mCallback != null) {
-            Log.i(LOG_TAG, "Server answered");
             mCallback.onSuccess(resultData.getSerializable(PARAM_RESULT));
         }
         else {
-            Log.e(LOG_TAG, "Error: result code " + resultCode);
             mCallback.onError((Exception)resultData.getSerializable(PARAM_EXCEPTION));
         }
     }

@@ -2,7 +2,7 @@ package com.devmarcul.maevent.business_logic;
 
 import android.util.Log;
 
-import com.devmarcul.maevent.content_provider.hardcoded.UserProfileBuilder;
+import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
 import com.devmarcul.maevent.data.ContentUpdater;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;

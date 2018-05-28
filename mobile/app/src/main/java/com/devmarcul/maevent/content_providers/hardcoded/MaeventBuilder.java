@@ -1,4 +1,4 @@
-package com.devmarcul.maevent.content_provider.hardcoded;
+package com.devmarcul.maevent.content_providers.hardcoded;
 
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;

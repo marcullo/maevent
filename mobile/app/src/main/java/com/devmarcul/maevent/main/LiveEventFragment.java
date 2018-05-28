@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.common.TagsViewAdapter;
-import com.devmarcul.maevent.content_provider.hardcoded.UserBuilder;
+import com.devmarcul.maevent.content_providers.hardcoded.UserBuilder;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.main.common.EventDetailsHandler;
 import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;

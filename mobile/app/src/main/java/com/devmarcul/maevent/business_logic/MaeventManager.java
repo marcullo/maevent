@@ -2,7 +2,7 @@ package com.devmarcul.maevent.business_logic;
 
 import android.content.Context;
 
-import com.devmarcul.maevent.api.MaeventApi;
+import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.ThisUser;
@@ -17,7 +17,7 @@ public class MaeventManager {
         return instance;
     }
 
-    private MaeventManager() {
+    protected MaeventManager() {
     }
 
     public void createEvent(final Context context, MaeventParams params, NetworkReceiver.Callback<Boolean> callback) {
@@ -33,6 +33,6 @@ public class MaeventManager {
         event.setAttendeesNr(1);
 
 //        NetworkService.startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, event, callback);
-        NetworkService.startService(context, MaeventApi.Action.GET_EVENTS, MaeventApi.Param.NONE, event, callback);
+        NetworkService.getInstance().startService(context, MaeventApi.Action.GET_EVENTS, MaeventApi.Param.NONE, event, callback);
     }
 }

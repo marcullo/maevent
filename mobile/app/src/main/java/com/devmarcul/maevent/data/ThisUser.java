@@ -6,8 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.devmarcul.maevent.business_logic.MaeventManager;
-import com.devmarcul.maevent.content_provider.hardcoded.UserProfileBuilder;
+import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
 import com.devmarcul.maevent.utils.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
