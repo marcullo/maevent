@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,8 +25,7 @@ namespace Maevent.API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            
+        {            
             services.AddDbContext<MaeventContext>(o => o.UseSqlServer(Configuration["Data:ConnectionString"]));
             services.AddScoped<IMaeventRepository, MaeventRepository>();
             services.AddTransient<MaeventDbInitializer>();
