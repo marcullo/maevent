@@ -47,6 +47,158 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GET Event Invalid",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8088/api/events/a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"events",
+						"a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Event",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Freeway Performance Exposition\",\n    \"place\": \"Stadion Narodowy\",\n    \"addressStreet\": \"al. Poniatowskiego 1\",\n    \"addressPostCode\": \"03-901 Warszawa\",\n    \"beginTime\": \"2018-06-01T08:00:00.8483545\",\n    \"endTime\": \"2018-06-08T18:00:00.8514397\",\n    \"rsvp\": false,\n    \"hostId\": 102\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Event Invalid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e802348f-6630-4ba6-af48-4a785889468b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Municipal Week\",\n    \"place\": \"Stadion Narodowy\",\n    \"addressPostCode\": \"03-901 Warszawa\",\n    \"beginTime\": \"2018-06-01T08:00:00.8483545\",\n    \"endTime\": \"2018-06-08T18:00:00.8514397\",\n    \"rsvp\": false,\n    \"hostId\": 102\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Event",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/events/Freeway Performance Exposition",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"events",
+						"Freeway Performance Exposition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Event Invalid",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/events/a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"events",
+						"a"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

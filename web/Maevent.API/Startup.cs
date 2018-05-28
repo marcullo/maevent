@@ -34,6 +34,8 @@ namespace Maevent.API
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Data.Entities.Event, Models.EventModel>();
+                cfg.CreateMap<Models.EventModel, Data.Entities.Event>();
+                cfg.CreateMap<Data.Entities.User, Models.UserModel>();
             });
 
             services.AddMvc()

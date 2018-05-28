@@ -16,8 +16,10 @@ namespace Maevent.Data
         // Events
         IEnumerable<Entities.Event> GetAllEvents();
         Event GetEvent(int id);
+        Event GetEventByName(string name);
+        bool EventExists(string name);
 
-        // MaeventUser
+        // Users
         User GetUser(string userName);
     }
 }

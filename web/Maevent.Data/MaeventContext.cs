@@ -13,6 +13,7 @@ namespace Maevent.Data
         public MaeventContext(DbContextOptions options)
             : base(options)
         {
+            Database.Migrate();
         }
 
         public DbSet<Event> Events { get; set; }
@@ -24,16 +25,19 @@ namespace Maevent.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Event>()
-              .Property(c => c.Name)
-              .IsRequired();
+                .Property(c => c.Name)
+                .IsRequired();
             builder.Entity<Event>()
-              .Property(c => c.RowVersion)
-              .ValueGeneratedOnAddOrUpdate()
-              .IsConcurrencyToken();
+                .Property(c => c.RowVersion)
+                .ValueGeneratedOnAddOrUpdate()
+                .IsConcurrencyToken();
             builder.Entity<User>()
-              .Property(c => c.RowVersion)
-              .ValueGeneratedOnAddOrUpdate()
-              .IsConcurrencyToken();
+                .Property(c => c.Name)
+                .IsRequired();
+            builder.Entity<User>()
+                .Property(c => c.RowVersion)
+                .ValueGeneratedOnAddOrUpdate()
+                .IsConcurrencyToken();
         }
     }
 }

@@ -40,10 +40,22 @@ namespace Maevent.Data
                 .FirstOrDefault();
         }
 
-        public User GetUser(string userName)
+        public Event GetEventByName(string name)
+        {
+            return _context.Events
+                .Where(c => c.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+                .FirstOrDefault();
+        }
+
+        public bool EventExists(string name)
+        {
+            return GetEventByName(name) != null;
+        }
+
+        public User GetUser(string name)
         {
             return _context.Users
-                .Where(u => u.Name == userName)
+                .Where(u => u.Name == name)
                 .Cast<User>()
                 .FirstOrDefault();
         }

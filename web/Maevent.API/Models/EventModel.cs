@@ -10,7 +10,7 @@ namespace Maevent.API.Models
     {
         [Required]
         [MinLength(5)]
-        [MaxLength(30)]
+        [MaxLength(50)]
         public string Name { get; set; }
         [Required]
         public string Place { get; set; }
