@@ -9,16 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Maevent.Data\Maevent.Data.csproj" />
   </ItemGroup>
 
 </Project>
