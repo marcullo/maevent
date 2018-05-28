@@ -1,35 +1,38 @@
 package com.devmarcul.maevent.business_logic;
 
-import com.devmarcul.maevent.content_provider.hardcoded.MaeventParamsBuilder;
-import com.devmarcul.maevent.data.ContentUpdater;
+import android.content.Context;
+
+import com.devmarcul.maevent.api.MaeventApi;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.ThisUser;
-import com.devmarcul.maevent.utils.Prompt;
+import com.devmarcul.maevent.receivers.NetworkReceiver;
+import com.devmarcul.maevent.services.NetworkService;
 
-public class MaeventManager implements ContentUpdater<Maevent> {
+public class MaeventManager {
 
-    @Override
-    public  void updateContent(Maevent event) {
-        MaeventParams params = event.getParams();
+    private static final MaeventManager instance = new MaeventManager();
 
-        //TODO Replace dummy initialization with data base query
-        params = MaeventParamsBuilder.build();
-
-        if (Maevent.areParamsValid(params)) {
-            event.setParams(params);
-        }
+    public static synchronized MaeventManager getInstance() {
+        return instance;
     }
 
-    public Maevent createEvent(MaeventParams params) {
-        if (Maevent.areParamsValid(params)) {
-            //TODO add api query
+    private MaeventManager() {
+    }
 
-            Maevent event = new Maevent();
-            event.setParams(params);
-            event.setHostId(ThisUser.getProfile().id);
-            return event;
+    public void createEvent(final Context context, MaeventParams params, NetworkReceiver.Callback<Boolean> callback) {
+        if (!Maevent.areParamsValid(params)) {
+            return;
         }
-        return null;
+
+        int hostId = ThisUser.getProfile().id;
+
+        Maevent event = new Maevent();
+        event.setParams(params);
+        event.setHostId(hostId);
+        event.setAttendeesNr(1);
+
+//        NetworkService.startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, event, callback);
+        NetworkService.startService(context, MaeventApi.Action.GET_EVENTS, MaeventApi.Param.NONE, event, callback);
     }
 }

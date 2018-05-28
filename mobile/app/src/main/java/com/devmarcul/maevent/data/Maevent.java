@@ -1,8 +1,11 @@
 package com.devmarcul.maevent.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.devmarcul.maevent.utils.Utils;
 
-public class Maevent implements DataValidator {
+public class Maevent implements Parcelable, DataValidator {
 
     private static String LOG_TAG = "Maevent";
 
@@ -10,6 +13,35 @@ public class Maevent implements DataValidator {
     protected int hostId;
     protected int attendeesNr;
     protected MaeventParams params;
+
+    public Maevent() {
+    }
+
+    protected Maevent(Parcel in) {
+        id = in.readInt();
+        hostId = in.readInt();
+        attendeesNr = in.readInt();
+        params = new MaeventParams();
+        params.name = in.readString();
+        params.place = in.readString();
+        params.addressStreet =  in.readString();
+        params.addressPostCode =  in.readString();
+        params.beginTime = in.readString();
+        params.endTime = in.readString();
+        params.rsvp = in.readInt() == 1;
+    }
+
+    public static final Creator<Maevent> CREATOR = new Creator<Maevent>() {
+        @Override
+        public Maevent createFromParcel(Parcel in) {
+            return new Maevent(in);
+        }
+
+        @Override
+        public Maevent[] newArray(int size) {
+            return new Maevent[size];
+        }
+    };
 
     public MaeventParams getParams() {
         return params;
@@ -45,6 +77,25 @@ public class Maevent implements DataValidator {
 
     public void setAttendeesNr(int attendeesNr) {
         this.attendeesNr = attendeesNr;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(hostId);
+        dest.writeInt(attendeesNr);
+        dest.writeString(params.name);
+        dest.writeString(params.place);
+        dest.writeString(params.addressStreet);
+        dest.writeString(params.addressPostCode);
+        dest.writeString(params.beginTime);
+        dest.writeString(params.endTime);
+        dest.writeInt(params.rsvp ? 1 : 0);
     }
 
     @Override

@@ -21,10 +21,11 @@ import android.widget.TextView;
 import com.archit.calendardaterangepicker.customviews.DateRangeCalendarView;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
-import com.devmarcul.maevent.data.ThisUser;
 import com.devmarcul.maevent.main.common.EventDetailsViewHolder;
+import com.devmarcul.maevent.receivers.NetworkReceiver;
 import com.devmarcul.maevent.utils.CustomTittleSetter;
 import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.Utils;
@@ -261,12 +262,17 @@ public class MaeventFragment extends Fragment implements CustomTittleSetter {
     }
 
     public void createEvent() {
-        //TODO Refactor
-        Maevent event = ThisUser.createEvent(mEventParamsBuffer);
-        if (event == null) {
-            Prompt.displayShort("Error while creating event!", parent);
-            return;
-        }
+        MaeventManager.getInstance().createEvent(parent, mEventParamsBuffer, new NetworkReceiver.Callback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean data) {
+                Prompt.displayShort("Success!", parent);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                Prompt.displayShort("Failure!", parent);
+            }
+        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
