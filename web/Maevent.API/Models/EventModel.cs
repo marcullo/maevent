@@ -8,8 +8,9 @@ namespace Maevent.API.Models
 {
     public class EventModel
     {
-        public string Url { get; set; }
         [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string Name { get; set; }
         [Required]
         public string Place { get; set; }
