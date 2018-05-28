@@ -1,8 +1,10 @@
 package com.devmarcul.maevent.business_logic;
 
 import android.content.Context;
+import android.os.Parcelable;
 
 import com.devmarcul.maevent.apis.MaeventApi;
+import com.devmarcul.maevent.apis.MaeventApiModel;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.ThisUser;
@@ -28,11 +30,12 @@ public class MaeventManager {
         int hostId = ThisUser.getProfile().id;
 
         Maevent event = new Maevent();
+        params.beginTime = "2018-05-29T11:54:26.312170";
+        params.endTime = "2018-05-29T11:54:26.312170";
         event.setParams(params);
         event.setHostId(hostId);
         event.setAttendeesNr(1);
 
-//        NetworkService.startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, event, callback);
-        NetworkService.getInstance().startService(context, MaeventApi.Action.GET_EVENTS, MaeventApi.Param.NONE, event, callback);
+        NetworkService.getInstance().startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, event, callback);
     }
 }

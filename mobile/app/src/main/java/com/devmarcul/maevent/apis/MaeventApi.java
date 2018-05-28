@@ -3,10 +3,10 @@ package com.devmarcul.maevent.apis;
 import android.os.ResultReceiver;
 
 import com.devmarcul.maevent.data.Maevent;
-import com.devmarcul.maevent.utils.network.NetworkManager;
+import com.devmarcul.maevent.utils.network.NetworkUtils;
 
 public interface MaeventApi {
-    NetworkManager.UrlBuilder builder = new NetworkManager.UrlBuilder();
+    NetworkUtils.UrlBuilder builder = new NetworkUtils.UrlBuilder();
 
     String TAG = "MaeventApi";
     String RESULT_RECEIVER = "RESULT_RECEIVER";
@@ -19,4 +19,5 @@ public interface MaeventApi {
 
     void handleGetEvents(final ResultReceiver receiver);
     void handleCreateEvent(final ResultReceiver receiver, Maevent event);
+    void cancelAllRequests(String tag);
 }
