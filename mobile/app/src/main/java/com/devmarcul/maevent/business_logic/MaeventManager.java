@@ -5,6 +5,7 @@ import com.devmarcul.maevent.data.ContentUpdater;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.ThisUser;
+import com.devmarcul.maevent.utils.Prompt;
 
 public class MaeventManager implements ContentUpdater<Maevent> {
 

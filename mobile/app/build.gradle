@@ -38,4 +38,5 @@ dependencies {
     implementation 'com.github.qiugang:EditTag:v1.2.4-beta2'
     implementation 'com.google.code.gson:gson:2.8.4'
     implementation 'com.archit.calendar:awesome-calendar:1.0.1'
+    implementation 'com.android.volley:volley:1.1.0' 
 }
