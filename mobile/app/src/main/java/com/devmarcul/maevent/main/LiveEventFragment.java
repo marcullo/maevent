@@ -120,7 +120,7 @@ public class LiveEventFragment extends Fragment implements
         mEventDetailsAdapter = new EventDetailsViewAdapter(mEventDetailsHandler, mEventDetailsView);
         mEventDetailsAdapter.adaptContent(MainActivity.pendingEvent);
         mEventDetailsAdapter.adaptJoinButton(false);
-        mEventDetailsAdapter.bindOnClickListeners();
+        mEventDetailsAdapter.bindListeners();
     }
 
     private void initAttendees() {

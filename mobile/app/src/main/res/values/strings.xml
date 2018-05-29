@@ -77,4 +77,6 @@
     <string name="no_internet_connection_title">Internet connection disappeared</string>
     <string name="no_internet_connection_description">How would you network without network connection?\nI am trying to reconnect to Maevent servers. </string>
 
+    <string name="error_main_create_event_invalid_place">Invalid place selected.</string>
+
 </resources>

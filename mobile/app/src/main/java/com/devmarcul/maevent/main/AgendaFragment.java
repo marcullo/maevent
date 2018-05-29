@@ -117,7 +117,7 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsAdapter.adaptContent(event);
         mEventDetailsAdapter.adaptUsersNumber(event, true);
         mEventDetailsAdapter.adaptJoinButton(!isPendingEvent);
-        mEventDetailsAdapter.bindOnClickListeners();
+        mEventDetailsAdapter.bindListeners();
 
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
         mEventDetailsContentView.setVisibility(View.VISIBLE);
@@ -133,7 +133,7 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsAdapter.adaptContent(invitation);
         mEventDetailsAdapter.adaptUsersNumber(invitation, false);
         mEventDetailsAdapter.adaptJoinButton(false);
-        mEventDetailsAdapter.bindOnClickListeners();
+        mEventDetailsAdapter.bindListeners();
 
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
         mEventDetailsContentView.setVisibility(View.VISIBLE);

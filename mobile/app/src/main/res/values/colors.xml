@@ -11,5 +11,6 @@
     <color name="colorWarning">#F44336</color>
     <color name="colorOk">#0fd419</color>
 
-    <color name="colorCreatingEventOk">@color/colorPrimary</color>
+    <color name="colorCreateEventItemSelected">@color/colorPrimary</color>
+    <color name="colorCreateEventItemUnselected">@color/colorSecondaryText</color>
 </resources>

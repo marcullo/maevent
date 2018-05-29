@@ -34,11 +34,11 @@ public class TagsViewAdapter implements
     }
 
     @Override
-    public void bindOnClickListeners() {
+    public void bindListeners() {
     }
 
     @Override
-    public void unbindOnClickListeners() {
+    public void unbindListeners() {
     }
 
     @Override

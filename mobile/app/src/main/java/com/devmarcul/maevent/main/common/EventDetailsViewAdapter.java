@@ -97,7 +97,7 @@ public class EventDetailsViewAdapter implements
     }
 
     @Override
-    public void bindOnClickListeners() {
+    public void bindListeners() {
         mViewHolder.mLocationButton.setOnClickListener(this);
         mViewHolder.mCallButton.setOnClickListener(this);
         mViewHolder.mCalendarButton.setOnClickListener(this);
@@ -105,7 +105,7 @@ public class EventDetailsViewAdapter implements
     }
 
     @Override
-    public void unbindOnClickListeners() {
+    public void unbindListeners() {
         mViewHolder.mLocationButton.setOnClickListener(null);
         mViewHolder.mCallButton.setOnClickListener(null);
         mViewHolder.mCalendarButton.setOnClickListener(null);

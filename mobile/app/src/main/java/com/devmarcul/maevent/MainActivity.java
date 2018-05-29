@@ -16,17 +16,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.main.AgendaFragment;
 import com.devmarcul.maevent.main.LiveEventFragment;
-import com.devmarcul.maevent.main.MaeventFragment;
+import com.devmarcul.maevent.main.CreateEventFragment;
 import com.devmarcul.maevent.main.common.EventDetailsHandler;
 import com.devmarcul.maevent.utils.bottom_navig.BottomNavigationBehavior;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.business_logic.MaeventAccountManager;
 import com.devmarcul.maevent.utils.Prompt;
-import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -172,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.main_create_event:
-                    fragment = new MaeventFragment();
+                    fragment = new CreateEventFragment();
                     break;
 
                 default:

@@ -1,8 +1,6 @@
 package com.devmarcul.maevent.common;
 
-public interface ContentAdapter<T, VH> {
-    void adaptContent(T obj);
+public interface ContentListener {
     void bindListeners();
     void unbindListeners();
-    VH getViewHolder();
 }

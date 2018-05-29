@@ -18,7 +18,6 @@ public abstract class AttendeeViewHolder extends RecyclerView.ViewHolder
     public TextView mAttendeeLocationView;
     public TextView mAttendeeHeadlineView;
 
-
     public AttendeeViewHolder(View itemView) {
         super(itemView);
         view = itemView;
