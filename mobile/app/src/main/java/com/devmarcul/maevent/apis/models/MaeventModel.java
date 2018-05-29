@@ -6,8 +6,16 @@ import android.os.Parcelable;
 import com.devmarcul.maevent.apis.MaeventApiModel;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.main.common.EventDetailsViewHolder;
+import com.devmarcul.maevent.utils.TimeUtils;
+
+import java.util.Calendar;
 
 public class MaeventModel extends MaeventApiModel implements Parcelable {
+
+    private static final String YEAR = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+    public static final String TIME_FORMAT = YEAR + "-MM-ddThh:mm";
+
     public String Name;
     public String Place;
     public String AddressStreet;
@@ -21,13 +29,22 @@ public class MaeventModel extends MaeventApiModel implements Parcelable {
         if (event == null) {
             return;
         }
-        MaeventParams params = event.getParams();
+
+        final MaeventParams params = event.getParams();
+
+        final String begin =
+                TimeUtils.convertTimeStringToOtherFormat(params.beginTime,
+                        EventDetailsViewHolder.TIME_FORMAT, TIME_FORMAT);
+        final String end =
+                TimeUtils.convertTimeStringToOtherFormat(params.endTime,
+                        EventDetailsViewHolder.TIME_FORMAT, TIME_FORMAT);
+
         Name = params.name;
         Place = params.place;
         AddressStreet = params.addressStreet;
         AddressPostCode = params.addressPostCode;
-        BeginTime = params.beginTime;
-        EndTime = params.endTime;
+        BeginTime = begin;
+        EndTime = end;
         Rsvp = params.rsvp;
         HostId = event.getHostId();
     }

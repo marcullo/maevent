@@ -68,6 +68,53 @@ public class TimeUtils {
         return sb.toString();
     }
 
+    public static String[] splitCalendarDuration(String duration, String initialFormat, String newFormat) {
+        if (duration == null) {
+            return null;
+        }
+
+        String[] calStrings = duration.split("-");
+        if (calStrings.length != 2) {
+            return null;
+        }
+
+        String beginStr = calStrings[0].trim();
+        final String endStr = calStrings[1].trim();
+
+        Calendar begin = getCalendarFromString(beginStr, initialFormat);
+        if (begin != null) {
+            // separated start and end
+
+            if (initialFormat.contentEquals(newFormat)) {
+                calStrings[0] = beginStr;
+                calStrings[1] = endStr;
+                return calStrings;
+            }
+
+            Calendar end = getCalendarFromString(endStr, initialFormat);
+            if (end == null) {
+                return null;
+            }
+
+            calStrings[0] = DateFormat.format(newFormat, begin).toString();
+            calStrings[1] = DateFormat.format(newFormat, end).toString();
+        }
+        else {
+            // one-day view
+
+            String[] segments = endStr.split(" ");
+            String endTime = segments[0];
+            String amPm = segments[1];
+            String endDate = segments[2];
+
+            StringBuilder builder = new StringBuilder();
+            builder.append(beginStr).append(" ").append(amPm).append(" ").append(endDate);
+            calStrings[0] = builder.toString();
+        }
+
+        return calStrings;
+    }
+
     public static String getTimeStringFromStringDuration(String start, String end, String initialFormat) {
         Calendar startCal = getCalendarFromString(start, initialFormat);
         Calendar endCal = getCalendarFromString(end, initialFormat);

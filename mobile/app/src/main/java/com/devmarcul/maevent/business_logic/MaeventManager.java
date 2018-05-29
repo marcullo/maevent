@@ -31,8 +31,6 @@ public class MaeventManager {
         int hostId = ThisUser.getProfile().id;
 
         Maevent event = new Maevent();
-        params.beginTime = "2018-05-29T11:54:26.312170";
-        params.endTime = "2018-05-29T11:54:26.312170";
         event.setParams(params);
         event.setHostId(hostId);
         event.setAttendeesNr(1);

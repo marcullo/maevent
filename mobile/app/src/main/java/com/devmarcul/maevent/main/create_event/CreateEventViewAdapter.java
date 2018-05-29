@@ -10,6 +10,7 @@ import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.common.ContentListener;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.main.common.EventDetailsViewHolder;
 import com.devmarcul.maevent.utils.TimeUtils;
 import com.devmarcul.maevent.utils.StringUtils;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
@@ -348,14 +349,16 @@ public class CreateEventViewAdapter implements
         Context context = mDialogView.getContext();
         String textYes = context.getString(R.string.text_yes);
 
+        String[] timeStr = TimeUtils.splitCalendarDuration(mViewHolder.mSelectedTimeView.getText().toString(),
+                EventDetailsViewHolder.TIME_FORMAT, EventDetailsViewHolder.TIME_FORMAT);
+
         MaeventParams params = new MaeventParams();
         params.name = mViewHolder.mSelectedNameView.getText().toString();
         params.place = wholePlace[0];
         params.addressStreet = wholePlace[1];
         params.addressPostCode = wholePlace[2];
-        //TODO Extract time
-        params.beginTime = mViewHolder.mSelectedTimeView.toString();
-        params.endTime = "todo extract";
+        params.beginTime = timeStr[0];
+        params.endTime = timeStr[1];
         params.rsvp = textYes.equals(rsvpStr);
 
         return params;
