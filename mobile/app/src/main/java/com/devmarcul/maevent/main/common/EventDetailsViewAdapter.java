@@ -8,7 +8,7 @@ import com.devmarcul.maevent.common.ContentAdapter;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
-import com.devmarcul.maevent.utils.Utils;
+import com.devmarcul.maevent.utils.TimeUtils;
 
 import java.util.Calendar;
 
@@ -83,17 +83,17 @@ public class EventDetailsViewAdapter implements
     }
 
     private String getTimeSting(String start, String end) {
-        String startTime = Utils.convertTimeStringToOtherFormat(start,
+        String startTime = TimeUtils.convertTimeStringToOtherFormat(start,
                 MaeventParams.TIME_FORMAT, EventDetailsViewHolder.TIME_FORMAT);
-        String stopTime = Utils.convertTimeStringToOtherFormat(end,
+        String stopTime = TimeUtils.convertTimeStringToOtherFormat(end,
                 MaeventParams.TIME_FORMAT, EventDetailsViewHolder.TIME_FORMAT);
-        return Utils.getTimeStringFromStringDuration(startTime, stopTime, EventDetailsViewHolder.TIME_FORMAT);
+        return TimeUtils.getTimeStringFromStringDuration(startTime, stopTime, EventDetailsViewHolder.TIME_FORMAT);
     }
 
     private String getDurationString(String start, String end) {
-        Calendar startDate = Utils.getCalendarFromString(start, MaeventParams.TIME_FORMAT);
-        Calendar endDate = Utils.getCalendarFromString(end, MaeventParams.TIME_FORMAT);
-        return Utils.getStringDurationFromCalendarDuration(startDate, endDate);
+        Calendar startDate = TimeUtils.getCalendarFromString(start, MaeventParams.TIME_FORMAT);
+        Calendar endDate = TimeUtils.getCalendarFromString(end, MaeventParams.TIME_FORMAT);
+        return TimeUtils.getStringDurationFromCalendarDuration(startDate, endDate);
     }
 
     @Override

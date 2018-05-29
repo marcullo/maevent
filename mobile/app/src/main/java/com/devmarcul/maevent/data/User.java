@@ -1,6 +1,6 @@
 package com.devmarcul.maevent.data;
 
-import com.devmarcul.maevent.utils.Utils;
+import com.devmarcul.maevent.utils.StringUtils;
 
 public class User implements DataValidator {
 
@@ -44,7 +44,7 @@ public class User implements DataValidator {
     }
 
     public String getContentForDebug() {
-        final String ENDL = Utils.getNewLine();
+        final String ENDL = StringUtils.getNewLine();
         StringBuilder sb = new StringBuilder();
 
         //TODO Hide sensitive data

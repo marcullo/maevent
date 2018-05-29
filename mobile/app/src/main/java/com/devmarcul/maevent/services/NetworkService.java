@@ -18,22 +18,24 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.devmarcul.maevent.apis.MaeventApi;
-import com.devmarcul.maevent.apis.MaeventApiModel;
-import com.devmarcul.maevent.apis.models.EventModel;
-import com.devmarcul.maevent.data.Maevent;
-import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.receivers.NetworkReceiver;
-import com.google.gson.Gson;
+import com.devmarcul.maevent.request_builders.JsonArrayRequestBuilder;
+import com.devmarcul.maevent.request_builders.JsonObjectRequestBuilder;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class NetworkService extends IntentService implements MaeventApi {
 
     public static final String LOG_TAG = "NetworkService";
-    public static final String REQUEST_METHODS[] = {
-            "GET", "POST"," PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH" };
+
+    public static final String REQUEST_METHODS[] = { "GET", "POST"," PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH" };
+    public enum ResultCode { Ok, ClientError, ServerError };
+    public static final int RESULT_CODE_OK = 200;
+    public static final int RESULT_CODE_CLIENT_ERROR = 400;
+    public static final int RESULT_CODE_SERVER_ERROR = 500;
+    public static final int RESULT_CODE_INTERNAL_ERROR = 999;
+    public static final int RESULT_CODE_ERROR = 1000;
 
     private static final NetworkService instance = new NetworkService();
     private static RequestQueue mRequestQueue;
@@ -63,14 +65,13 @@ public class NetworkService extends IntentService implements MaeventApi {
             handleGetEvents(receiver);
         }
         else if (Action.CREATE_EVENT.name().equals(action)) {
-            final Maevent event = intent.getParcelableExtra(Param.EVENT.name());
-            handleCreateEvent(receiver, event);
+            final MaeventModel model = intent.getParcelableExtra(Param.EVENT.name());
+            handleCreateEvent(receiver, model);
         }
     }
 
     public void startService(Context context, MaeventApi.Action action, MaeventApi.Param param, Parcelable parcel, NetworkReceiver.Callback callback) {
-        NetworkReceiver receiver = new NetworkReceiver(new Handler(context.getMainLooper()));
-        receiver.setReceiver(callback);
+        NetworkReceiver receiver = new NetworkReceiver(new Handler(context.getMainLooper()), callback);
 
         Intent intent = new Intent(context, NetworkService.class);
         intent.setAction(action.name());
@@ -83,93 +84,36 @@ public class NetworkService extends IntentService implements MaeventApi {
 
     @Override
     public void handleGetEvents(final ResultReceiver receiver) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(REQUEST_METHODS[Request.Method.GET]).append(" Request ").append(MaeventApi.URL_EVENTS);
-        Log.i(LOG_TAG, builder.toString());
+        JsonArrayRequest request = (JsonArrayRequest) new JsonArrayRequestBuilder()
+            .setReceiver(receiver)
+            .setMethod(Request.Method.GET)
+            .build(MaeventApi.URL_EVENTS, null);
 
-        final Bundle bundle = new Bundle();
-        final int code = NetworkReceiver.RESULT_CODE_OK;
-
-        JsonArrayRequest request = new JsonArrayRequest
-                (Request.Method.GET, MaeventApi.URL_EVENTS, null, new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        if (receiver != null) {
-                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, true);
-                            receiver.send(code, bundle);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (receiver != null) {
-                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, false);
-                            receiver.send(code, bundle);
-                        }
-                    }
-                });
-
-        request.setTag(MaeventApi.TAG);
-        mRequestQueue.add(request);
-    }
-
-    @Override
-    public void handleCreateEvent(final ResultReceiver receiver, Maevent event) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(REQUEST_METHODS[Request.Method.POST]).append(" Request ").append(MaeventApi.URL_EVENTS);
-        Log.i(LOG_TAG, builder.toString());
-
-        final Bundle bundle = new Bundle();
-        final int code = NetworkReceiver.RESULT_CODE_OK;
-
-        MaeventParams params = event.getParams();
-
-        EventModel model = new EventModel();
-        model.Name = params.name;
-        model.Place = params.place;
-        model.AddressStreet = params.addressStreet;
-        model.AddressPostCode = params.addressPostCode;
-        model.BeginTime = params.beginTime;
-        model.EndTime = params.endTime;
-        model.Rsvp = params.rsvp;
-        model.HostId = 2;
-
-        Gson gson = new Gson();
-        JSONObject body = null;
-        try {
-            body = new JSONObject(gson.toJson(model));
-        } catch (JSONException e) {
-            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, false);
-            receiver.send(code, bundle);
+        if (request == null) {
+            Log.e(LOG_TAG, "Invalid request");
             return;
         }
-
-        JsonObjectRequest request = new JsonObjectRequest
-                (Request.Method.POST, MaeventApi.URL_EVENTS, body, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        if (receiver != null) {
-                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, true);
-                            receiver.send(code, bundle);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (receiver != null) {
-                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, false);
-                            receiver.send(code, bundle);
-                        }
-                    }
-                });
-
-        request.setTag(MaeventApi.TAG);
         mRequestQueue.add(request);
     }
 
     @Override
-    public void cancelAllRequests(String tag) {
-        mRequestQueue.cancelAll(tag);
+    public void handleCreateEvent(final ResultReceiver receiver, MaeventModel model) {
+        JsonObjectRequest request = (JsonObjectRequest) new JsonObjectRequestBuilder()
+                .setReceiver(receiver)
+                .setMethod(Request.Method.POST)
+                .build(MaeventApi.URL_EVENTS, model);
+
+        if (request == null) {
+            Log.e(LOG_TAG, "Invalid request");
+            return;
+        }
+        mRequestQueue.add(request);
+    }
+
+    @Override
+    public void cancelAllRequests() {
+        if (mRequestQueue != null) {
+            mRequestQueue.cancelAll(MaeventApi.TAG);
+        }
     }
 }

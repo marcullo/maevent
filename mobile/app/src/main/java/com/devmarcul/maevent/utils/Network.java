@@ -1,6 +1,6 @@
-package com.devmarcul.maevent.utils.network;
+package com.devmarcul.maevent.utils;
 
-public class NetworkUtils {
+public class Network {
 
     public static class UrlBuilder
     {

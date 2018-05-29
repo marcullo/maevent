@@ -10,7 +10,8 @@ import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.common.ContentListener;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
-import com.devmarcul.maevent.utils.Utils;
+import com.devmarcul.maevent.utils.TimeUtils;
+import com.devmarcul.maevent.utils.StringUtils;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.google.android.gms.location.places.Place;
 
@@ -126,12 +127,24 @@ public class CreateEventViewAdapter implements
             @Override
             public void onClick(View v) {
                 mViewHolder.mCheckRsvpView.toggle();
+
+                if (!isNameSelected()) {
+                    mHandler.onHideKeyboardRequested();
+                    updateNameViews();
+                    updateCreateEventButtonVisibility();
+                }
             }
         });
         mViewHolder.mCheckRsvpView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 updateRsvpViews();
+
+                if (!isNameSelected()) {
+                    mHandler.onHideKeyboardRequested();
+                    updateNameViews();
+                    updateCreateEventButtonVisibility();
+                }
             }
         });
         mViewHolder.mCreateEventButton.setOnClickListener(new View.OnClickListener() {
@@ -176,8 +189,8 @@ public class CreateEventViewAdapter implements
             end = endDate;
         }
 
-        String startDateText = Utils.getStringFromCalendar(start, CreateEventViewHolder.TIME_FORMAT);
-        String endDateText = Utils.getStringFromCalendar(end, CreateEventViewHolder.TIME_FORMAT);
+        String startDateText = TimeUtils.getStringFromCalendar(start, CreateEventViewHolder.TIME_FORMAT);
+        String endDateText = TimeUtils.getStringFromCalendar(end, CreateEventViewHolder.TIME_FORMAT);
 
         updateTimeViews(startDateText, endDateText);
         updateCreateEventButtonVisibility();
@@ -201,7 +214,7 @@ public class CreateEventViewAdapter implements
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append(place.getName()).append(Utils.getNewLine()).append(place.getAddress());
+        sb.append(place.getName()).append(StringUtils.getNewLine()).append(place.getAddress());
         mViewHolder.mSelectedPlaceView.setText(sb.toString());
         setPlaceSelected();
         updateCreateEventButtonVisibility();
@@ -220,7 +233,7 @@ public class CreateEventViewAdapter implements
     }
 
     private void updateTimeViews(String start, String end) {
-        String newTime = Utils.getTimeStringFromStringDuration(start, end, CreateEventViewHolder.TIME_FORMAT);
+        String newTime = TimeUtils.getTimeStringFromStringDuration(start, end, CreateEventViewHolder.TIME_FORMAT);
         mViewHolder.mSelectedTimeView.setText(newTime);
         setTimeSelected();
     }
@@ -329,7 +342,7 @@ public class CreateEventViewAdapter implements
     }
 
     private MaeventParams getParamsBuffer() {
-        String[] wholePlace = mViewHolder.mSelectedPlaceView.getText().toString().split(",");
+        String[] wholePlace = mViewHolder.mSelectedPlaceView.getText().toString().split("[,\n]");
 
         String rsvpStr = mViewHolder.mSelectedRsvpView.getText().toString().split(" ")[1];
         Context context = mDialogView.getContext();

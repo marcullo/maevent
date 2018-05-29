@@ -5,12 +5,11 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
 
+import com.devmarcul.maevent.services.NetworkService;
+
 public class NetworkReceiver<T> extends ResultReceiver {
 
     public static final String LOG_TAG = "NetworkReceiver";
-
-    public static final int RESULT_CODE_OK = 200;
-    public static final int RESULT_CODE_ERROR = 400;
     public static final String PARAM_EXCEPTION = "exception";
     public static final String PARAM_RESULT = "result";
 
@@ -24,20 +23,28 @@ public class NetworkReceiver<T> extends ResultReceiver {
 
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
-        Log.i(LOG_TAG, "Server answered");
-
-        if (mCallback != null) {
+        if (resultCode == NetworkService.RESULT_CODE_OK) {
             mCallback.onSuccess(resultData.getSerializable(PARAM_RESULT));
+//            resultCodeName = NetworkService.RESULT_CODE_OK
+        }
+        else if (resultCode == NetworkService.RESULT_CODE_INTERNAL_ERROR) {
+            mCallback.onError(new Exception());
+        }
+        else if (resultCode == NetworkService.RESULT_CODE_CLIENT_ERROR
+                || resultCode == NetworkService.RESULT_CODE_SERVER_ERROR) {
+            mCallback.onError((Exception) resultData.getSerializable(PARAM_EXCEPTION));
         }
         else {
-            mCallback.onError((Exception)resultData.getSerializable(PARAM_EXCEPTION));
+            mCallback.onError((Exception) resultData.getSerializable(PARAM_EXCEPTION));
         }
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("Result code: ").append(resultCode).append(", data: ").append(resultData.toString());
+        Log.i(LOG_TAG, builder.toString());
     }
 
-    public NetworkReceiver(Handler handler) {
+    public NetworkReceiver(Handler handler, Callback callback) {
         super(handler);
-    }
-    public void setReceiver(Callback<T> callback) {
         mCallback = callback;
     }
 }

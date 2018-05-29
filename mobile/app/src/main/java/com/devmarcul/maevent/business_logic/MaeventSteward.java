@@ -5,15 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.CalendarContract;
 
-import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventCalendar;
 import com.devmarcul.maevent.data.MaeventCalendarParams;
 import com.devmarcul.maevent.data.MaeventParams;
-import com.devmarcul.maevent.utils.Prompt;
-import com.devmarcul.maevent.utils.Utils;
-
-import java.util.Calendar;
 
 public class MaeventSteward {
 

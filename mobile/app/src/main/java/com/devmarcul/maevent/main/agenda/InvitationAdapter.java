@@ -13,7 +13,7 @@ import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Invitations;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.main.common.EventDetailsViewHolder;
-import com.devmarcul.maevent.utils.Utils;
+import com.devmarcul.maevent.utils.TimeUtils;
 
 public class InvitationAdapter
         extends RecyclerView.Adapter<InvitationAdapter.InvitationAdapterViewHolder> {
@@ -104,7 +104,7 @@ public class InvitationAdapter
     private void adaptContent(InvitationAdapterViewHolder holder, Invitation invitation) {
         String eventName = invitation.getParams().name;
         String place = invitation.getParams().place;
-        String startTime = Utils.convertTimeStringToOtherFormat(invitation.getParams().beginTime,
+        String startTime = TimeUtils.convertTimeStringToOtherFormat(invitation.getParams().beginTime,
             MaeventParams.TIME_FORMAT, InvitationAdapter.TIME_FORMAT);
 
         holder.eventNameView.setText(eventName);

@@ -2,22 +2,13 @@ package com.devmarcul.maevent.utils;
 
 import android.text.format.DateFormat;
 
-import com.devmarcul.maevent.R;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class Utils {
-    public static String getNewLine() {
-        return java.lang.System.getProperty("line.separator");
-    }
-
-    public static String getKeyValueString(String key, String value) {
-        return key + ": " + value;
-    }
+public class TimeUtils {
 
     public static Calendar getCalendarFromString(String timeStr, String format) {
         Calendar time = Calendar.getInstance();

@@ -2,7 +2,8 @@ package com.devmarcul.maevent.data;
 
 import android.provider.CalendarContract;
 
-import com.devmarcul.maevent.utils.Utils;
+import com.devmarcul.maevent.utils.TimeUtils;
+import com.devmarcul.maevent.utils.StringUtils;
 
 import java.util.Calendar;
 
@@ -29,8 +30,8 @@ public class MaeventCalendar implements DataValidator  {
     }
 
     public void update(MaeventParams params) {
-        Calendar beginTimeCal = Utils.getCalendarFromString(params.beginTime, MaeventParams.TIME_FORMAT);
-        Calendar endTimeCal = Utils.getCalendarFromString(params.endTime, MaeventParams.TIME_FORMAT);
+        Calendar beginTimeCal = TimeUtils.getCalendarFromString(params.beginTime, MaeventParams.TIME_FORMAT);
+        Calendar endTimeCal = TimeUtils.getCalendarFromString(params.endTime, MaeventParams.TIME_FORMAT);
         assert beginTimeCal != null;
         assert endTimeCal != null;
 
@@ -61,7 +62,7 @@ public class MaeventCalendar implements DataValidator  {
 
     @Override
     public String getContentForDebug() {
-        final String ENDL = Utils.getNewLine();
+        final String ENDL = StringUtils.getNewLine();
         StringBuilder sb = new StringBuilder();
 
         sb.append(ENDL);

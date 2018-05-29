@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
-import com.devmarcul.maevent.utils.Utils;
+import com.devmarcul.maevent.utils.StringUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class ThisUser {
     }
 
     public static String getContentForDebug() {
-        final String ENDL = Utils.getNewLine();
+        final String ENDL = StringUtils.getNewLine();
         StringBuilder sb = new StringBuilder();
 
         //TODO Hide sensitive data

@@ -12,12 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.ClientError;
+import com.android.volley.ServerError;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.main.create_event.CreateEventViewAdapter;
 import com.devmarcul.maevent.receivers.NetworkReceiver;
+import com.devmarcul.maevent.services.NetworkService;
 import com.devmarcul.maevent.utils.CustomTittleSetter;
 import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.Tools;
@@ -61,6 +64,7 @@ public class CreateEventFragment extends Fragment implements
     @Override
     public void onPause() {
         super.onPause();
+        NetworkService.getInstance().cancelAllRequests();
         mCreateEventAdapter.unbindListeners();
     }
 
@@ -108,12 +112,7 @@ public class CreateEventFragment extends Fragment implements
         MaeventManager.getInstance().createEvent(parent, params, new NetworkReceiver.Callback<Boolean>() {
             @Override
             public void onSuccess(Boolean success) {
-                if (success) {
-                    Prompt.displayShort("Success!", parent);
-                }
-                else {
-                    Prompt.displayShort("Server refused request or unavailable", parent);
-                }
+                Prompt.displayShort("Success!", parent);
                 mCreateEventAdapter.setCreateEventLoadingGone();
                 mCreateEventAdapter.updateCreateEventButtonVisibility();
                 mCreateEventAdapter.bindListeners();
@@ -121,7 +120,15 @@ public class CreateEventFragment extends Fragment implements
 
             @Override
             public void onError(Exception exception) {
-                Prompt.displayShort("Failure!", parent);
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Event name exists. Choose another one.", parent);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", parent);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", parent);
+                }
                 mCreateEventAdapter.setCreateEventLoadingGone();
                 mCreateEventAdapter.updateCreateEventButtonVisibility();
                 mCreateEventAdapter.bindListeners();

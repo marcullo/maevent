@@ -1,6 +1,6 @@
 package com.devmarcul.maevent.data;
 
-import com.devmarcul.maevent.utils.Utils;
+import com.devmarcul.maevent.utils.StringUtils;
 
 public class Invitation extends Maevent {
 
@@ -33,7 +33,7 @@ public class Invitation extends Maevent {
 
     @Override
     public String getContentForDebug() {
-        final String ENDL = Utils.getNewLine();
+        final String ENDL = StringUtils.getNewLine();
         StringBuilder sb = new StringBuilder();
 
         //TODO Hide sensitive data

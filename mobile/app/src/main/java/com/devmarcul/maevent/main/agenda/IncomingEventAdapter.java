@@ -16,7 +16,8 @@ import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.Maevents;
-import com.devmarcul.maevent.utils.Utils;
+import com.devmarcul.maevent.utils.TimeUtils;
+import com.devmarcul.maevent.utils.StringUtils;
 
 import java.security.InvalidParameterException;
 import java.util.Calendar;
@@ -152,15 +153,15 @@ public class IncomingEventAdapter
 
         MaeventParams params = event.getParams();
         Calendar cal = Calendar.getInstance();
-        Calendar beginCal = Utils.getCalendarFromString(params.beginTime, MaeventParams.TIME_FORMAT);
-        Calendar endCal = Utils.getCalendarFromString(params.endTime, MaeventParams.TIME_FORMAT);
+        Calendar beginCal = TimeUtils.getCalendarFromString(params.beginTime, MaeventParams.TIME_FORMAT);
+        Calendar endCal = TimeUtils.getCalendarFromString(params.endTime, MaeventParams.TIME_FORMAT);
 
         long currentTimestamp = cal.getTimeInMillis();
         long beginEventTimestamp = beginCal.getTimeInMillis();
         long endEventTimestamp = endCal.getTimeInMillis();
 
         StringBuilder sb = new StringBuilder();
-        String ENDL = Utils.getNewLine();
+        String ENDL = StringUtils.getNewLine();
 
         if (beginEventTimestamp > endEventTimestamp) {
             throw new InvalidParameterException("It is impossible to have negative event duration");
@@ -197,7 +198,7 @@ public class IncomingEventAdapter
                 sb.append(suffix);
             }
             else {
-                String suffix = Utils.getStringFromCalendar(beginCal, "dd.MM");
+                String suffix = TimeUtils.getStringFromCalendar(beginCal, "dd.MM");
                 sb.append(suffix);
             }
         }

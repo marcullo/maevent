@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.MaeventApiModel;
+import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.ThisUser;
@@ -36,6 +37,8 @@ public class MaeventManager {
         event.setHostId(hostId);
         event.setAttendeesNr(1);
 
-        NetworkService.getInstance().startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, event, callback);
+        MaeventModel model = new MaeventModel(event);
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, model, callback);
     }
 }
