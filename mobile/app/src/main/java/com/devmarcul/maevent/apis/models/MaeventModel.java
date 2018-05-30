@@ -16,14 +16,17 @@ public class MaeventModel extends MaeventApiModel implements Parcelable {
     private static final String YEAR = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
     public static final String TIME_FORMAT = YEAR + "-MM-ddThh:mm";
 
+    public int Uid;
     public String Name;
+    public int HostUid;
     public String Place;
     public String AddressStreet;
     public String AddressPostCode;
     public String BeginTime;
     public String EndTime;
     public boolean Rsvp;
-    public int HostId;
+    public String AttendeesUids;
+    public int InviteesNumber;
 
     public MaeventModel(Maevent event) {
         if (event == null) {
@@ -39,25 +42,31 @@ public class MaeventModel extends MaeventApiModel implements Parcelable {
                 TimeUtils.convertTimeStringToOtherFormat(params.endTime,
                         EventDetailsViewHolder.TIME_FORMAT, TIME_FORMAT);
 
+        Uid = event.getId();
         Name = params.name;
+        HostUid = event.getHostId();
         Place = params.place;
         AddressStreet = params.addressStreet;
         AddressPostCode = params.addressPostCode;
         BeginTime = begin;
         EndTime = end;
         Rsvp = params.rsvp;
-        HostId = event.getHostId();
+        AttendeesUids = event.getAttendeesUids();
+        InviteesNumber = event.getInviteesNumber();
     }
 
     protected MaeventModel(Parcel in) {
+        Uid = in.readInt();
         Name = in.readString();
+        HostUid = in.readInt();
         Place = in.readString();
         AddressStreet = in.readString();
         AddressPostCode = in.readString();
         BeginTime = in.readString();
         EndTime = in.readString();
         Rsvp = in.readByte() != 0;
-        HostId = in.readInt();
+        AttendeesUids = in.readString();
+        InviteesNumber = in.readInt();
     }
 
     public static final Creator<MaeventModel> CREATOR = new Creator<MaeventModel>() {
@@ -79,13 +88,16 @@ public class MaeventModel extends MaeventApiModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(Uid);
         dest.writeString(Name);
+        dest.writeInt(HostUid);
         dest.writeString(Place);
         dest.writeString(AddressStreet);
         dest.writeString(AddressPostCode);
         dest.writeString(BeginTime);
         dest.writeString(EndTime);
         dest.writeByte((byte) (Rsvp ? 1 : 0));
-        dest.writeInt(HostId);
+        dest.writeString(AttendeesUids);
+        dest.writeInt(InviteesNumber);
     }
 }

@@ -28,12 +28,12 @@ public class MaeventManager {
             return;
         }
 
-        int hostId = ThisUser.getProfile().id;
+        int id = ThisUser.getProfile().uid;
 
         Maevent event = new Maevent();
         event.setParams(params);
-        event.setHostId(hostId);
-        event.setAttendeesNr(1);
+        event.setHostId(id);
+        event.setAttendeesUids(String.valueOf(id));
 
         MaeventModel model = new MaeventModel(event);
         NetworkService.getInstance()

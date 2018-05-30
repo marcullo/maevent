@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Maevent.API.Models.MappingProfiles;
 using Maevent.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,11 +32,10 @@ namespace Maevent.API
             services.AddTransient<MaeventDbInitializer>();
 
             AutoMapper.Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<Data.Entities.Event, Models.EventModel>();
-                cfg.CreateMap<Models.EventModel, Data.Entities.Event>();
-                cfg.CreateMap<Data.Entities.User, Models.UserModel>();
-            });
+                {
+                    cfg.AddProfile(new EventProfileMapping());
+                    cfg.AddProfile(new UserProfileMapping());
+                });
 
             services.AddMvc()
                 .AddJsonOptions(opt =>

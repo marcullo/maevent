@@ -42,7 +42,8 @@ public class EventDetailsViewAdapter implements
         String street = params.addressStreet;
         String postCode = params.addressPostCode;
         String time = getTimeSting(params.beginTime, params.endTime);
-        String usersNumber = String.valueOf(event.getAttendeesNr());
+        //TODO Add parsing attendees uids count
+        String usersNumber = String.valueOf("0");
         //TODO Consider replacing with remaining time
         String duration = getDurationString(params.beginTime, params.endTime);
 
@@ -61,7 +62,8 @@ public class EventDetailsViewAdapter implements
         int usersNumberIconRes;
 
         if (usersAreAttendees) {
-            usersNumber = String.valueOf(event.getAttendeesNr());
+            //TODO Add parsing attendees uids count
+            usersNumber = String.valueOf("0");
             usersNumberIconRes = R.drawable.ic_people;
         }
         else {

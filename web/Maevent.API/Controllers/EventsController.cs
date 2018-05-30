@@ -25,7 +25,7 @@ namespace Maevent.API.Controllers
             _repo = repo;
         }
 
-        [HttpGet("")]
+        [HttpGet]
         public IActionResult Get()
         {
             var events = _repo.GetAllEvents();
@@ -33,12 +33,37 @@ namespace Maevent.API.Controllers
             return Ok(Mapper.Map<IEnumerable<EventModel>>(events));
         }
 
-        [HttpGet("{id}", Name = "EventGet")]
-        public IActionResult Get(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAll()
         {
             try
             {
-                var ev = _repo.GetEvent(id);
+                foreach (var ev in _repo.GetAllEvents())
+                {
+                    _repo.Delete(ev);
+
+                    if (!await _repo.SaveAllAsync())
+                    {
+                        return BadRequest("Could not delete a event");
+                    }
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Threw exception while deleting Events: {ex}");
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet("{uid}", Name = "EventGet")]
+        public IActionResult Get(int uid)
+        {
+            try
+            {
+                var ev = _repo.GetEvent(uid);
                 if (ev == null)
                 {
                     return NotFound($"Requested event not found");
@@ -56,7 +81,8 @@ namespace Maevent.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]EventModel model)
+        public async Task<IActionResult> Post(
+            [FromBody]EventModel model)
         {
             try
             {
@@ -79,7 +105,7 @@ namespace Maevent.API.Controllers
                 _repo.Add(ev);
                 if (await _repo.SaveAllAsync())
                 {
-                    var newUri = Url.Link("EventGet", new { id = ev.Id});
+                    var newUri = Url.Link("EventGet", new { uid = ev.Uid});
 
                     return Created(newUri, Mapper.Map<EventModel>(ev));
                 }
@@ -90,18 +116,18 @@ namespace Maevent.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Threw exception while saving Event: {ex}");
+                _logger.LogError($"Exception thrown while saving Event: {ex}");
             }
 
             return BadRequest();
         }
 
-        [HttpDelete("{name}")]
-        public async Task<IActionResult> Delete(string name)
+        [HttpDelete("{uid}")]
+        public async Task<IActionResult> Delete(int uid)
         {
             try
             {
-                var oldEvent = _repo.GetEventByName(name);
+                var oldEvent = _repo.GetEvent(uid);
                 if (oldEvent == null)
                 {
                     return NotFound("Could not find requested Event");
@@ -115,11 +141,46 @@ namespace Maevent.API.Controllers
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Exception thrown while deleting event: {ex}");
             }
 
             return BadRequest();
+        }
+        
+        [HttpPut("{uid}")]
+        public async Task<IActionResult> Put(int uid,
+            [FromBody] EventModel model)
+        {
+            try
+            {
+                var ev = _repo.GetEvent(uid);
+                if (ev == null)
+                {
+                    return NotFound();
+                }
+
+                if (ev.Name.Equals(model.Name) && uid != ev.Uid)
+                {
+                    return BadRequest("Event with requested name exists.");
+                }
+
+                ev = Mapper.Map<Event>(model);
+
+                _repo.Update(ev);
+
+                if (await _repo.SaveAllAsync())
+                {
+                    return Ok(Mapper.Map<EventModel>(ev));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception thrown while updating event: {ex}");
+            }
+
+            return BadRequest("Could not update event");
         }
     }
 }

@@ -13,7 +13,8 @@ namespace Maevent.Data
         public MaeventContext(DbContextOptions options)
             : base(options)
         {
-            Database.Migrate();
+            //Database.Migrate();
+            Database.EnsureCreated();
         }
 
         public DbSet<Event> Events { get; set; }

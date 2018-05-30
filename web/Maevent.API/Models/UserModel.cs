@@ -8,6 +8,7 @@ namespace Maevent.API.Models
 {
     public class UserModel
     {
+        public int Uid { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public string Pose { get; set; }
@@ -15,9 +16,6 @@ namespace Maevent.API.Models
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Location { get; set; }
-
-        public Boolean Registered { get; set; }
-
-        //public ICollection<string> Tags { get; set; }
+        public string Tags { get; set; }
     }
 }

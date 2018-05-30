@@ -34,7 +34,7 @@ public class MaeventUserManager implements
         //TODO Replace with query
         UserProfile[] userProfiles = UserProfileBuilder.getObjects();
         for (int i = 0; i < userProfiles.length; i++) {
-            if (userProfiles[i].id == userId) {
+            if (userProfiles[i].uid == userId) {
                 return userProfiles[i].phone;
             }
         }
@@ -46,7 +46,7 @@ public class MaeventUserManager implements
         //TODO Replace with query
         UserProfile[] userProfiles = UserProfileBuilder.getObjects();
         for (int i = 0; i < userProfiles.length; i++) {
-            if (userProfiles[i].id == userId) {
+            if (userProfiles[i].uid == userId) {
                 return userProfiles[i].firstName + " " + userProfiles[i].lastName;
             }
         }

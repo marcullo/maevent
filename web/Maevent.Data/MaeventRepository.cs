@@ -25,6 +25,11 @@ namespace Maevent.Data
         {
             _context.Remove(entity);
         }
+        public void Update<T>(T entity) where T : class
+        {
+            _context.Update(entity);
+        }
+
 
         public IEnumerable<Entities.Event> GetAllEvents()
         {
@@ -33,10 +38,10 @@ namespace Maevent.Data
                 .ToList();
         }
 
-        public Event GetEvent(int id)
+        public Event GetEvent(int uid)
         {
             return _context.Events
-                .Where(c => c.Id == id)
+                .Where(c => c.Uid == uid)
                 .FirstOrDefault();
         }
 
@@ -52,12 +57,27 @@ namespace Maevent.Data
             return GetEventByName(name) != null;
         }
 
-        public User GetUser(string name)
+        public User GetUser(int uid)
+        {
+            return _context.Users
+                .Where(u => u.Uid == uid)
+                .Cast<User>()
+                .FirstOrDefault();
+        }
+
+        public User GetUserByName(string name)
         {
             return _context.Users
                 .Where(u => u.Name == name)
                 .Cast<User>()
                 .FirstOrDefault();
+        }
+
+        public IEnumerable<Entities.User> GetAllUsers()
+        {
+            return _context.Users
+                .OrderBy(c => c.Name)
+                .ToList();
         }
 
         public async Task<bool> SaveAllAsync()

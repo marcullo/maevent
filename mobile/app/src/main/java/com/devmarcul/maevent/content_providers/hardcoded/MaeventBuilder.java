@@ -24,7 +24,7 @@ public class MaeventBuilder {
         object.setParams(objectCopy.getParams());
         object.setHostId(objectCopy.getHostId());
         object.setId(objectCopy.getId());
-        object.setAttendeesNr(objectCopy.getAttendeesNr());
+        object.setInviteesNumber(objectCopy.getInviteesNumber());
 
         cnt++;
         if (cnt == CNT) {
@@ -51,7 +51,7 @@ public class MaeventBuilder {
         object0.setParams(params);
         object0.setHostId(hostId);
         object0.setId(id);
-        object0.setAttendeesNr(220);
+        object0.setInviteesNumber(220);
 
         params = MaeventParamsBuilder.build();
         hostId++;
@@ -59,7 +59,7 @@ public class MaeventBuilder {
         object1.setParams(params);
         object1.setHostId(hostId);
         object1.setId(id);
-        object1.setAttendeesNr(44);
+        object1.setInviteesNumber(44);
 
         params = MaeventParamsBuilder.build();
         hostId++;
@@ -67,7 +67,7 @@ public class MaeventBuilder {
         object2.setParams(params);
         object2.setHostId(hostId);
         object2.setId(id);
-        object2.setAttendeesNr(23);
+        object2.setInviteesNumber(23);
 
         params = MaeventParamsBuilder.build();
         hostId++;
@@ -75,7 +75,7 @@ public class MaeventBuilder {
         object3.setParams(params);
         object3.setHostId(hostId);
         object3.setId(id);
-        object3.setAttendeesNr(100);
+        object3.setInviteesNumber(100);
 
         params = MaeventParamsBuilder.build();
         hostId++;
@@ -83,7 +83,7 @@ public class MaeventBuilder {
         object4.setParams(params);
         object4.setHostId(hostId);
         object4.setId(id);
-        object4.setAttendeesNr(60);
+        object4.setInviteesNumber(60);
     }
 
     private static void assignObjects() {

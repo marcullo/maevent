@@ -11,6 +11,7 @@ namespace Maevent.Data
         // Basic DB Operations
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
+        void Update<T>(T entity) where T : class;
         Task<bool> SaveAllAsync();
 
         // Events
@@ -20,6 +21,8 @@ namespace Maevent.Data
         bool EventExists(string name);
 
         // Users
-        User GetUser(string userName);
+        User GetUser(int id);
+        User GetUserByName(string userName);
+        IEnumerable<Entities.User> GetAllUsers();
     }
 }

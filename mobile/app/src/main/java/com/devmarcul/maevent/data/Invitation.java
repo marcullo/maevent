@@ -12,7 +12,7 @@ public class Invitation extends Maevent {
     public Invitation(MaeventParams params, int hostId, User inviter, int inviteesNr) {
         super();
         this.params = params;
-        this.hostId = hostId;
+        this.hostUid = hostId;
         this.inviter = inviter;
         this.inviteesNr = inviteesNr;
     }

@@ -12,6 +12,7 @@ namespace Maevent.Data.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public int Uid { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public string Pose { get; set; }
@@ -19,12 +20,8 @@ namespace Maevent.Data.Entities
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Location { get; set; }
-
-        public Boolean Registered { get; set; }
-
-        //TODO Add mapper for collection
-        //public ICollection<string> Tags { get; set; }
-
+        public string Tags { get; set; }
+        
         public byte[] RowVersion { get; set; }
     }
 }

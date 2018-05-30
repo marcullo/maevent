@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e8e16a88-20bf-4333-91a3-d7e8e6925a64",
+		"_postman_id": "57e0344b-a4aa-4fb6-a23d-e2a3c6f30bff",
 		"name": "Maevent.API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -10,7 +10,10 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:8088/api/events",
 					"protocol": "http",
@@ -31,9 +34,12 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
-					"raw": "http://localhost:8088/api/events/1",
+					"raw": "http://localhost:8088/api/events/2000000003",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -42,29 +48,7 @@
 					"path": [
 						"api",
 						"events",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET Event Invalid",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://localhost:8088/api/events/a",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"events",
-						"a"
+						"2000000003"
 					]
 				}
 			},
@@ -82,7 +66,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Freeway Performance Exposition\",\n    \"place\": \"Stadion Narodowy\",\n    \"addressStreet\": \"al. Poniatowskiego 1\",\n    \"addressPostCode\": \"03-901 Warszawa\",\n    \"beginTime\": \"2018-06-01T08:00:00.8483545\",\n    \"endTime\": \"2018-06-08T18:00:00.8514397\",\n    \"rsvp\": false,\n    \"hostId\": 102\n}"
+					"raw": "{\n    \"uid\": 2000000003,\n    \"name\": \"Freeway Performance Exposition\",\n    \"hostUid\": \"2000000008\",\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesUids\": \"2000000003\",\n    \"inviteesNumber\": 2000\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8088/api/events",
@@ -123,7 +107,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Municipal Week\",\n    \"place\": \"Stadion Narodowy\",\n    \"addressPostCode\": \"03-901 Warszawa\",\n    \"beginTime\": \"2018-06-01T08:00:00.8483545\",\n    \"endTime\": \"2018-06-08T18:00:00.8514397\",\n    \"rsvp\": false,\n    \"hostId\": 102\n}"
+					"raw": "{\n    \"name\": \"Municipal Week\",\n    \"place\": \"Stadion Narodowy\",\n    \"addressPostCode\": \"03-901 Warszawa\",\n    \"beginTime\": \"2018-06-01T08:00:5\",\n    \"endTime\": \"2018-06-08T18:\",\n    \"rsvp\": false,\n    \"hostId\": 102\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8088/api/events",
@@ -135,6 +119,36 @@
 					"path": [
 						"api",
 						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT (Update) Event",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uid\": 2000000003,\n    \"name\": \"Freeway Performance Exposition\",\n    \"hostUid\": \"2000000008\",\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesUids\": \"2000000003\",\n    \"inviteesNumber\": 2000\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/events/2000000003",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"events",
+						"2000000003"
 					]
 				}
 			},
@@ -155,7 +169,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8088/api/events/Freeway Performance Exposition",
+					"raw": "http://localhost:8088/api/events/2000000003",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -164,14 +178,14 @@
 					"path": [
 						"api",
 						"events",
-						"Freeway Performance Exposition"
+						"2000000003"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "DELETE Event Invalid",
+			"name": "DELETE Events All",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -185,7 +199,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8088/api/events/a",
+					"raw": "http://localhost:8088/api/events/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -194,7 +208,216 @@
 					"path": [
 						"api",
 						"events",
-						"a"
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/users/2000000005",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"users",
+						"2000000005"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Michael Parapazzi\",\n    \"title\": \"Professor\",\n    \"pose\": \"Embedded Software Developer\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"email\": \"blockandre@block.com\",\n    \"location\": \"Warsaw\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST User Invalid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e802348f-6630-4ba6-af48-4a785889468b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Professor\",\n    \"pose\": \"Embedded Software Developer\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"location\": \"Warsaw\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT (Update) User",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Andrew Block\",\n    \"title\": \"Professor\",\n    \"pose\": \"Architect\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"location\": \"Warsaw\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/users/2000000005",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"users",
+						"2000000005"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE User",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/users/Michael Parapazzi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"users",
+						"Michael Parapazzi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Users All",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/users/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"users",
+						""
 					]
 				}
 			},

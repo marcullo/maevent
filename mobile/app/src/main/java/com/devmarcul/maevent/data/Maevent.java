@@ -9,25 +9,30 @@ public class Maevent implements DataValidator {
 
     private static String LOG_TAG = "Maevent";
 
-    protected int id;
-    protected int hostId;
-    protected int attendeesNr;
+    protected int uid;
+    protected int hostUid;
     protected MaeventParams params;
+    protected String attendeesUids;
+    protected int inviteesNumber;
 
     public MaeventParams getParams() {
         return params;
     }
 
     public int getId() {
-        return id;
+        return uid;
     }
 
     public int getHostId() {
-        return hostId;
+        return hostUid;
     }
 
-    public int getAttendeesNr() {
-        return attendeesNr;
+    public String getAttendeesUids() {
+        return attendeesUids;
+    }
+
+    public int getInviteesNumber() {
+        return inviteesNumber;
     }
 
     public void setParams(MaeventParams params) {
@@ -39,15 +44,19 @@ public class Maevent implements DataValidator {
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.uid = id;
     }
 
     public void setHostId(int hostId) {
-        this.hostId = hostId;
+        this.hostUid = hostId;
     }
 
-    public void setAttendeesNr(int attendeesNr) {
-        this.attendeesNr = attendeesNr;
+    public void setAttendeesUids(String attendeesUids) {
+        this.attendeesUids = attendeesUids;
+    }
+
+    public void setInviteesNumber(int nr) {
+        this.inviteesNumber = nr;
     }
 
     @Override

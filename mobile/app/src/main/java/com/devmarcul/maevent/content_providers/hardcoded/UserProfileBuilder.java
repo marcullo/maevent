@@ -68,7 +68,7 @@ public class UserProfileBuilder {
         int id = INTITIAL_USER_ID;
 
         id++;
-        object0.id = id;
+        object0.uid = id;
         object0.email = "test.maevent@gmail.com";
         object0.firstName = "Andrew";
         object0.lastName = "Block";
@@ -85,7 +85,7 @@ public class UserProfileBuilder {
         object0.tags.add("SOLID");
 
         id++;
-        object1.id = id;
+        object1.uid = id;
         object1.email = "mr-nobody@nobody.com";
         object1.firstName = "Mr.";
         object1.lastName = "Nobody";
@@ -100,7 +100,7 @@ public class UserProfileBuilder {
         object1.tags.add("Fast cars");
 
         id++;
-        object2.id = id;
+        object2.uid = id;
         object2.email = "hey.me@gmail.com";
         object2.firstName = "Michael";
         object2.lastName = "Block";
@@ -120,7 +120,7 @@ public class UserProfileBuilder {
         object2.tags.add("Maevent");
 
         id++;
-        object3.id = id;
+        object3.uid = id;
         object3.email = "jsklansky@gmail.com";
         object3.firstName = "Justine";
         object3.lastName = "Sklansky";
@@ -133,7 +133,7 @@ public class UserProfileBuilder {
         object3.tags = new ArrayList<>();
 
         id++;
-        object4.id = id;
+        object4.uid = id;
         object4.email = "blockandregmail.com";
         object4.firstName = "Andre";
         object4.lastName = "Blockings";
