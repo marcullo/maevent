@@ -13,68 +13,38 @@ import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.business_logic.ThisUser;
 
 public class IntroductionViewHolder {
-    private View view;
-    private EditText mFirstNameEditText;
-    private EditText mLastNameEditText;
-    private EditText mPoseEditText;
-    private EditText mHeadlineEditText;
-    private ImageButton mProfileImage;
-    private Spinner mTitleSpinner;
 
-    public IntroductionViewHolder(Context context, View itemView) {
-        view = itemView;
-        mFirstNameEditText = view.findViewById(R.id.et_configure_profile_first_name);
-        mLastNameEditText = view.findViewById(R.id.et_configure_profile_last_name);
-        mPoseEditText = view.findViewById(R.id.et_configure_profile_pose);
-        mHeadlineEditText = view.findViewById(R.id.et_configure_profile_headline);
-        mProfileImage = view.findViewById(R.id.ibtn_configure_profile_image);
-        mTitleSpinner = view.findViewById(R.id.sp_configure_profile_title);
+    public static String TITLES[];
 
-        initializeName();
-        initializePhoto();
-        initializeTitle(context);
-        mPoseEditText.setText(ThisUser.getProfile().pose);
-        mHeadlineEditText.setText(ThisUser.getProfile().headline);
-    }
+    private final View mContentView;
+    public EditText mFirstNameEditText;
+    public EditText mLastNameEditText;
+    public EditText mPoseEditText;
+    public EditText mHeadlineEditText;
+    public ImageButton mProfileImage;
+    public Spinner mTitleSpinner;
 
-    private void initializeName() {
+    public IntroductionViewHolder(View contentView) {
+        mContentView = contentView;
+        mFirstNameEditText = mContentView.findViewById(R.id.et_configure_profile_first_name);
+        mLastNameEditText = mContentView.findViewById(R.id.et_configure_profile_last_name);
+        mPoseEditText = mContentView.findViewById(R.id.et_configure_profile_pose);
+        mHeadlineEditText = mContentView.findViewById(R.id.et_configure_profile_headline);
+        mProfileImage = mContentView.findViewById(R.id.ibtn_configure_profile_image);
+        mTitleSpinner = mContentView.findViewById(R.id.sp_configure_profile_title);
+
         mFirstNameEditText.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
         mLastNameEditText.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
-        String firstName = ThisUser.getProfile().firstName;
-        String lastName = ThisUser.getProfile().lastName;
-
-        mFirstNameEditText.setText(firstName);
-        mLastNameEditText.setText(lastName);
+        initializeTitleSpinner();
     }
 
-    private void initializePhoto() {
-        if (ThisUser.getProfile().hasPhoto) {
-            Bitmap image = ThisUser.getPhoto();
-            mProfileImage.setImageBitmap(image);
-        }
-    }
-
-    private void initializeTitle(Context context) {
-        int titleId = wrapTitleFromProfile(context);
-
+    private void initializeTitleSpinner() {
+        Context context = mContentView.getContext();
+        TITLES = context.getResources().getStringArray(R.array.configure_profile_titles);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
                 context, R.array.configure_profile_titles, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTitleSpinner.setAdapter(spinnerAdapter);
-        mTitleSpinner.setSelection(titleId);
     }
-
-    private int wrapTitleFromProfile(Context context) {
-        String profileTitle = ThisUser.getProfile().title;
-        String titles[] = context.getResources().getStringArray(R.array.configure_profile_titles);
-        for (int i = 1; i < titles.length; i++) {
-            if (titles[i].equals(profileTitle)) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-
 }

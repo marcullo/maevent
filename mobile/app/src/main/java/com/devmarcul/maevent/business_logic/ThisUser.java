@@ -22,7 +22,6 @@ public class ThisUser {
 
     private static GoogleSignInAccount googleAccount;
     private static UserProfile profile;
-    private static int uid = 0;
 
     //TODO Refactor photo storage in order not to load from the internet constantly
     private static Bitmap photo;
@@ -34,7 +33,7 @@ public class ThisUser {
     }
 
     public static boolean isRegistered() {
-        return uid != 0;
+        return profile.id != 0;
     }
 
     public static Bitmap getPhoto() {
@@ -46,6 +45,7 @@ public class ThisUser {
         UserProfileBuilder.setCnt(0);
         profile = UserProfileBuilder.build();
         profile.id = 2000000008;
+//        profile.id = 0;
 
         googleAccount = account;
 

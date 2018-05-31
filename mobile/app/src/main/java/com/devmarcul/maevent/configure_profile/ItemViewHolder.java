@@ -9,12 +9,12 @@ import android.widget.TextView;
 import com.devmarcul.maevent.R;
 
 public class ItemViewHolder {
-    private View view;
-    private View child;
-    private ImageView icon;
-    private TextView label;
-    private ImageView arrow;
-    private boolean collapsed;
+    public View view;
+    public View child;
+    public ImageView icon;
+    public TextView label;
+    public ImageView arrow;
+    public boolean collapsed;
 
     public ItemViewHolder(View view, View child, String title, int imageResource, boolean collapsed) {
         this.view = view;

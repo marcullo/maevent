@@ -14,9 +14,13 @@ import android.view.View;
 
 import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.common.TagsViewAdapter;
+import com.devmarcul.maevent.configure_profile.ContactViewAdapter;
 import com.devmarcul.maevent.configure_profile.ContactViewHolder;
+import com.devmarcul.maevent.configure_profile.IntroductionViewAdapter;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;
+import com.devmarcul.maevent.configure_profile.TagsItemAdapter;
+import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.utils.dialog.TwoButtonsDialog;
 import com.devmarcul.maevent.business_logic.MaeventAccountManager;
 import com.devmarcul.maevent.utils.Prompt;
@@ -29,118 +33,60 @@ public class ConfigureProfileActivity extends AppCompatActivity {
 
     private static String LOG_TAG = "ConfigureProfileActivity";
 
-    private ItemViewHolder mIntroductionLabel;
-    private IntroductionViewHolder mIntroductionViewHolder;
-    private ItemViewHolder mContactLabel;
-    private ContactViewHolder mContactViewHolder;
-    private ItemViewHolder mTagsLabel;
-    private TagsViewAdapter mTagsViewAdapter;
+    private IntroductionViewAdapter mIntroductionViewAdapter;
+    private ContactViewAdapter mContactViewAdapter;
+    private TagsItemAdapter mTagsItemAdapter;
 
     private TwoButtonsDialog mCancelDialog;
+    private boolean mCancelButtonVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean configProfileRequested = false;
-        Intent starter = getIntent();
-        if (starter != null) {
-            final String KEY_CONFIG_PROFILE_REQUESTED = MainActivity.KEY_CONFIG_PROFILE_REQUESTED;
-            if (starter.hasExtra(KEY_CONFIG_PROFILE_REQUESTED)) {
-                configProfileRequested = starter.getBooleanExtra(KEY_CONFIG_PROFILE_REQUESTED, false);
-            }
-        }
-
         GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
         ThisUser.updateContent(account);
-        if (ThisUser.isRegistered() && !configProfileRequested) {
+        if (ThisUser.isRegistered() && !isConfigureProfileRequested()) {
             setMainActivity();
         }
 
-        setContentView(R.layout.activity_configure_profile);
-
-        final View introductionLabelView = findViewById(R.id.configure_profile_introduction_label);
-        final View introductionView = findViewById(R.id.configure_profile_introduction);
-        final View contactLabelView = findViewById(R.id.configure_profile_contact_label);
-        final View contactView = findViewById(R.id.configure_profile_contact);
-        final View tagsLabelView = findViewById(R.id.configure_profile_tags_label);
-        final View tagsView = findViewById(R.id.configure_profile_tags);
-
-        final String introductionLabel = getString(R.string.configure_profile_introduction_label);
-        final String contactLabel = getString(R.string.configure_profile_contact_label);
-        final String tagsPickerLabel = getString(R.string.configure_profile_tags_picker_label);
-
-        final int introductionIconResource = R.drawable.ic_configure_profile_introduction;
-        final int contactIconResource = R.drawable.ic_configure_profile_contact;
-        final int tagsPickerResource = R.mipmap.butterfly_tie;
-
-        mIntroductionLabel = new ItemViewHolder(introductionLabelView, introductionView, introductionLabel, introductionIconResource, true);
-        mContactLabel = new ItemViewHolder(contactLabelView, contactView, contactLabel, contactIconResource, true);
-        mTagsLabel = new ItemViewHolder(tagsLabelView, tagsView, tagsPickerLabel, tagsPickerResource, true);
-
-        mIntroductionViewHolder = new IntroductionViewHolder(this, introductionView);
-        mContactViewHolder = new ContactViewHolder(this, contactView);
-
-        mTagsViewAdapter = new TagsViewAdapter(tagsView, R.id.et_tags);
-        mTagsViewAdapter.adaptContent(ThisUser.getProfile().tags);
-        mTagsViewAdapter.adaptEditable(true);
-
-        introductionLabelView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIntroductionLabel.toggle();
-            }
-        });
-
-        contactLabelView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mContactLabel.toggle();
-            }
-        });
-
-        tagsLabelView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTagsLabel.toggle();
-            }
-        });
-
-        mCancelDialog = new TwoButtonsDialog.Builder(this)
-            .setTitle(getString(R.string.configure_profile_cancel_dialog_title))
-            .setSubtitle(getString(R.string.configure_profile_cancel_dialog_subtitle))
-            .setConfirmButtonColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            .setCancelButtonColor(ContextCompat.getColor(this, R.color.colorAccent))
-            .setConfirmButton(getString(R.string.text_yes), new TwoButtonsDialogListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    setMainActivity();
-                }
-            })
-            .setCancelButton(getString(R.string.text_no), new TwoButtonsDialogListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                }
-            })
-            .build();
+        final UserProfile profile = ThisUser.getProfile();
+        initUi(profile);
+        mCancelButtonVisible = ThisUser.isRegistered();
+        if (mCancelButtonVisible) {
+            initCancelDialog();
+        }
 
         Log.d(LOG_TAG, "Created.");
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mIntroductionLabel.toggle();
-        mContactLabel.toggle();
-        mTagsLabel.toggle();
+    protected void onResume() {
+        super.onResume();
+
+        mIntroductionViewAdapter.expandContent();
+        mContactViewAdapter.expandContent();
+        mTagsItemAdapter.expandContent();
+
+        mIntroductionViewAdapter.bindListeners();
+        mContactViewAdapter.bindListeners();
+        mTagsItemAdapter.bindListeners();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mIntroductionViewAdapter.unbindListeners();
+        mContactViewAdapter.unbindListeners();
+        mTagsItemAdapter.unbindListeners();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_configure_profile, menu);
-        //TODO Refactor cancel item
-        if (ThisUser.isRegistered()) {
+        if (mCancelButtonVisible) {
             MenuItem cancelItem = menu.findItem(R.id.configure_profile_action_cancel);
             cancelItem.setVisible(true);
         }
@@ -175,6 +121,59 @@ public class ConfigureProfileActivity extends AppCompatActivity {
     }
 
     //--------------------------------------------------------------------------------------------//
+
+    private void initUi(UserProfile profile) {
+        setContentView(R.layout.activity_configure_profile);
+
+        final View introductionLabelView = findViewById(R.id.configure_profile_introduction_label);
+        final View introductionView = findViewById(R.id.configure_profile_introduction);
+
+        final View contactLabelView = findViewById(R.id.configure_profile_contact_label);
+        final View contactView = findViewById(R.id.configure_profile_contact);
+
+        final View tagsLabelView = findViewById(R.id.configure_profile_tags_label);
+        final View tagsView = findViewById(R.id.configure_profile_tags);
+
+        mIntroductionViewAdapter = new IntroductionViewAdapter(this, introductionLabelView, introductionView);
+        mIntroductionViewAdapter.adaptContent(profile);
+
+        mContactViewAdapter = new ContactViewAdapter(this, contactLabelView, contactView);
+        mContactViewAdapter.adaptContent(profile);
+
+        mTagsItemAdapter = new TagsItemAdapter(this, tagsLabelView, tagsView);
+        mTagsItemAdapter.adaptContent(profile.tags);
+    }
+
+    private void initCancelDialog() {
+        mCancelDialog = new TwoButtonsDialog.Builder(this)
+                .setTitle(getString(R.string.configure_profile_cancel_dialog_title))
+                .setSubtitle(getString(R.string.configure_profile_cancel_dialog_subtitle))
+                .setConfirmButtonColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setCancelButtonColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setConfirmButton(getString(R.string.text_yes), new TwoButtonsDialogListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        setMainActivity();
+                    }
+                })
+                .setCancelButton(getString(R.string.text_no), new TwoButtonsDialogListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .build();
+    }
+
+    private boolean isConfigureProfileRequested() {
+        Intent starter = getIntent();
+        if (starter != null) {
+            final String KEY_CONFIG_PROFILE_REQUESTED = MainActivity.KEY_CONFIG_PROFILE_REQUESTED;
+            if (starter.hasExtra(KEY_CONFIG_PROFILE_REQUESTED)) {
+                return starter.getBooleanExtra(KEY_CONFIG_PROFILE_REQUESTED, false);
+            }
+        }
+        return false;
+    }
 
     private void saveConfiguration() {
         //TODO Add saving to storage while launching another activity
