@@ -105,9 +105,18 @@ namespace Maevent.API.Controllers
                 _repo.Add(ev);
                 if (await _repo.SaveAllAsync())
                 {
-                    var newUri = Url.Link("EventGet", new { uid = ev.Uid});
+                    ev.Uid = _repo.GetEventByName(ev.Name).Id;
+                    _repo.Update(ev);
 
-                    return Created(newUri, Mapper.Map<EventModel>(ev));
+                    if (await _repo.SaveAllAsync())
+                    {
+                        var newUri = Url.Link("EventGet", new { uid = ev.Uid });
+                        return Created(newUri, Mapper.Map<EventModel>(ev));
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Could not save User to the database");
+                    }
                 }
                 else
                 {
