@@ -12,11 +12,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.common.TagsViewAdapter;
 import com.devmarcul.maevent.configure_profile.ContactViewHolder;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;
-import com.devmarcul.maevent.data.ThisUser;
 import com.devmarcul.maevent.utils.dialog.TwoButtonsDialog;
 import com.devmarcul.maevent.business_logic.MaeventAccountManager;
 import com.devmarcul.maevent.utils.Prompt;
@@ -45,9 +45,9 @@ public class ConfigureProfileActivity extends AppCompatActivity {
         boolean configProfileRequested = false;
         Intent starter = getIntent();
         if (starter != null) {
-            final String configProfileRequestedKey = MainActivity.KEY_CONFIG_PROFILE_REQUESTED;
-            if (starter.hasExtra(configProfileRequestedKey)) {
-                configProfileRequested = starter.getBooleanExtra(configProfileRequestedKey, false);
+            final String KEY_CONFIG_PROFILE_REQUESTED = MainActivity.KEY_CONFIG_PROFILE_REQUESTED;
+            if (starter.hasExtra(KEY_CONFIG_PROFILE_REQUESTED)) {
+                configProfileRequested = starter.getBooleanExtra(KEY_CONFIG_PROFILE_REQUESTED, false);
             }
         }
 

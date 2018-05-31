@@ -1,4 +1,4 @@
-package com.devmarcul.maevent.services;
+package com.devmarcul.maevent.business_logic.services;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -22,7 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.models.MaeventModel;
-import com.devmarcul.maevent.receivers.NetworkReceiver;
+import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;

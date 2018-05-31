@@ -13,18 +13,17 @@ import com.android.volley.ClientError;
 import com.android.volley.ServerError;
 import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.business_logic.MaeventUserManager;
+import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.common.TagsViewAdapter;
 import com.devmarcul.maevent.common.UserDetailsViewAdapter;
-import com.devmarcul.maevent.data.ThisUser;
 import com.devmarcul.maevent.data.UserProfile;
-import com.devmarcul.maevent.receivers.NetworkReceiver;
+import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.utils.Prompt;
 import com.google.gson.Gson;
 
 public class ProfileActivity extends AppCompatActivity
         implements View.OnClickListener {
 
-    public static String KEY_CONFIG_PROFILE_REQUESTED = "config-profile-requested";
     private static String LOG_TAG = "ProfileActivity";
 
     private UserProfile mUserProfile;
@@ -130,7 +129,7 @@ public class ProfileActivity extends AppCompatActivity
     private void setConfigureProfileActivity() {
         Log.d(LOG_TAG, "Setting configure profile activity.");
         Intent intent = new Intent(this, ConfigureProfileActivity.class);
-        intent.putExtra(KEY_CONFIG_PROFILE_REQUESTED, true);
+        intent.putExtra(MainActivity.KEY_CONFIG_PROFILE_REQUESTED, true);
         startActivity(intent);
     }
 }

@@ -7,8 +7,8 @@ import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
-import com.devmarcul.maevent.receivers.NetworkReceiver;
-import com.devmarcul.maevent.services.NetworkService;
+import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
+import com.devmarcul.maevent.business_logic.services.NetworkService;
 
 public class MaeventUserManager implements
         UserContentUpdater,

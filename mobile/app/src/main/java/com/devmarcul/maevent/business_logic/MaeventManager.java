@@ -6,9 +6,8 @@ import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
-import com.devmarcul.maevent.data.ThisUser;
-import com.devmarcul.maevent.receivers.NetworkReceiver;
-import com.devmarcul.maevent.services.NetworkService;
+import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
+import com.devmarcul.maevent.business_logic.services.NetworkService;
 
 public class MaeventManager {
 

@@ -1,11 +1,11 @@
-package com.devmarcul.maevent.receivers;
+package com.devmarcul.maevent.business_logic.receivers;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
 
-import com.devmarcul.maevent.services.NetworkService;
+import com.devmarcul.maevent.business_logic.services.NetworkService;
 
 public class NetworkReceiver<T> extends ResultReceiver {
 

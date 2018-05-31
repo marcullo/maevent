@@ -1,4 +1,4 @@
-package com.devmarcul.maevent.data;
+package com.devmarcul.maevent.business_logic;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
+import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.utils.StringUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 

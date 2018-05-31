@@ -41,7 +41,7 @@
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="stateHidden" />
 
-        <service android:name=".services.NetworkService"
+        <service android:name=".business_logic.services.NetworkService"
             android:exported="false" />
 
     </application>

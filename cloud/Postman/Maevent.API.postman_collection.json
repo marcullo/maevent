@@ -345,7 +345,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Andrew Block\",\n    \"title\": \"Professor\",\n    \"pose\": \"Architect\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"location\": \"Warsaw\"\n}"
+					"raw": "{\n\t\"uid\": 1233231442,\n\t\"name\": \"Andrew Block\",\n    \"title\": \"Professor\",\n    \"pose\": \"Architect\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"location\": \"Warsaw\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8088/api/users/2000000005",
@@ -378,7 +378,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8088/api/users/Michael Parapazzi",
+					"raw": "http://localhost:8088/api/users/2000000007",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -387,7 +387,7 @@
 					"path": [
 						"api",
 						"users",
-						"Michael Parapazzi"
+						"2000000007"
 					]
 				}
 			},

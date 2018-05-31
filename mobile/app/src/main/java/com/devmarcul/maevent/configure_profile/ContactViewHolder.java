@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.devmarcul.maevent.R;
-import com.devmarcul.maevent.data.ThisUser;
+import com.devmarcul.maevent.business_logic.ThisUser;
 
 public class ContactViewHolder {
     private View view;
