@@ -6,8 +6,6 @@ import android.widget.TextView;
 
 import com.devmarcul.maevent.R;
 
-import me.originqiu.library.EditTag;
-
 public class UserDetailsViewHolder {
 
     private View view;

@@ -1,4 +1,4 @@
-package com.devmarcul.maevent.data;
+package com.devmarcul.maevent.business_logic;
 
 public interface UserSearcher {
     String getUserPhone(int userId);

@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.devmarcul.maevent.common.TagsViewAdapter;
-import com.devmarcul.maevent.common.TagsViewHolder;
 import com.devmarcul.maevent.configure_profile.ContactViewHolder;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.ItemViewHolder;

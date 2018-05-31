@@ -8,7 +8,7 @@ public class UserProfile {
 
     private static String LOG_TAG = "UserProfile";
 
-    public int uid;
+    public int id;
     public String firstName;
     public String lastName;
     public String title;
@@ -19,6 +19,6 @@ public class UserProfile {
     public String linkedin;
     public String location;
     public boolean hasPhoto;
-    public List<String> tags;
+    public Tags tags;
     public Uri photo;
 }

@@ -51,7 +51,7 @@ public class MaeventModel extends MaeventApiModel implements Parcelable {
         BeginTime = begin;
         EndTime = end;
         Rsvp = params.rsvp;
-        AttendeesUids = event.getAttendeesUids();
+        AttendeesUids = event.getAttendeesIds();
         InviteesNumber = event.getInviteesNumber();
     }
 

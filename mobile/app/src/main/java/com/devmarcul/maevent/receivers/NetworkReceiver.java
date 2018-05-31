@@ -25,7 +25,6 @@ public class NetworkReceiver<T> extends ResultReceiver {
     protected void onReceiveResult(int resultCode, Bundle resultData) {
         if (resultCode == NetworkService.RESULT_CODE_OK) {
             mCallback.onSuccess(resultData.getSerializable(PARAM_RESULT));
-//            resultCodeName = NetworkService.RESULT_CODE_OK
         }
         else if (resultCode == NetworkService.RESULT_CODE_INTERNAL_ERROR) {
             mCallback.onError(new Exception());

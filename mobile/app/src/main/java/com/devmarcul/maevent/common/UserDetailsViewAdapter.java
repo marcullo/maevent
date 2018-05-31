@@ -3,7 +3,6 @@ package com.devmarcul.maevent.common;
 import android.view.View;
 
 import com.devmarcul.maevent.R;
-import com.devmarcul.maevent.data.ThisUser;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 
@@ -33,8 +32,7 @@ public class UserDetailsViewAdapter implements
         mViewHolder.mPhotePhotoView.setImageResource(R.mipmap.maevent_logo);
         mViewHolder.mNameView.setText(name);
         mViewHolder.mLocationView.setText(profile.location);
-        //TODO adapt rank
-        mViewHolder.mRankView.setText("Professor");
+        mViewHolder.mRankView.setText(profile.title);
         mViewHolder.mPoseView.setText(profile.pose);
         mViewHolder.mHeadlineView.setText(profile.headline);
         mViewHolder.mEmailView.setText(profile.email);

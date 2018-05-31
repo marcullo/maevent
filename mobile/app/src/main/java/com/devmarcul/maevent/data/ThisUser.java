@@ -27,6 +27,8 @@ public class ThisUser {
     private static Bitmap photo;
 
     public static UserProfile getProfile() {
+        //TODO get from database
+        //TODO replace with maevent steward
         return profile;
     }
 
@@ -43,6 +45,7 @@ public class ThisUser {
         UserProfileBuilder.setCnt(0);
         profile = UserProfileBuilder.build();
         registered = true;
+        profile.id = 2000000008;
 
         googleAccount = account;
         if (!registered && googleAccount != null) {

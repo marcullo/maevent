@@ -3,7 +3,6 @@ package com.devmarcul.maevent.main.common;
 import android.view.View;
 
 import com.devmarcul.maevent.R;
-import com.devmarcul.maevent.business_logic.MaeventSteward;
 import com.devmarcul.maevent.common.ContentAdapter;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
@@ -33,16 +32,16 @@ public class EventDetailsViewAdapter implements
 
     @Override
     public void adaptContent(Maevent event) {
+        //TODO get bundle with all necessary data instead of only event
         MaeventParams params = event.getParams();
-        int hostId = event.getHostId();
-
         String eventName = params.name;
-        String host = MaeventSteward.getHostName(hostId);
+        //TODO Host !
+        String host = "Andrew Block";
         String place = params.place;
         String street = params.addressStreet;
         String postCode = params.addressPostCode;
         String time = getTimeSting(params.beginTime, params.endTime);
-        //TODO Add parsing attendees uids count
+        //TODO Add parsing attendees ids count
         String usersNumber = String.valueOf("0");
         //TODO Consider replacing with remaining time
         String duration = getDurationString(params.beginTime, params.endTime);
@@ -62,7 +61,7 @@ public class EventDetailsViewAdapter implements
         int usersNumberIconRes;
 
         if (usersAreAttendees) {
-            //TODO Add parsing attendees uids count
+            //TODO Add parsing attendees ids count
             usersNumber = String.valueOf("0");
             usersNumberIconRes = R.drawable.ic_people;
         }

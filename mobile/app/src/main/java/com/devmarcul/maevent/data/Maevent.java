@@ -1,18 +1,15 @@
 package com.devmarcul.maevent.data;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.devmarcul.maevent.utils.StringUtils;
 
 public class Maevent implements DataValidator {
 
     private static String LOG_TAG = "Maevent";
 
-    protected int uid;
-    protected int hostUid;
+    protected int id;
+    protected int hostId;
     protected MaeventParams params;
-    protected String attendeesUids;
+    protected String attendeesIds;
     protected int inviteesNumber;
 
     public MaeventParams getParams() {
@@ -20,15 +17,15 @@ public class Maevent implements DataValidator {
     }
 
     public int getId() {
-        return uid;
+        return id;
     }
 
     public int getHostId() {
-        return hostUid;
+        return hostId;
     }
 
-    public String getAttendeesUids() {
-        return attendeesUids;
+    public String getAttendeesIds() {
+        return attendeesIds;
     }
 
     public int getInviteesNumber() {
@@ -44,15 +41,15 @@ public class Maevent implements DataValidator {
     }
 
     public void setId(int id) {
-        this.uid = id;
+        this.id = id;
     }
 
     public void setHostId(int hostId) {
-        this.hostUid = hostId;
+        this.hostId = hostId;
     }
 
-    public void setAttendeesUids(String attendeesUids) {
-        this.attendeesUids = attendeesUids;
+    public void setAttendeesIds(String attendeesIds) {
+        this.attendeesIds = attendeesIds;
     }
 
     public void setInviteesNumber(int nr) {

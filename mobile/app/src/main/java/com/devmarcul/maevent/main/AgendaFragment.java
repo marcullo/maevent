@@ -141,9 +141,10 @@ public class AgendaFragment extends Fragment implements
 
     @Override
     public void onClickCall(Maevent event) {
+        //TODO Replace with bundle with all necessary data instead of event
         int id = event.getHostId();
-        String phone = MaeventSteward.getHostPhone(id);
-        MaeventSteward.callHost(phone, parent);
+        //TODO Host phone!
+        MaeventSteward.callHost("+48123456789", parent);
     }
 
     @Override

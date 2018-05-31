@@ -1,5 +1,6 @@
 package com.devmarcul.maevent.content_providers.hardcoded;
 
+import com.devmarcul.maevent.data.Tags;
 import com.devmarcul.maevent.data.UserProfile;
 
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class UserProfileBuilder {
         int id = INTITIAL_USER_ID;
 
         id++;
-        object0.uid = id;
+        object0.id = id;
         object0.email = "test.maevent@gmail.com";
         object0.firstName = "Andrew";
         object0.lastName = "Block";
@@ -78,14 +79,14 @@ public class UserProfileBuilder {
         object0.phone = "++48123456789";
         object0.linkedin = "maeventTest";
         object0.location = "Warsaw";
-        object0.tags = new ArrayList<>();
+        object0.tags = new Tags();
         object0.tags.add("Android");
         object0.tags.add("Java");
         object0.tags.add("Python");
         object0.tags.add("SOLID");
 
         id++;
-        object1.uid = id;
+        object1.id = id;
         object1.email = "mr-nobody@nobody.com";
         object1.firstName = "Mr.";
         object1.lastName = "Nobody";
@@ -95,12 +96,12 @@ public class UserProfileBuilder {
         object1.phone = "+22195332004";
         object1.linkedin = "noempty";
         object1.location = "Cracow";
-        object1.tags = new ArrayList<>();
+        object1.tags = new Tags();
         object1.tags.add("Loop");
         object1.tags.add("Fast cars");
 
         id++;
-        object2.uid = id;
+        object2.id = id;
         object2.email = "hey.me@gmail.com";
         object2.firstName = "Michael";
         object2.lastName = "Block";
@@ -110,7 +111,7 @@ public class UserProfileBuilder {
         object2.phone = "+02 20041 22";
         object2.linkedin = "medevop";
         object2.location = "Warsaw";
-        object2.tags = new ArrayList<>();
+        object2.tags = new Tags();
         object2.tags.add("Android");
         object2.tags.add("Java");
         object2.tags.add("Python");
@@ -120,7 +121,7 @@ public class UserProfileBuilder {
         object2.tags.add("Maevent");
 
         id++;
-        object3.uid = id;
+        object3.id = id;
         object3.email = "jsklansky@gmail.com";
         object3.firstName = "Justine";
         object3.lastName = "Sklansky";
@@ -130,10 +131,10 @@ public class UserProfileBuilder {
         object3.phone = "+4212234055";
         object3.linkedin = "Jusklansky";
         object3.location = "New York";
-        object3.tags = new ArrayList<>();
+        object3.tags = new Tags();
 
         id++;
-        object4.uid = id;
+        object4.id = id;
         object4.email = "blockandregmail.com";
         object4.firstName = "Andre";
         object4.lastName = "Blockings";
@@ -143,8 +144,8 @@ public class UserProfileBuilder {
         object4.phone = "+08 03 02 05 04";
         object4.linkedin = "blockandre";
         object4.location = "Gdansk";
-        object4.tags = new ArrayList<>();
-    }
+        object4.tags = new Tags();
+}
 
     private static void assignObjects() {
         objects = new UserProfile[CNT];

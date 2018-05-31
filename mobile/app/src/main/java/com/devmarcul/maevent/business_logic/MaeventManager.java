@@ -1,10 +1,8 @@
 package com.devmarcul.maevent.business_logic;
 
 import android.content.Context;
-import android.os.Parcelable;
 
 import com.devmarcul.maevent.apis.MaeventApi;
-import com.devmarcul.maevent.apis.MaeventApiModel;
 import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
@@ -28,12 +26,12 @@ public class MaeventManager {
             return;
         }
 
-        int id = ThisUser.getProfile().uid;
+        int id = ThisUser.getProfile().id;
 
         Maevent event = new Maevent();
         event.setParams(params);
         event.setHostId(id);
-        event.setAttendeesUids(String.valueOf(id));
+        event.setAttendeesIds(String.valueOf(id));
 
         MaeventModel model = new MaeventModel(event);
         NetworkService.getInstance()

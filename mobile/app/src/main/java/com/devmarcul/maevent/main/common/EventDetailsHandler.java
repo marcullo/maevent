@@ -49,6 +49,7 @@ public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandl
 
     @Override
     public void onClickCall() {
+        //TODO Get host phone from bundled data about event
         int hostId;
         if (mFocusedEvent != null) {
             hostId = mFocusedEvent.getHostId();
@@ -59,8 +60,7 @@ public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandl
         else {
             return;
         }
-        String phone = MaeventSteward.getHostPhone(hostId);
-        MaeventSteward.callHost(phone, parent);
+        MaeventSteward.callHost("+48123456789", parent);
     }
 
     @Override
@@ -75,14 +75,14 @@ public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandl
 
     @Override
     public void onClickCalendar() {
-        int hostId;
+        //TODO Get host name and phone from bundled data about event/invitation
+        String hostName = "Andrew Block";
+        String hostPhone = "+48123456789";
         if (mFocusedEvent != null) {
-            hostId = mFocusedEvent.getHostId();
-            MaeventSteward.saveEventToCalendar(mFocusedEvent, hostId, parent);
+            MaeventSteward.saveEventToCalendar(mFocusedEvent, hostName, hostPhone, parent);
         }
         else if (mFocusedInvitation != null) {
-            hostId = mFocusedInvitation.getHostId();
-            MaeventSteward.saveEventToCalendar(mFocusedInvitation, hostId, parent);
+            MaeventSteward.saveEventToCalendar(mFocusedInvitation, hostName, hostPhone, parent);
         }
     }
 

@@ -12,26 +12,14 @@ import com.devmarcul.maevent.data.MaeventParams;
 
 public class MaeventSteward {
 
-    public static String getHostName(int hostId) {
-        MaeventUserManager mum = new MaeventUserManager();
-        String phone = mum.getUserName(hostId);
-        return phone;
-    }
-
-    public static String getHostPhone(int hostId) {
-        MaeventUserManager mum = new MaeventUserManager();
-        String phone = mum.getUserPhone(hostId);
-        return phone;
-    }
-
     public static void callHost(String phoneNumber, Activity activity) {
         Uri phoneUri = Uri.fromParts("tel", phoneNumber, null);
         Intent intent = new Intent(Intent.ACTION_DIAL, phoneUri);
         activity.startActivity(intent);
     }
 
-    public static void saveEventToCalendar(Maevent event, int hostId, Activity activity) {
-        MaeventCalendarParams params = prepareBaseParams(event);
+    public static void saveEventToCalendar(Maevent event, String hostName, String hostPhone, Activity activity) {
+        MaeventCalendarParams params = prepareBaseParams(event, hostName, hostPhone);
         Intent intent = prepareBaseIntent(params);
         intent.putExtra(CalendarContract.Events.DESCRIPTION, params.description);
         activity.startActivity(intent);
@@ -56,12 +44,8 @@ public class MaeventSteward {
         activity.startActivity(mapIntent);
     }
 
-    private static MaeventCalendarParams prepareBaseParams(Maevent event) {
+    private static MaeventCalendarParams prepareBaseParams(Maevent event, String hostName, String hostPhone) {
         MaeventParams eventParams = event.getParams();
-        int hostId = event.getHostId();
-        String hostName = getHostName(hostId);
-        String hostPhone = getHostPhone(hostId);
-
         MaeventCalendar cal = new MaeventCalendar();
         cal.update(eventParams, hostName, hostPhone);
         return cal.getParams();
