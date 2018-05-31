@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/main_profile_person_details"
-        layout="@layout/main_person_details" />
+        layout="@layout/main_profile_details" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_main_profile_edit"

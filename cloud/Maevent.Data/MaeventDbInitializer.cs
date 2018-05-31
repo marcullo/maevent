@@ -109,6 +109,7 @@ namespace Maevent.Data
                 Headline = "Nevermind!",
                 Phone = "+34123456789",
                 Email = "blockandre@block.com",
+                Linkedin = "blockandre",
                 Location = "Warsaw",
                 Tags = "SOLID;TDD"
             },
@@ -121,6 +122,7 @@ namespace Maevent.Data
                 Headline = "Always positive",
                 Phone = "+110988766443",
                 Email = "vincent@company.com",
+                Linkedin = "companyvincent",
                 Location = "France",
                 Tags = "EURO"
             },
@@ -133,6 +135,7 @@ namespace Maevent.Data
                 Headline = "Nucleons rulez",
                 Phone = "+47112300555",
                 Email = "matt@nolan.com",
+                Linkedin = "matthiewmcc",
                 Location = "Belgium",
                 Tags = null
             },
@@ -145,6 +148,7 @@ namespace Maevent.Data
                 Headline = "Universe expands...",
                 Phone = "+33 441 05 342",
                 Email = "morgan@freeman.com",
+                Linkedin = null,
                 Location = "United States",
                 Tags = "Knowledge;Science;Black hole"
             },

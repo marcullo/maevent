@@ -29,9 +29,8 @@ public class UserModel extends MaeventApiModel implements Parcelable {
     public String Phone;
     @SerializedName(value = "Email", alternate = {"email"})
     public String Email;
-
-    //TODO add linkedin profile
-
+    @SerializedName(value = "Linkedin", alternate = {"linkedin", "linkedIn"})
+    public String Linkedin;
     @SerializedName(value = "Location", alternate = {"location"})
     public String Location;
     @SerializedName(value = "Tags", alternate = {"tags"})
@@ -64,6 +63,7 @@ public class UserModel extends MaeventApiModel implements Parcelable {
         Headline = profile.headline;
         Phone = profile.phone;
         Email = profile.email;
+        Linkedin = profile.linkedin;
         Location = profile.location;
         Tags = tags;
     }
@@ -76,6 +76,7 @@ public class UserModel extends MaeventApiModel implements Parcelable {
         Headline = in.readString();
         Phone = in.readString();
         Email = in.readString();
+        Linkedin = in.readString();
         Location = in.readString();
         Tags = in.readString();
     }
@@ -110,6 +111,7 @@ public class UserModel extends MaeventApiModel implements Parcelable {
         profile.headline = this.Headline;
         profile.phone = this.Phone;
         profile.email = this.Email;
+        profile.linkedin = this.Linkedin;
         profile.location = this.Location;
         profile.tags = tags;
 
@@ -142,6 +144,7 @@ public class UserModel extends MaeventApiModel implements Parcelable {
         dest.writeString(Headline);
         dest.writeString(Phone);
         dest.writeString(Email);
+        dest.writeString(Linkedin);
         dest.writeString(Location);
         dest.writeString(Tags);
     }

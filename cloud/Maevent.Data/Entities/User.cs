@@ -19,6 +19,7 @@ namespace Maevent.Data.Entities
         public string Headline { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
+        public string Linkedin { get; set; }
         public string Location { get; set; }
         public string Tags { get; set; }
         

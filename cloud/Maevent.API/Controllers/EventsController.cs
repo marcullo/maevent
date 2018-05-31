@@ -175,7 +175,9 @@ namespace Maevent.API.Controllers
                     return BadRequest("Event with requested name exists.");
                 }
 
+                var id = ev.Id;
                 ev = Mapper.Map<Event>(model);
+                ev.Uid = id;
 
                 _repo.Update(ev);
 

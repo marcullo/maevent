@@ -1,17 +1,14 @@
 package com.devmarcul.maevent.main.live_event;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
-import com.devmarcul.maevent.data.Users;
 
 public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder> {
 
@@ -31,7 +28,7 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
     @NonNull
     @Override
     public AttendeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutId = R.layout.main_person;
+        int layoutId = R.layout.main_profile;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(layoutId, null);
         return new AttendeeViewHolder(view) {

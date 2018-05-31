@@ -27,9 +27,9 @@ namespace Maevent.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var events = _repo.GetAllUsers();
+            var users = _repo.GetAllUsers();
 
-            return Ok(Mapper.Map<IEnumerable<UserModel>>(events));
+            return Ok(Mapper.Map<IEnumerable<UserModel>>(users));
         }
 
         [HttpDelete]
@@ -161,7 +161,7 @@ namespace Maevent.API.Controllers
         {
             try
             {
-                var usr = _repo.GetEvent(uid);
+                var usr = _repo.GetUser(uid);
                 if (usr == null)
                 {
                     return NotFound();
@@ -172,13 +172,15 @@ namespace Maevent.API.Controllers
                     return BadRequest("User with requested name exists.");
                 }
 
-                usr = Mapper.Map<Event>(model);
-                usr.Uid = usr.Id;
+                var id = usr.Id;
+                usr = Mapper.Map<User>(model);
+                usr.Uid = id;
+
                 _repo.Update(usr);
 
                 if (await _repo.SaveAllAsync())
                 {
-                    return Ok(Mapper.Map<EventModel>(usr));
+                    return Ok(Mapper.Map<UserModel>(usr));
                 }
             }
             catch (Exception ex)

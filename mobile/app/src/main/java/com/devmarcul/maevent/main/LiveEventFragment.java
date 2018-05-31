@@ -61,7 +61,7 @@ public class LiveEventFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.main_live_event, container, false);
-        mAttendeeDetailsView = inflater.inflate(R.layout.main_person_details, container, false);
+        mAttendeeDetailsView = inflater.inflate(R.layout.main_profile_details, container, false);
         parent = getActivity();
 
         initEventDetails();
@@ -152,7 +152,7 @@ public class LiveEventFragment extends Fragment implements
     }
 
     private void initAttendeeDetailsDialog() {
-        View attendeeDetailsView = mAttendeeDetailsView.findViewById(R.id.main_person_details);
+        View attendeeDetailsView = mAttendeeDetailsView.findViewById(R.id.main_profile_details);
         DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, attendeeDetailsView);
         mAttendeeDetailsDialog = builder.build(true);
 
