@@ -58,6 +58,7 @@ public class CreateEventFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
+        setTitle();
         mCreateEventAdapter.bindListeners();
     }
 

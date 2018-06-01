@@ -84,8 +84,8 @@ public class AgendaFragment extends Fragment implements
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         setTitle();
     }
 
