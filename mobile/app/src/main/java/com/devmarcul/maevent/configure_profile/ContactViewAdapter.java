@@ -1,12 +1,15 @@
 package com.devmarcul.maevent.configure_profile;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.common.ContentAdapter;
 import com.devmarcul.maevent.data.UserProfile;
+import com.devmarcul.maevent.utils.StringUtils;
+import com.google.android.gms.location.places.Place;
 
 public class ContactViewAdapter implements
         ContentAdapter<UserProfile, ContactViewHolder>,
@@ -61,5 +64,22 @@ public class ContactViewAdapter implements
 
     public void collapseContent() {
         mLabelViewHolder.collapse();
+    }
+
+    public void updatePlaceViews(Place place) {
+        if (place == null) {
+            return;
+        }
+        if (place.getAddress() == null) {
+            return;
+        }
+
+        mViewHolder.mLocationEditTextBuff.setText(place.getAddress());
+        setPlaceSelected();
+    }
+
+    private void setPlaceSelected() {
+        mViewHolder.mLocationButton.setImageDrawable(mLabelViewHolder.view.getContext().getDrawable(R.drawable.ic_done));
+        mViewHolder.mLocationButton.setColorFilter(ContextCompat.getColor(mLabelViewHolder.view.getContext(), R.color.colorOk));
     }
 }

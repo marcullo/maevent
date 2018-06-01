@@ -59,7 +59,8 @@ public class ThisUser {
 //        profile = UserProfileBuilder.build();
         profile = new UserProfile();
 //        profile.id = 2000000008;
-        profile.id = 0;
+        profile.id = 1;
+//        profile.id = 0;
 
         googleAccount = account;
 

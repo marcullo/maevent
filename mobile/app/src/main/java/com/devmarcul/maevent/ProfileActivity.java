@@ -61,6 +61,11 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     private void updateContent() {
+        if (ThisUser.getProfile().id == 0) {
+            Prompt.displayShort("Invalid user", getParent());
+            return;
+        }
+
         initUi();
 
         final Context context = this;

@@ -16,15 +16,6 @@
         tools:context=".ConfigureProfileActivity">
 
         <include
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/default_vertical_margin"
-            android:layout_marginBottom="@dimen/default_vertical_margin"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/configure_profile_loading"
-            layout="@layout/item_loading" />
-
-        <include
             android:id="@+id/configure_profile_introduction_label"
             android:visibility="gone"
             layout="@layout/configure_profile_item" />
@@ -43,6 +34,15 @@
             android:id="@+id/configure_profile_contact"
             android:visibility="gone"
             layout="@layout/configure_profile_contact" />
+
+        <include
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/default_vertical_margin"
+            android:layout_marginBottom="@dimen/default_vertical_margin"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/configure_profile_loading_contact"
+            layout="@layout/item_loading" />
 
         <include
             android:id="@+id/configure_profile_tags_label"

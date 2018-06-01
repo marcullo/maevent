@@ -1,5 +1,6 @@
 package com.devmarcul.maevent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,6 +40,10 @@ import com.devmarcul.maevent.business_logic.MaeventAccountManager;
 import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.dialog.TwoButtonsDialogListener;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -51,7 +56,9 @@ import com.mobsandgeeks.saripaar.annotation.Select;
 
 import java.util.List;
 
-public class ConfigureProfileActivity extends AppCompatActivity implements Validator.ValidationListener {
+public class ConfigureProfileActivity extends AppCompatActivity implements
+        Validator.ValidationListener,
+        View.OnClickListener {
 
     private static String LOG_TAG = "ConfigureProfileActivity";
 
@@ -214,6 +221,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
             displayCancelDialog();
             return true;
         }
+        if (id == R.id.configure_profile_action_support) {
+            Prompt.displayTodo(this);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -249,6 +259,40 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(this), MainActivity.PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+
+        mLoadingView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Place place = null;
+        if (requestCode == MainActivity.PLACE_PICKER_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                place = PlacePicker.getPlace(this, data);
+            }
+        }
+
+        mLoadingView.setVisibility(View.GONE);
+        mContactViewAdapter.updatePlaceViews(place);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mCancelDialog != null) {
+            mCancelDialog.show();
+        }
+    }
+
     //--------------------------------------------------------------------------------------------//
 
     private void initUi() {
@@ -266,9 +310,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         final View tagsView = findViewById(R.id.configure_profile_tags);
 
         mIntroductionViewAdapter = new IntroductionViewAdapter(this, introductionLabelView, introductionView);
-        mContactViewAdapter = new ContactViewAdapter(this, contactLabelView, contactView);
+        mContactViewAdapter = new ContactViewAdapter(this, contactLabelView, contactView, this);
         mTagsItemAdapter = new TagsItemAdapter(this, tagsLabelView, tagsView);
-        mLoadingView = findViewById(R.id.configure_profile_loading);
+        mLoadingView = findViewById(R.id.configure_profile_loading_contact);
     }
 
     private void initCancelDialog() {
@@ -420,7 +464,12 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         ContactViewHolder cvh = mContactViewAdapter.getViewHolder();
         TagsViewHolder tvh = mTagsItemAdapter.getViewHolder();
 
+        int userProfileId = ThisUser.getProfile().id;
+
         UserProfile profile = new UserProfile();
+        if (userProfileId != 0) {
+            profile.id = userProfileId;
+        }
         profile.tags = new Tags();
         profile.firstName = ivh.mFirstNameEditText.getText().toString();
         profile.lastName = ivh.mLastNameEditText.getText().toString();
@@ -430,10 +479,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         profile.phone = cvh.mPhoneEditText.getText().toString();
         profile.email = cvh.mEmailEditText.getText().toString();
         profile.linkedin = cvh.mLinkedinAccountEditText.getText().toString();
-        profile.location = cvh.mLocationButton.getText().toString();
+        profile.location = cvh.mLocationEditTextBuff.getText().toString();
         profile.tags.addAll(tvh.mEditTagView.getTagList());
 
         return profile;
     }
-
 }
