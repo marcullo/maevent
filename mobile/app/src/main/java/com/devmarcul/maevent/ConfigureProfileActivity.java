@@ -149,7 +149,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
 
         if (!mConfigProfileRequested) {
             GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
-            ThisUser.updateContent(account);
+            ThisUser.updateContent(this, account);
         }
 
         if (ThisUser.hasCompleteProfile() && !mConfigProfileRequested) {
@@ -184,7 +184,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     protected void onPause() {
         super.onPause();
 
-        mPreviewDialog.cancel();
+        if (mPreviewDialog != null) {
+            mPreviewDialog.cancel();
+        }
 
         mIntroductionViewAdapter.unbindListeners();
         mContactViewAdapter.unbindListeners();
@@ -425,6 +427,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     }
 
     private void saveConfiguration(final UserProfile profile) {
+        ThisUser.updateContent(this);
         if (!User.isProfileValid(ThisUser.getProfile())) {
             createUser(profile);
         }
@@ -440,6 +443,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
             public void onSuccess(String data) {
                 profile.id = Integer.valueOf(data);
                 ThisUser.setProfile(profile);
+                ThisUser.saveContent(context);
                 Log.i(LOG_TAG, "Success. Id: " + ThisUser.getProfile().id);
                 Log.i(LOG_TAG, "Data: " + data);
                 setMainActivity();
@@ -526,6 +530,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         ContactViewHolder cvh = mContactViewAdapter.getViewHolder();
         TagsViewHolder tvh = mTagsItemAdapter.getViewHolder();
 
+        ThisUser.updateContent(this);
         int userProfileId = ThisUser.getProfile().id;
 
         UserProfile profile = new UserProfile();

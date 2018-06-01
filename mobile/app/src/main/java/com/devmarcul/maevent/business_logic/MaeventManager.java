@@ -25,6 +25,7 @@ public class MaeventManager {
             return;
         }
 
+        ThisUser.updateContent(context);
         int id = ThisUser.getProfile().id;
 
         Maevent event = new Maevent();

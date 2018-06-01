@@ -62,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     private void updateContent() {
+        ThisUser.updateContent(this);
         if (ThisUser.getProfile().id == 0) {
             Prompt.displayShort("Invalid user", getParent());
             return;
@@ -71,6 +72,7 @@ public class ProfileActivity extends AppCompatActivity
 
         final Context context = this;
 
+        ThisUser.updateContent(this);
         String identifier = String.valueOf(ThisUser.getProfile().id);
         MaeventUserManager.getInstance().getUser(this, identifier, new NetworkReceiver.Callback<String>() {
             @Override
@@ -93,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity
                 mUserProfile = model.toUserProfile();
                 updateUi();
                 ThisUser.setProfile(mUserProfile);
+                ThisUser.saveContent(context);
             }
 
             @Override
@@ -135,6 +138,7 @@ public class ProfileActivity extends AppCompatActivity
 
     private void setConfigureProfileActivity() {
         User user = new User();
+        ThisUser.updateContent(this);
         user.setProfile(ThisUser.getProfile());
         UserModel model = new UserModel(user);
 

@@ -1,10 +1,12 @@
 package com.devmarcul.maevent.business_logic;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.ClientError;
@@ -29,21 +31,22 @@ import java.net.URL;
 public class ThisUser {
 
     private static String LOG_TAG = "ThisUser";
+    private static String PREFERENCE_THISUSER = "pref-thisuser";
 
-    private static GoogleSignInAccount googleAccount;
     private static UserProfile profile;
+
+    private static int accountId;
+    private static String accountEmail;
 
     //TODO Refactor photo storage in order not to load from the internet constantly
     private static Bitmap photo;
 
     public static UserProfile getProfile() {
-        //TODO get from database
-        //TODO replace with maevent steward
         return profile;
     }
 
     public static boolean hasCompleteProfile() {
-        return User.isProfileValid(profile) && profile.id != 0;
+        return profile.id != 0;
     }
 
     public static Bitmap getPhoto() {
@@ -54,26 +57,61 @@ public class ThisUser {
         ThisUser.profile = profile;
     }
 
-    public static void updateContent(GoogleSignInAccount account) {
-        //TODO Replace dummy initialization with data base query
-        UserProfileBuilder.setCnt(0);
-//        profile = UserProfileBuilder.build();
-        profile = new UserProfile();
-//        profile.id = 2000000008;
-//        profile.id = 2000000007;
-        profile.id = 0;
+    public static synchronized void updateContent(Context context, GoogleSignInAccount account) {
+        if (profile == null) {
+            profile = new UserProfile();
+        }
 
-        googleAccount = account;
+        boolean res = restoreStatus(context);
+        if (!res) {
+            profile.id = 0;
+            profile.email = null;
+            Log.d(LOG_TAG, "User new in the system or internal failure");
+            return;
+        }
+
+        profile.email = accountEmail;
+        accountEmail = account.getEmail();
+        if (accountEmail == null) {
+            profile.id = 0;
+            profile.email = null;
+            Log.d(LOG_TAG, "No account email");
+            return;
+        }
+
+        if (accountEmail.contentEquals(profile.email)) {
+            profile.id = accountId;
+            Log.d(LOG_TAG, "Content updated for " + profile.email);
+        }
 
         final String debugContent = getContentForDebug();
         Log.d(LOG_TAG, "Profile: " + debugContent);
     }
 
+    public static void updateContent(Context context) {
+        if (profile == null) {
+            profile = new UserProfile();
+        }
+
+        boolean res = restoreStatus(context);
+        if (!res) {
+            profile.id = 0;
+            profile.email = null;
+            Log.d(LOG_TAG, "User new in the system or internal failure");
+            return;
+        }
+
+        profile.id = accountId;
+    }
+
+    public static synchronized void saveContent(Context context) {
+        saveStatus(context);
+        boolean res = restoreStatus(context);
+    }
+
     public static String getContentForDebug() {
         final String ENDL = StringUtils.getNewLine();
         StringBuilder sb = new StringBuilder();
-
-        //TODO Hide sensitive data
         sb.append(ENDL);
         sb.append(profile.firstName).append(", ").append(profile.lastName).append(ENDL);
         sb.append(profile.email).append(", ").append(profile.phone).append(ENDL);
@@ -81,5 +119,68 @@ public class ThisUser {
                 .append(", location: ").append(profile.location).append(ENDL);
 
         return sb.toString();
+    }
+
+    private static boolean saveStatus(Context context) {
+        if (profile == null) {
+            return false;
+        }
+        if (profile.id == 0) {
+            return false;
+        }
+        if (profile.email == null) {
+            return false;
+        }
+        if (context == null) {
+            return false;
+        }
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            if (prefs == null) {
+                return false;
+            }
+            SharedPreferences.Editor editor = prefs.edit();
+            if (editor == null) {
+                return false;
+            }
+
+            StringBuilder builder = new StringBuilder();
+            builder.append(profile.id).append(" ").append(profile.email);
+            editor.putString(PREFERENCE_THISUSER, builder.toString());
+            editor.apply();
+            return true;
+        }
+        catch (Exception ex) {
+            return false;
+        }
+    }
+
+    private static boolean restoreStatus(Context context) {
+        if (context == null) {
+            return false;
+        }
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            if (prefs == null) {
+                return false;
+            }
+
+            String content = prefs.getString(PREFERENCE_THISUSER, null);
+            if (content == null) {
+                return false;
+            }
+
+            String vals[] = content.split(" ");
+            if (vals.length != 2) {
+                return false;
+            }
+
+            accountId = Integer.valueOf(vals[0]);
+            accountEmail = vals[1];
+            return true;
+        }
+        catch (Exception ex) {
+            return false;
+        }
     }
 }
