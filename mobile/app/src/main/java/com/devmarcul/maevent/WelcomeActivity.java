@@ -68,7 +68,6 @@ public class WelcomeActivity extends AppCompatActivity
                 MaeventAccountManager.signInForResult(this);
             }
             else {
-                //TODO Add task for checking network connection
                 mNoInternetConnectionDialog.show();
             }
         }
@@ -78,13 +77,17 @@ public class WelcomeActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
+        if (!hasInternetConnection()) {
+            mNoInternetConnectionDialog.show();
+            if (!mAnimationFinished) {
+                startAnimation();
+            }
+            return;
+        }
+
         GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
         if (account != null) {
             setNextActivity();
-        }
-
-        if (!mAnimationFinished) {
-            startAnimation();
         }
     }
 

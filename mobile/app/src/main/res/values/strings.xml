@@ -26,6 +26,7 @@
     <string name="toolbar_title_live_event">Networking</string>
     <string name="toolbar_title_create_event">Create event</string>
 
+    <string name="configure_profile_preview">PREVIEW</string>
     <string name="configure_profile_save">SAVE</string>
     <string name="configure_profile_cancel">Cancel</string>
     <string name="configure_profile_introduction_label">Introduction</string>
@@ -36,15 +37,14 @@
 
     <string name="configure_profile_first_name_label">FIRST NAME</string>
     <string name="configure_profile_last_name_label">LAST NAME</string>
-    <string name="configure_profile_title_label">TITLE</string>
     <string name="configure_profile_pose_label">POSE</string>
     <string name="configure_profile_headline_label">HEADLINE</string>
     <string name="configure_profile_add_tag">Add Tag</string>
 
-    <string name="profile_title_label">Rank</string>
+    <string name="profile_rank_label">Rank</string>
 
-    <string-array name="configure_profile_titles">
-        <item>@string/profile_title_label</item>
+    <string-array name="configure_profile_ranks">
+        <item>@string/profile_rank_label</item>
         <item>B.Sc.</item>
         <item>M.Sc.</item>
         <item>Phd.</item>
@@ -75,7 +75,7 @@
     <string name="main_create_event_rsvp">@string/text_rsvp</string>
 
     <string name="no_internet_connection_title">Internet connection disappeared</string>
-    <string name="no_internet_connection_description">How would you network without network connection?\nI am trying to reconnect to Maevent servers. </string>
+    <string name="no_internet_connection_description">How would you network without network connection?</string>
 
     <string name="error_main_create_event_invalid_place">Invalid place selected.</string>
 

@@ -80,7 +80,7 @@
             android:id="@+id/tv_person_rank_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/profile_title_label"
+            android:text="@string/profile_rank_label"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             card_view:layout_constraintEnd_toEndOf="@+id/tv_person_rank"

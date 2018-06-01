@@ -3,12 +3,12 @@ package com.devmarcul.maevent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,16 +22,18 @@ import com.android.volley.ServerError;
 import com.devmarcul.maevent.business_logic.MaeventUserManager;
 import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
+import com.devmarcul.maevent.common.TagsViewAdapter;
 import com.devmarcul.maevent.common.TagsViewHolder;
+import com.devmarcul.maevent.common.UserDetailsViewAdapter;
 import com.devmarcul.maevent.configure_profile.ContactViewAdapter;
 import com.devmarcul.maevent.configure_profile.ContactViewHolder;
 import com.devmarcul.maevent.configure_profile.IntroductionViewAdapter;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.TagsItemAdapter;
 import com.devmarcul.maevent.data.Tags;
-import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.utils.Tools;
+import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.devmarcul.maevent.utils.dialog.TwoButtonsDialog;
 import com.devmarcul.maevent.business_logic.MaeventAccountManager;
 import com.devmarcul.maevent.utils.Prompt;
@@ -65,8 +67,15 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
     private ProgressBar mLoadingView;
 
     private TwoButtonsDialog mCancelDialog;
-    private boolean mConfigProfileRequested;
+    private DetailsDialog mPreviewDialog;
 
+    private View mUserDetailsView;
+    private View mUserDetailsContentView;
+    private UserDetailsViewAdapter mUserDetailsAdapter;
+    private ProgressBar mUserDetailsLoading;
+
+
+    private boolean mConfigProfileRequested;
     private boolean mRequestFinished;
     private Validator mValidator;
 
@@ -85,8 +94,8 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
     @NotEmpty
     @Length(min = 4, max = 80)
     EditText mHeadlineEditText;
-    @Select(message = "Select a rank (upper left corner)")
-    Spinner mTitleSpinner;
+    @Select(message = "Pick a rank (upper left corner)")
+    Spinner mRankSpinner;
 
     @NotEmpty
     @Length(min = 9, max = 14)
@@ -107,7 +116,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         mLastNameEditText = mIntroductionViewAdapter.getViewHolder().mLastNameEditText;
         mPoseEditText = mIntroductionViewAdapter.getViewHolder().mPoseEditText;
         mHeadlineEditText = mIntroductionViewAdapter.getViewHolder().mHeadlineEditText;
-        mTitleSpinner = mIntroductionViewAdapter.getViewHolder().mTitleSpinner;
+        mRankSpinner = mIntroductionViewAdapter.getViewHolder().mTitleSpinner;
 
         mPhoneEditText = mContactViewAdapter.getViewHolder().mPhoneEditText;
         mEmailEditText = mContactViewAdapter.getViewHolder().mEmailEditText;
@@ -138,6 +147,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
             adaptContent(null);
             enableContent();
             bindListeners();
+            initPreviewDialog();
             initCancelDialog();
             mRequestFinished = true;
             return;
@@ -146,6 +156,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         adaptContent(null);
         enableContent();
         bindListeners();
+        initPreviewDialog();
         invalidateOptionsMenu();
         mRequestFinished = true;
 
@@ -184,6 +195,12 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.configure_profile_action_preview) {
+            UserProfile profile = extractProfileFromViews();
+            mPreviewDialog.show();
+            mUserDetailsAdapter.adaptContent(profile);
+            return true;
+        }
         if (id == R.id.configure_profile_action_save) {
             mValidator.validate();
             return true;
@@ -201,10 +218,43 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onValidationSucceeded() {
+        Tools.hideSoftKeyboard(this, getCurrentFocus());
+
+        if (!mRequestFinished) {
+            Prompt.displayShort("Wait for response from a server first", this);
+            return;
+        }
+
+        hideContent();
+        unbindListeners();
+        mRequestFinished = false;
+
+        UserProfile profile = extractProfileFromViews();
+        saveConfiguration(profile);
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+            if (view instanceof EditText) {
+                ((EditText)view).setError(message);
+            }
+            else {
+                Prompt.displayLong(message, this);
+            }
+        }
+    }
+
     //--------------------------------------------------------------------------------------------//
 
     private void initUi() {
         setContentView(R.layout.activity_configure_profile);
+        LayoutInflater inflater = getLayoutInflater();
+        mUserDetailsView = inflater.inflate(R.layout.main_profile_details, null);
 
         introductionLabelView = findViewById(R.id.configure_profile_introduction_label);
         final View introductionView = findViewById(R.id.configure_profile_introduction);
@@ -239,6 +289,25 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
                     }
                 })
                 .build();
+    }
+
+    private void initPreviewDialog() {
+        View userDetailsView = mUserDetailsView.findViewById(R.id.main_profile_details);
+        DetailsDialog.Builder builder = new DetailsDialog.Builder(this, userDetailsView);
+        mPreviewDialog = builder.build(true);
+
+        mUserDetailsContentView = userDetailsView.findViewById(R.id.person_details);
+        mUserDetailsLoading = userDetailsView.findViewById(R.id.pb_person_details_loading);
+        mUserDetailsLoading.setVisibility(View.GONE);
+
+        View editTagsView = mUserDetailsContentView.findViewById(R.id.edit_tags);
+        mUserDetailsAdapter = new UserDetailsViewAdapter(
+                userDetailsView,
+                new TagsViewAdapter(editTagsView, R.id.et_tags));
+
+        mUserDetailsAdapter = new UserDetailsViewAdapter(
+                userDetailsView,
+                new TagsViewAdapter(editTagsView, R.id.et_tags));
     }
 
     private void bindListeners() {
@@ -291,10 +360,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         return false;
     }
 
-    final Context context = this;
-
     private void saveConfiguration(final UserProfile profile) {
-        MaeventUserManager.getInstance().createUser(this, profile, new NetworkReceiver.Callback<String>() {
+        final Context context = this;
+        MaeventUserManager.getInstance().createUser(context, profile, new NetworkReceiver.Callback<String>() {
             @Override
             public void onSuccess(String data) {
                 profile.id = Integer.valueOf(data);
@@ -347,19 +415,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         mCancelDialog.show();
     }
 
-    @Override
-    public void onValidationSucceeded() {
-        Tools.hideSoftKeyboard(this, getCurrentFocus());
-
-        if (!mRequestFinished) {
-            Prompt.displayShort("Wait for response from a server first", this);
-            return;
-        }
-
-        hideContent();
-        unbindListeners();
-        mRequestFinished = false;
-
+    private UserProfile extractProfileFromViews() {
         IntroductionViewHolder ivh = mIntroductionViewAdapter.getViewHolder();
         ContactViewHolder cvh = mContactViewAdapter.getViewHolder();
         TagsViewHolder tvh = mTagsItemAdapter.getViewHolder();
@@ -377,20 +433,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         profile.location = cvh.mLocationButton.getText().toString();
         profile.tags.addAll(tvh.mEditTagView.getTagList());
 
-        saveConfiguration(profile);
+        return profile;
     }
 
-    @Override
-    public void onValidationFailed(List<ValidationError> errors) {
-        for (ValidationError error : errors) {
-            View view = error.getView();
-            String message = error.getCollatedErrorMessage(this);
-            if (view instanceof EditText) {
-                ((EditText)view).setError(message);
-            }
-            else {
-                Prompt.displayLong(message, this);
-            }
-        }
-    }
 }

@@ -1,7 +1,6 @@
 package com.devmarcul.maevent.configure_profile;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -10,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.devmarcul.maevent.R;
-import com.devmarcul.maevent.business_logic.ThisUser;
 
 public class IntroductionViewHolder {
 
@@ -41,9 +39,9 @@ public class IntroductionViewHolder {
 
     private void initializeTitleSpinner() {
         Context context = mContentView.getContext();
-        TITLES = context.getResources().getStringArray(R.array.configure_profile_titles);
+        TITLES = context.getResources().getStringArray(R.array.configure_profile_ranks);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
-                context, R.array.configure_profile_titles, android.R.layout.simple_spinner_item);
+                context, R.array.configure_profile_ranks, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTitleSpinner.setAdapter(spinnerAdapter);
     }

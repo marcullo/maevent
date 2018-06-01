@@ -6,67 +6,81 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/iv_configure_project_phone_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cv_configure_phone"
+    <LinearLayout
+        android:id="@+id/configure_profile_contact_part"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/configure_profile_margin_size"
+        android:paddingBottom="@dimen/configure_profile_margin_size"
+        android:gravity="center"
+        android:weightSum="10"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cv_configure_phone"
-        app:srcCompat="@drawable/ic_phone" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cv_configure_phone"
-        android:layout_width="130dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/iv_configure_project_phone_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        card_view:cardCornerRadius="8dp">
-
-        <EditText
-            android:id="@+id/et_configure_project_phone"
+        <ImageView
+            android:id="@+id/iv_configure_project_phone_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="phone" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cv_configure_phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cv_configure_phone"
+            app:srcCompat="@drawable/ic_phone" />
 
-    </android.support.v7.widget.CardView>
-
-    <ImageView
-        android:id="@+id/iv_configure_project_in_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cv_configure_in"
-        app:layout_constraintEnd_toStartOf="@+id/cv_configure_in"
-        app:layout_constraintTop_toTopOf="@+id/cv_configure_in"
-        app:srcCompat="@drawable/ic_in" />
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/cv_configure_in"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        card_view:cardCornerRadius="8dp">
-
-        <EditText
-            android:id="@+id/et_configure_project_linkedin"
-            android:layout_width="match_parent"
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_configure_phone"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="7"
-            android:inputType="textPersonName" />
+            android:layout_weight="5"
+            app:layout_constraintStart_toEndOf="@+id/iv_configure_project_phone_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            card_view:cardCornerRadius="8dp">
 
-    </android.support.v7.widget.CardView>
+            <EditText
+                android:id="@+id/et_configure_project_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="phone" />
+
+        </android.support.v7.widget.CardView>
+
+        <ImageView
+            android:id="@+id/iv_configure_project_in_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:paddingStart="@dimen/configure_profile_margin_size"
+            app:layout_constraintBottom_toBottomOf="@+id/cv_configure_in"
+            app:layout_constraintEnd_toStartOf="@+id/cv_configure_in"
+            app:layout_constraintTop_toTopOf="@+id/cv_configure_in"
+            app:srcCompat="@drawable/ic_in" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_configure_in"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            card_view:cardCornerRadius="8dp">
+
+            <EditText
+                android:id="@+id/et_configure_project_linkedin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="7"
+                android:inputType="textPersonName" />
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_configure_project_email_icon"
@@ -91,7 +105,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toStartOf="@+id/btn_configure_profile_location"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_configure_phone"
+        app:layout_constraintTop_toBottomOf="@+id/configure_profile_contact_part"
         card_view:cardCornerRadius="8dp">
 
         <EditText
@@ -103,15 +117,28 @@
 
     </android.support.v7.widget.CardView>
 
-    <Button
+    <ImageButton
         android:id="@+id/btn_configure_profile_location"
-        android:layout_width="96dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cv_configure_email"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_location_on"
+        android:backgroundTint="@color/colorPrimary"
+        android:gravity="end"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cv_configure_email"
         app:layout_constraintTop_toTopOf="@+id/cv_configure_email"
-        tools:text="Warsaw" />
+        app:layout_constraintVertical_bias="0.227" />
 
+    <EditText
+        android:id="@+id/et_configure_project_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:inputType="textPersonName" />
 
 </android.support.constraint.ConstraintLayout>
