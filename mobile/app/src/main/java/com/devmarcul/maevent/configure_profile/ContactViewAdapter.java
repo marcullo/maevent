@@ -53,4 +53,8 @@ public class ContactViewAdapter implements
     public void expandContent() {
         mLabelViewHolder.expand();
     }
+
+    public void collapseContent() {
+        mLabelViewHolder.collapse();
+    }
 }

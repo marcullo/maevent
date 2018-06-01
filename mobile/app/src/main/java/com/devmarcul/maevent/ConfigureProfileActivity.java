@@ -3,6 +3,7 @@ package com.devmarcul.maevent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +19,9 @@ import android.widget.Spinner;
 
 import com.android.volley.ClientError;
 import com.android.volley.ServerError;
+import com.devmarcul.maevent.business_logic.MaeventUserManager;
 import com.devmarcul.maevent.business_logic.ThisUser;
+import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.common.TagsViewHolder;
 import com.devmarcul.maevent.configure_profile.ContactViewAdapter;
 import com.devmarcul.maevent.configure_profile.ContactViewHolder;
@@ -28,6 +31,7 @@ import com.devmarcul.maevent.configure_profile.TagsItemAdapter;
 import com.devmarcul.maevent.data.Tags;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
+import com.devmarcul.maevent.utils.Tools;
 import com.devmarcul.maevent.utils.dialog.TwoButtonsDialog;
 import com.devmarcul.maevent.business_logic.MaeventAccountManager;
 import com.devmarcul.maevent.utils.Prompt;
@@ -63,6 +67,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
     private TwoButtonsDialog mCancelDialog;
     private boolean mConfigProfileRequested;
 
+    private boolean mRequestFinished;
     private Validator mValidator;
 
     // For validation only ----------------------------------------------------
@@ -80,7 +85,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
     @NotEmpty
     @Length(min = 4, max = 80)
     EditText mHeadlineEditText;
-    @Select
+    @Select(message = "Select a rank (upper left corner)")
     Spinner mTitleSpinner;
 
     @NotEmpty
@@ -132,13 +137,17 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
             mLoadingView.setVisibility(View.GONE);
             adaptContent(null);
             enableContent();
+            bindListeners();
             initCancelDialog();
+            mRequestFinished = true;
             return;
         }
 
         adaptContent(null);
         enableContent();
+        bindListeners();
         invalidateOptionsMenu();
+        mRequestFinished = true;
 
         mContentView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorTextIcons));
         mLoadingView.setVisibility(View.GONE);
@@ -232,6 +241,18 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
                 .build();
     }
 
+    private void bindListeners() {
+        mIntroductionViewAdapter.bindListeners();
+        mContactViewAdapter.bindListeners();
+        mTagsItemAdapter.bindListeners();
+    }
+
+    private void unbindListeners() {
+        mIntroductionViewAdapter.unbindListeners();
+        mContactViewAdapter.unbindListeners();
+        mTagsItemAdapter.unbindListeners();
+    }
+
     private void enableContent() {
         introductionLabelView.setVisibility(View.VISIBLE);
         contactLabelView.setVisibility(View.VISIBLE);
@@ -240,10 +261,14 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         mIntroductionViewAdapter.expandContent();
         mContactViewAdapter.expandContent();
         mTagsItemAdapter.expandContent();
+    }
 
-        mIntroductionViewAdapter.bindListeners();
-        mContactViewAdapter.bindListeners();
-        mTagsItemAdapter.bindListeners();
+    private void hideContent() {
+        mIntroductionViewAdapter.collapseContent();
+        mContactViewAdapter.collapseContent();
+        mTagsItemAdapter.collapseContent();
+
+        mRequestFinished = false;
     }
 
     private void adaptContent(UserProfile profile) {
@@ -266,9 +291,33 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
         return false;
     }
 
-    private void saveConfiguration() {
-        //TODO Add saving to storage while launching another activity
-        Prompt.displayShort("TODO Add saving to storage", this);
+    final Context context = this;
+
+    private void saveConfiguration(final UserProfile profile) {
+        MaeventUserManager.getInstance().createUser(this, profile, new NetworkReceiver.Callback<String>() {
+            @Override
+            public void onSuccess(String data) {
+                profile.id = Integer.valueOf(data);
+                ThisUser.setProfile(profile);
+                Log.i(LOG_TAG, "Success. Id: " + ThisUser.getProfile().id);
+                setMainActivity();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Your profile is invalid! Contact with support.", context);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", context);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", context);
+                }
+                bindListeners();
+                mRequestFinished = true;
+            }
+        });
     }
 
     private void setWelcomeActivity() {
@@ -300,8 +349,35 @@ public class ConfigureProfileActivity extends AppCompatActivity implements Valid
 
     @Override
     public void onValidationSucceeded() {
-        saveConfiguration();
-        setMainActivity();
+        Tools.hideSoftKeyboard(this, getCurrentFocus());
+
+        if (!mRequestFinished) {
+            Prompt.displayShort("Wait for response from a server first", this);
+            return;
+        }
+
+        hideContent();
+        unbindListeners();
+        mRequestFinished = false;
+
+        IntroductionViewHolder ivh = mIntroductionViewAdapter.getViewHolder();
+        ContactViewHolder cvh = mContactViewAdapter.getViewHolder();
+        TagsViewHolder tvh = mTagsItemAdapter.getViewHolder();
+
+        UserProfile profile = new UserProfile();
+        profile.tags = new Tags();
+        profile.firstName = ivh.mFirstNameEditText.getText().toString();
+        profile.lastName = ivh.mLastNameEditText.getText().toString();
+        profile.title = mIntroductionViewAdapter.getTitle();
+        profile.pose = ivh.mPoseEditText.getText().toString();
+        profile.headline = ivh.mHeadlineEditText.getText().toString();
+        profile.phone = cvh.mPhoneEditText.getText().toString();
+        profile.email = cvh.mEmailEditText.getText().toString();
+        profile.linkedin = cvh.mLinkedinAccountEditText.getText().toString();
+        profile.location = cvh.mLocationButton.getText().toString();
+        profile.tags.addAll(tvh.mEditTagView.getTagList());
+
+        saveConfiguration(profile);
     }
 
     @Override

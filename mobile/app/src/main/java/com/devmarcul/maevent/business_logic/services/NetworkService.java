@@ -22,6 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.models.MaeventModel;
+import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.google.gson.Gson;
 
@@ -79,6 +80,10 @@ public class NetworkService extends IntentService implements MaeventApi {
             }
             handleGetUser(receiver, identifier);
         }
+        else if (Action.CREATE_USER.name().equals(action)) {
+            final UserModel model = intent.getParcelableExtra(Param.USER.name());
+            handleCreateUser(receiver, model);
+        }
     }
 
     public void startService(Context context, MaeventApi.Action action, MaeventApi.Param param, String str, NetworkReceiver.Callback callback) {
@@ -103,6 +108,13 @@ public class NetworkService extends IntentService implements MaeventApi {
         context.startService(intent);
 
         Log.d(LOG_TAG, action.name() + " Handling network intent service");
+    }
+
+    @Override
+    public void cancelAllRequests() {
+        if (mRequestQueue != null) {
+            mRequestQueue.cancelAll(MaeventApi.TAG);
+        }
     }
 
     @Override
@@ -199,9 +211,51 @@ public class NetworkService extends IntentService implements MaeventApi {
     }
 
     @Override
-    public void cancelAllRequests() {
-        if (mRequestQueue != null) {
-            mRequestQueue.cancelAll(MaeventApi.TAG);
+    public void handleCreateUser(final ResultReceiver receiver, UserModel model) {
+        JSONObject body;
+        try {
+            Gson gson = new Gson();
+            body = new JSONObject(gson.toJson(model));
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Invalid request");
+            return;
         }
+
+        final Bundle bundle = new Bundle();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, MaeventApi.URL_USERS, body,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        UserModel model;
+                        try {
+                            Gson gson = new Gson();
+                            model = gson.fromJson(response.toString(), UserModel.class);
+                        }
+                        catch (Exception ex) {
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response.toString());
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, String.valueOf(model.Uid));
+                            receiver.send(RESULT_CODE_OK, bundle);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof ClientError) {
+                    bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ClientError());
+                }
+                else {
+                    bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ServerError());
+                }
+                receiver.send(RESULT_CODE_ERROR, bundle);
+            }
+        });
+        mRequestQueue.add(request);
     }
 }

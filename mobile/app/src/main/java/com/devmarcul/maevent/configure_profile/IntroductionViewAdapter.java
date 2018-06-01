@@ -64,6 +64,10 @@ public class IntroductionViewAdapter implements
         mLabelViewHolder.expand();
     }
 
+    public void collapseContent() {
+        mLabelViewHolder.collapse();
+    }
+
     public String getTitle() {
         int i = mViewHolder.mTitleSpinner.getSelectedItemPosition();
         return mViewHolder.TITLES[i];

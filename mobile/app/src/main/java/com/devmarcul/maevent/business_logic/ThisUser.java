@@ -9,8 +9,10 @@ import android.util.Log;
 
 import com.android.volley.ClientError;
 import com.android.volley.ServerError;
+import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
+import com.devmarcul.maevent.business_logic.services.NetworkService;
 import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
 import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.utils.Prompt;
@@ -45,6 +47,10 @@ public class ThisUser {
 
     public static Bitmap getPhoto() {
         return photo;
+    }
+
+    public static void setProfile(UserProfile profile) {
+        ThisUser.profile = profile;
     }
 
     public static void updateContent(GoogleSignInAccount account) {

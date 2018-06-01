@@ -4,7 +4,10 @@ import android.content.Context;
 import android.util.Log;
 
 import com.devmarcul.maevent.apis.MaeventApi;
+import com.devmarcul.maevent.apis.models.MaeventModel;
+import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
+import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
@@ -32,6 +35,19 @@ public class MaeventUserManager implements
         }
         NetworkService.getInstance()
                 .startService(context, MaeventApi.Action.GET_USER, MaeventApi.Param.STRING, identifier, callback);
+    }
+
+    public void createUser(final Context context, UserProfile profile, NetworkReceiver.Callback<String> callback) {
+        if (!User.isProfileValid(profile)) {
+            return;
+        }
+
+        User user = new User();
+        user.setProfile(profile);
+
+        UserModel model = new UserModel(user);
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.CREATE_USER, MaeventApi.Param.USER, model, callback);
     }
 
     @Override

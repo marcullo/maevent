@@ -12,6 +12,9 @@ public class Tools {
         if (inputMethodManager == null) {
             return;
         }
+        if (focus == null) {
+            return;
+        }
         inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), 0);
     }
 }
