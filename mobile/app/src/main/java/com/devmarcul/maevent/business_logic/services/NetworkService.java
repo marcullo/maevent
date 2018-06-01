@@ -246,7 +246,7 @@ public class NetworkService extends IntentService implements MaeventApi {
                             receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
                         }
                         else {
-                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, String.valueOf(model.Uid));
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, String.valueOf(model.Id));
                             receiver.send(RESULT_CODE_OK, bundle);
                         }
                     }
@@ -278,7 +278,11 @@ public class NetworkService extends IntentService implements MaeventApi {
 
         final Bundle bundle = new Bundle();
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, MaeventApi.URL_USERS, body,
+        StringBuilder builder = new StringBuilder();
+        builder.append(MaeventApi.URL_USERS).append(model.Id);
+        String url = builder.toString();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, body,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -295,7 +299,7 @@ public class NetworkService extends IntentService implements MaeventApi {
                             receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
                         }
                         else {
-                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, String.valueOf(model.Uid));
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, String.valueOf(model.Id));
                             receiver.send(RESULT_CODE_OK, bundle);
                         }
                     }

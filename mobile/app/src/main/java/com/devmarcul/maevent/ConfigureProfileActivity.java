@@ -73,6 +73,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     private IntroductionViewAdapter mIntroductionViewAdapter;
     private ContactViewAdapter mContactViewAdapter;
     private TagsItemAdapter mTagsItemAdapter;
+    private ProgressBar mLoadingLocationView;
     private ProgressBar mLoadingView;
 
     private TwoButtonsDialog mCancelDialog;
@@ -156,6 +157,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
             return;
         }
         else if (ThisUser.hasCompleteProfile()) {
+            mLoadingLocationView.setVisibility(View.GONE);
             mLoadingView.setVisibility(View.GONE);
             adaptContent(ThisUser.getProfile());
             enableContent();
@@ -174,6 +176,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         mRequestFinished = true;
 
         mContentView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorTextIcons));
+        mLoadingLocationView.setVisibility(View.GONE);
         mLoadingView.setVisibility(View.GONE);
     }
 
@@ -244,6 +247,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         }
 
         hideContent();
+        mLoadingView.setVisibility(View.VISIBLE);
         unbindListeners();
         mRequestFinished = false;
 
@@ -274,7 +278,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
 
-        mLoadingView.setVisibility(View.VISIBLE);
+        mLoadingLocationView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -288,7 +292,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
             }
         }
 
-        mLoadingView.setVisibility(View.GONE);
+        mLoadingLocationView.setVisibility(View.GONE);
         mContactViewAdapter.updatePlaceViews(place);
     }
 
@@ -318,7 +322,8 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         mIntroductionViewAdapter = new IntroductionViewAdapter(this, introductionLabelView, introductionView);
         mContactViewAdapter = new ContactViewAdapter(this, contactLabelView, contactView, this);
         mTagsItemAdapter = new TagsItemAdapter(this, tagsLabelView, tagsView);
-        mLoadingView = findViewById(R.id.configure_profile_loading_contact);
+        mLoadingLocationView = findViewById(R.id.configure_profile_loading_contact);
+        mLoadingView = findViewById(R.id.configure_profile_loading);
     }
 
     private void initCancelDialog() {
@@ -451,6 +456,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
                 }
                 bindListeners();
                 mRequestFinished = true;
+                mLoadingView.setVisibility(View.GONE);
             }
         });
     }
@@ -480,6 +486,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
                 }
                 bindListeners();
                 mRequestFinished = true;
+                mLoadingView.setVisibility(View.GONE);
             }
         });
 

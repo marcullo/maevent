@@ -58,12 +58,12 @@ namespace Maevent.API.Controllers
             return BadRequest();
         }
 
-        [HttpGet("{uid}", Name = "EventGet")]
-        public IActionResult Get(int uid)
+        [HttpGet("{id}", Name = "EventGet")]
+        public IActionResult Get(int id)
         {
             try
             {
-                var ev = _repo.GetEvent(uid);
+                var ev = _repo.GetEvent(id);
                 if (ev == null)
                 {
                     return NotFound($"Requested event not found");
@@ -105,12 +105,12 @@ namespace Maevent.API.Controllers
                 _repo.Add(ev);
                 if (await _repo.SaveAllAsync())
                 {
-                    ev.Uid = _repo.GetEventByName(ev.Name).Id;
+                    ev.Id = _repo.GetEventByName(ev.Name).Id;
                     _repo.Update(ev);
 
                     if (await _repo.SaveAllAsync())
                     {
-                        var newUri = Url.Link("EventGet", new { uid = ev.Uid });
+                        var newUri = Url.Link("EventGet", new { id = ev.Id });
                         return Created(newUri, Mapper.Map<EventModel>(ev));
                     }
                     else
@@ -131,12 +131,12 @@ namespace Maevent.API.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{uid}")]
-        public async Task<IActionResult> Delete(int uid)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var oldEvent = _repo.GetEvent(uid);
+                var oldEvent = _repo.GetEvent(id);
                 if (oldEvent == null)
                 {
                     return NotFound("Could not find requested Event");
@@ -158,26 +158,33 @@ namespace Maevent.API.Controllers
             return BadRequest();
         }
         
-        [HttpPut("{uid}")]
-        public async Task<IActionResult> Put(int uid,
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id,
             [FromBody] EventModel model)
         {
             try
             {
-                var ev = _repo.GetEvent(uid);
+                var ev = _repo.GetEvent(id);
                 if (ev == null)
                 {
                     return NotFound();
                 }
 
-                if (ev.Name.Equals(model.Name) && uid != ev.Uid)
+                if (ev.Name.Equals(model.Name) && id != ev.Id)
                 {
                     return BadRequest("Event with requested name exists.");
                 }
 
-                var id = ev.Id;
-                ev = Mapper.Map<Event>(model);
-                ev.Uid = id;
+                ev.Name = model.Name;
+                ev.HostId = model.HostId;
+                ev.Place = model.Place;
+                ev.AddressStreet = model.AddressStreet;
+                ev.AddressPostCode = model.AddressPostCode;
+                ev.BeginTime = model.BeginTime;
+                ev.EndTime = model.EndTime;
+                ev.Rsvp = model.Rsvp;
+                ev.AttendeesIds = model.AttendeesIds;
+                ev.InviteesNumber = model.InviteesNumber;
 
                 _repo.Update(ev);
 

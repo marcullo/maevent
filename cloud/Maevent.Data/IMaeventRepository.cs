@@ -22,7 +22,7 @@ namespace Maevent.Data
 
         // Users
         User GetUser(int id);
-        User GetUserByName(string userName);
+        User GetUserByName(string firstName, string lastName);
         IEnumerable<Entities.User> GetAllUsers();
     }
 }

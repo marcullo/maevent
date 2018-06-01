@@ -38,10 +38,10 @@ namespace Maevent.Data
                 .ToList();
         }
 
-        public Event GetEvent(int uid)
+        public Event GetEvent(int id)
         {
             return _context.Events
-                .Where(c => c.Uid == uid)
+                .Where(c => c.Id == id)
                 .FirstOrDefault();
         }
 
@@ -57,18 +57,19 @@ namespace Maevent.Data
             return GetEventByName(name) != null;
         }
 
-        public User GetUser(int uid)
+        public User GetUser(int id)
         {
             return _context.Users
-                .Where(u => u.Uid == uid)
+                .Where(u => u.Id == id)
                 .Cast<User>()
                 .FirstOrDefault();
         }
 
-        public User GetUserByName(string name)
+        public User GetUserByName(string firstName, string lastName)
         {
             return _context.Users
-                .Where(u => u.Name == name)
+                .Where(v => v.LastName == lastName)
+                .Where(u => u.FirstName == firstName)
                 .Cast<User>()
                 .FirstOrDefault();
         }
@@ -76,7 +77,7 @@ namespace Maevent.Data
         public IEnumerable<Entities.User> GetAllUsers()
         {
             return _context.Users
-                .OrderBy(c => c.Name)
+                .OrderBy(c => c.LastName)
                 .ToList();
         }
 

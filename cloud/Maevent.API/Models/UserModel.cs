@@ -8,8 +8,9 @@ namespace Maevent.API.Models
 {
     public class UserModel
     {
-        public int Uid { get; set; }
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Title { get; set; }
         public string Pose { get; set; }
         public string Headline { get; set; }

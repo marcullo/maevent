@@ -33,7 +33,10 @@ namespace Maevent.Data
                 .ValueGeneratedOnAddOrUpdate()
                 .IsConcurrencyToken();
             builder.Entity<User>()
-                .Property(c => c.Name)
+                .Property(c => c.FirstName)
+                .IsRequired();
+            builder.Entity<User>()
+                .Property(c => c.LastName)
                 .IsRequired();
             builder.Entity<User>()
                 .Property(c => c.RowVersion)

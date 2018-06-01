@@ -57,12 +57,12 @@ namespace Maevent.API.Controllers
             return BadRequest();
         }
 
-        [HttpGet("{uid}", Name = "UserGet")]
-        public IActionResult GetUser(int uid)
+        [HttpGet("{id}", Name = "UserGet")]
+        public IActionResult GetUser(int id)
         {
             try
             {
-                var user = _repo.GetUser(uid);
+                var user = _repo.GetUser(id);
                 if (user == null)
                 {
                     return NotFound($"Requested user not found");
@@ -91,10 +91,10 @@ namespace Maevent.API.Controllers
 
                 var user = Mapper.Map<User>(model);
 
-                var seeked = _repo.GetUserByName(model.Name);
+                var seeked = _repo.GetUserByName(model.FirstName, model.LastName);
                 if (seeked != null)
                 {
-                    _logger.LogWarning($"User {model.Name} already exists");
+                    _logger.LogWarning($"User {model.FirstName} {model.LastName} already exists");
                     return BadRequest();
                 }
 
@@ -103,12 +103,12 @@ namespace Maevent.API.Controllers
                 _repo.Add(user);
                 if (await _repo.SaveAllAsync())
                 {
-                    user.Uid = _repo.GetUserByName(user.Name).Id;
+                    user.Id = _repo.GetUserByName(user.FirstName, user.LastName).Id;
                     _repo.Update(user);
 
                     if (await _repo.SaveAllAsync())
                     {
-                        var newUri = Url.Link("UserGet", new { uid = user.Uid });
+                        var newUri = Url.Link("UserGet", new { id = user.Id });
                         return Created(newUri, Mapper.Map<UserModel>(user));
                     }
                     else
@@ -129,12 +129,12 @@ namespace Maevent.API.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{uid}")]
-        public async Task<IActionResult> Delete(int uid)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var user = _repo.GetUser(uid);
+                var user = _repo.GetUser(id);
                 if (user == null)
                 {
                     return NotFound("Could not find requested User");
@@ -155,26 +155,44 @@ namespace Maevent.API.Controllers
             return BadRequest();
         }
 
-        [HttpPut("{uid}")]
-        public async Task<IActionResult> Put(int uid,
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id,
             [FromBody] UserModel model)
         {
             try
             {
-                var usr = _repo.GetUser(uid);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (model.Id != id)
+                {
+                    return BadRequest("Changing id is impossible");
+                }
+
+                var usr = _repo.GetUser(id);
                 if (usr == null)
                 {
                     return NotFound();
                 }
 
-                if (usr.Name.Equals(model.Name) && uid != usr.Uid)
+                if (usr.FirstName.Equals(model.FirstName)
+                    && usr.LastName.Equals(model.LastName)
+                    && id != usr.Id)
                 {
                     return BadRequest("User with requested name exists.");
                 }
 
-                var id = usr.Id;
-                usr = Mapper.Map<User>(model);
-                usr.Uid = id;
+                usr.FirstName = model.FirstName;
+                usr.LastName = model.LastName;
+                usr.Title = model.Title;
+                usr.Pose = model.Pose;
+                usr.Headline = model.Headline;
+                usr.Phone = model.Phone;
+                usr.Email = model.Email;
+                usr.Linkedin = model.Linkedin;
+                usr.Location = model.Location;
+                usr.Tags = model.Tags;
 
                 _repo.Update(usr);
 

@@ -9,16 +9,14 @@ import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class UserModel extends MaeventApiModel implements Parcelable {
 
-    @SerializedName(value = "Uid", alternate = {"uid"})
-    public String Uid;
-    @SerializedName(value = "Name", alternate = {"name"})
-    public String Name;
+    @SerializedName(value = "Id", alternate = {"id"})
+    public String Id;
+    @SerializedName(value = "FirstName", alternate = {"firstName", "firstname"})
+    public String FirstName;
+    @SerializedName(value = "LastName", alternate = {"lastName", "lastname"})
+    public String LastName;
     @SerializedName(value = "Title", alternate = {"title"})
     public String Title;
     @SerializedName(value = "Pose", alternate = {"pose"})
@@ -45,9 +43,6 @@ public class UserModel extends MaeventApiModel implements Parcelable {
 
         StringBuilder builder = new StringBuilder();
 
-        builder.append(profile.firstName).append(" ").append(profile.lastName);
-        String name = builder.toString();
-
         String tags = "";
         if (profile.tags != null) {
             builder.setLength(0);
@@ -58,8 +53,9 @@ public class UserModel extends MaeventApiModel implements Parcelable {
             tags = builder.toString();
         }
 
-        Uid = String.valueOf(profile.id);
-        Name = name;
+        Id = String.valueOf(profile.id);
+        FirstName = profile.firstName;
+        LastName = profile.lastName;
         Title = profile.title;
         Pose = profile.pose;
         Headline = profile.headline;
@@ -71,8 +67,9 @@ public class UserModel extends MaeventApiModel implements Parcelable {
     }
 
     protected UserModel(Parcel in) {
-        Uid = in.readString();
-        Name = in.readString();
+        Id = in.readString();
+        FirstName = in.readString();
+        LastName = in.readString();
         Title = in.readString();
         Pose = in.readString();
         Headline = in.readString();
@@ -84,14 +81,6 @@ public class UserModel extends MaeventApiModel implements Parcelable {
     }
 
     public UserProfile toUserProfile() {
-        String firstName = null;
-        String lastName = null;
-        if (this.Name != null) {
-            String nameElems[] = this.Name.split(" ");
-            firstName = nameElems[0];
-            lastName = nameElems[1];
-        }
-
         Tags tags = null;
         if (this.Tags != null) {
             String tagsArray[] = this.Tags.split(";");
@@ -105,9 +94,9 @@ public class UserModel extends MaeventApiModel implements Parcelable {
         }
 
         UserProfile profile = new UserProfile();
-        profile.id = Integer.valueOf(this.Uid);
-        profile.firstName = firstName;
-        profile.lastName = lastName;
+        profile.id = Integer.valueOf(this.Id);
+        profile.firstName = this.FirstName;
+        profile.lastName = this.LastName;
         profile.title = this.Title;
         profile.pose = this.Pose;
         profile.headline = this.Headline;
@@ -139,8 +128,9 @@ public class UserModel extends MaeventApiModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(Uid);
-        dest.writeString(Name);
+        dest.writeString(Id);
+        dest.writeString(FirstName);
+        dest.writeString(LastName);
         dest.writeString(Title);
         dest.writeString(Pose);
         dest.writeString(Headline);
