@@ -16,6 +16,7 @@ import com.devmarcul.maevent.business_logic.MaeventUserManager;
 import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.common.TagsViewAdapter;
 import com.devmarcul.maevent.common.UserDetailsViewAdapter;
+import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.utils.Prompt;
@@ -91,12 +92,13 @@ public class ProfileActivity extends AppCompatActivity
 
                 mUserProfile = model.toUserProfile();
                 updateUi();
+                ThisUser.setProfile(mUserProfile);
             }
 
             @Override
             public void onError(Exception exception) {
                 if (exception instanceof ClientError) {
-                    Prompt.displayShort("Your profile is invalid! Contact with support.", context);
+                    Prompt.displayShort("Your profile is invalid - probably name exists! Contact with support.", context);
                 }
                 else if (exception instanceof ServerError) {
                     Prompt.displayShort("No connection with server.", context);
@@ -132,9 +134,15 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     private void setConfigureProfileActivity() {
-        Log.d(LOG_TAG, "Setting configure profile activity.");
+        User user = new User();
+        user.setProfile(ThisUser.getProfile());
+        UserModel model = new UserModel(user);
+
+        Log.d(LOG_TAG, "Setting configure profile activity from model bound to user:");
+        Log.d(LOG_TAG, user.getContentForDebug());
         Intent intent = new Intent(this, ConfigureProfileActivity.class);
         intent.putExtra(MainActivity.KEY_CONFIG_PROFILE_REQUESTED, true);
+        intent.putExtra(MainActivity.KEY_CONFIG_PROFILE_CONTENT,  model);
         startActivity(intent);
     }
 }

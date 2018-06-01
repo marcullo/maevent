@@ -14,6 +14,7 @@ import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.business_logic.services.NetworkService;
 import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
+import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.StringUtils;
@@ -42,7 +43,7 @@ public class ThisUser {
     }
 
     public static boolean hasCompleteProfile() {
-        return profile != null && profile.id != 0;
+        return User.isProfileValid(profile) && profile.id != 0;
     }
 
     public static Bitmap getPhoto() {
@@ -59,8 +60,8 @@ public class ThisUser {
 //        profile = UserProfileBuilder.build();
         profile = new UserProfile();
 //        profile.id = 2000000008;
-        profile.id = 1;
-//        profile.id = 0;
+//        profile.id = 2000000007;
+        profile.id = 0;
 
         googleAccount = account;
 

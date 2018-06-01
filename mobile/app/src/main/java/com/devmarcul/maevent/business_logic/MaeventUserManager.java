@@ -39,6 +39,7 @@ public class MaeventUserManager implements
 
     public void createUser(final Context context, UserProfile profile, NetworkReceiver.Callback<String> callback) {
         if (!User.isProfileValid(profile)) {
+            Log.e(LOG_TAG, "User profile invalid!");
             return;
         }
 
@@ -51,7 +52,18 @@ public class MaeventUserManager implements
     }
 
     @Override
-    public void updateUser(final Context context, UserProfile profile, NetworkReceiver.Callback<Boolean> callback) {
+    public void updateUser(final Context context, UserProfile profile, NetworkReceiver.Callback<String> callback) {
+        if (!User.isProfileValid(profile)) {
+            Log.e(LOG_TAG, "User profile invalid!");
+            return;
+        }
+
+        User user = new User();
+        user.setProfile(profile);
+
+        UserModel model = new UserModel(user);
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.UPDATE_USER, MaeventApi.Param.USER, model, callback);
     }
 
     public void updateContent(User user) {

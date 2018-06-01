@@ -31,6 +31,8 @@ import com.google.android.gms.tasks.Task;
 public class MainActivity extends AppCompatActivity {
 
     public static String KEY_CONFIG_PROFILE_REQUESTED = "config-profile-requested";
+    public static String KEY_CONFIG_PROFILE_CONTENT = "config-profile-content";
+
     private static String LOG_TAG = "MainActivity";
     public static final int PLACE_PICKER_REQUEST = 1;
 

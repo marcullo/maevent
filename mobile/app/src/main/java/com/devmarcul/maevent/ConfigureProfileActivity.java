@@ -20,6 +20,7 @@ import android.widget.Spinner;
 
 import com.android.volley.ClientError;
 import com.android.volley.ServerError;
+import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.business_logic.MaeventUserManager;
 import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
@@ -32,6 +33,7 @@ import com.devmarcul.maevent.configure_profile.IntroductionViewAdapter;
 import com.devmarcul.maevent.configure_profile.IntroductionViewHolder;
 import com.devmarcul.maevent.configure_profile.TagsItemAdapter;
 import com.devmarcul.maevent.data.Tags;
+import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.utils.Tools;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
@@ -81,9 +83,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     private UserDetailsViewAdapter mUserDetailsAdapter;
     private ProgressBar mUserDetailsLoading;
 
-
     private boolean mConfigProfileRequested;
     private boolean mRequestFinished;
+    private int mRetriesNr;
     private Validator mValidator;
 
     // For validation only ----------------------------------------------------
@@ -116,6 +118,8 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mRetriesNr = 0;
+
         initUi();
 
         // For validation only ----------------------------------------------------
@@ -132,7 +136,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
 
-        mConfigProfileRequested = isConfigureProfileRequested();
+        mConfigProfileRequested = checkConfigurationRequested();
         mContentView = findViewById(R.id.activity_configure_profile_container);
 
         Log.d(LOG_TAG, "Created.");
@@ -142,8 +146,10 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
 
-        GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
-        ThisUser.updateContent(account);
+        if (!mConfigProfileRequested) {
+            GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
+            ThisUser.updateContent(account);
+        }
 
         if (ThisUser.hasCompleteProfile() && !mConfigProfileRequested) {
             setMainActivity();
@@ -151,7 +157,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         }
         else if (ThisUser.hasCompleteProfile()) {
             mLoadingView.setVisibility(View.GONE);
-            adaptContent(null);
+            adaptContent(ThisUser.getProfile());
             enableContent();
             bindListeners();
             initPreviewDialog();
@@ -393,18 +399,34 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         mTagsItemAdapter.adaptContent(profile.tags);
     }
 
-    private boolean isConfigureProfileRequested() {
+    private boolean checkConfigurationRequested() {
         Intent starter = getIntent();
         if (starter != null) {
+            boolean res = false;
             final String KEY_CONFIG_PROFILE_REQUESTED = MainActivity.KEY_CONFIG_PROFILE_REQUESTED;
             if (starter.hasExtra(KEY_CONFIG_PROFILE_REQUESTED)) {
-                return starter.getBooleanExtra(KEY_CONFIG_PROFILE_REQUESTED, false);
+                res = starter.getBooleanExtra(KEY_CONFIG_PROFILE_REQUESTED, false);
             }
+            final String KEY_CONFIG_PROFILE_CONTENT = MainActivity.KEY_CONFIG_PROFILE_CONTENT;
+            if (starter.hasExtra(KEY_CONFIG_PROFILE_CONTENT)) {
+                UserModel model = starter.getParcelableExtra(KEY_CONFIG_PROFILE_CONTENT);
+                ThisUser.setProfile(model.toUserProfile());
+            }
+            return res;
         }
         return false;
     }
 
     private void saveConfiguration(final UserProfile profile) {
+        if (!User.isProfileValid(ThisUser.getProfile())) {
+            createUser(profile);
+        }
+        else {
+            updateExistingUser(profile);
+        }
+    }
+
+    private void createUser(final UserProfile profile) {
         final Context context = this;
         MaeventUserManager.getInstance().createUser(context, profile, new NetworkReceiver.Callback<String>() {
             @Override
@@ -412,13 +434,14 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
                 profile.id = Integer.valueOf(data);
                 ThisUser.setProfile(profile);
                 Log.i(LOG_TAG, "Success. Id: " + ThisUser.getProfile().id);
+                Log.i(LOG_TAG, "Data: " + data);
                 setMainActivity();
             }
 
             @Override
             public void onError(Exception exception) {
                 if (exception instanceof ClientError) {
-                    Prompt.displayShort("Your profile is invalid! Contact with support.", context);
+                    Prompt.displayShort("Your profile is invalid  - probably name exists! Contact with support.", context);
                 }
                 else if (exception instanceof ServerError) {
                     Prompt.displayShort("No connection with server.", context);
@@ -430,6 +453,36 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
                 mRequestFinished = true;
             }
         });
+    }
+
+    private void updateExistingUser(final UserProfile profile) {
+        final Context context = this;
+        MaeventUserManager.getInstance().updateUser(context, profile, new NetworkReceiver.Callback<String>() {
+            @Override
+            public void onSuccess(String data) {
+                profile.id = Integer.valueOf(data);
+                ThisUser.setProfile(profile);
+                Log.i(LOG_TAG, "Success. Id: " + ThisUser.getProfile().id);
+                Log.i(LOG_TAG, "Data: " + data);
+                setMainActivity();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Your profile is invalid - probably name exists! Contact with support.", context);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", context);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", context);
+                }
+                bindListeners();
+                mRequestFinished = true;
+            }
+        });
+
     }
 
     private void setWelcomeActivity() {
@@ -483,5 +536,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         profile.tags.addAll(tvh.mEditTagView.getTagList());
 
         return profile;
+    }
+
+    private void setViewsFromProfile() {
+
     }
 }

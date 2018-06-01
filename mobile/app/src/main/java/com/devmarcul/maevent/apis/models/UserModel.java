@@ -48,13 +48,15 @@ public class UserModel extends MaeventApiModel implements Parcelable {
         builder.append(profile.firstName).append(" ").append(profile.lastName);
         String name = builder.toString();
 
-        builder.setLength(0);
-        for (String tag :
-                profile.tags) {
-            builder.append(tag).append(";");
+        String tags = "";
+        if (profile.tags != null) {
+            builder.setLength(0);
+            for (String tag :
+                    profile.tags) {
+                builder.append(tag).append(";");
+            }
+            tags = builder.toString();
         }
-        String tags = builder.toString();
-
 
         Uid = String.valueOf(profile.id);
         Name = name;
