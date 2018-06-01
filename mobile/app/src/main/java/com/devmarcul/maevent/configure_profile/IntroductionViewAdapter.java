@@ -64,6 +64,11 @@ public class IntroductionViewAdapter implements
         mLabelViewHolder.expand();
     }
 
+    public String getTitle() {
+        int i = mViewHolder.mTitleSpinner.getSelectedItemPosition();
+        return mViewHolder.TITLES[i];
+    }
+
     private int wrapTitleFromProfile(String profileTitle) {
         for (int i = 1; i < mViewHolder.TITLES.length; i++) {
             if (mViewHolder.TITLES[i].equals(profileTitle)) {

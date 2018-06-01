@@ -91,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity
             @Override
             public void onError(Exception exception) {
                 if (exception instanceof ClientError) {
-                    Prompt.displayShort("Your profile was deleted! Contact with support.", context);
+                    Prompt.displayShort("Your profile is invalid! Contact with support.", context);
                 }
                 else if (exception instanceof ServerError) {
                     Prompt.displayShort("No connection with server.", context);

@@ -31,16 +31,21 @@ public class User implements DataValidator {
     }
 
     public static boolean isProfileValid(UserProfile profile) {
-        boolean valid = profile.firstName != null
-                && profile.lastName != null
-                && profile.firstName.length() > 1
-                && profile.lastName.length() > 1
-                && !profile.firstName.equals(profile.lastName)
+        boolean valid = profile != null
+                && isNameValid(profile.firstName, profile.lastName)
                 && profile.email != null
                 && profile.email.length() > 5
                 && profile.phone != null
                 && profile.phone.length() > 8;
         return valid;
+    }
+
+    public static boolean isNameValid(String firstName, String lastName) {
+        return firstName != null
+                && lastName != null
+                && firstName.length() > 1
+                && lastName.length() > 3
+                && !firstName.contentEquals(lastName);
     }
 
     public String getContentForDebug() {

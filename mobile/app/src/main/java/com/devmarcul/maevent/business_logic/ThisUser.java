@@ -1,15 +1,22 @@
 package com.devmarcul.maevent.business_logic;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.volley.ClientError;
+import com.android.volley.ServerError;
+import com.devmarcul.maevent.apis.models.UserModel;
+import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
 import com.devmarcul.maevent.data.UserProfile;
+import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.StringUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,8 +39,8 @@ public class ThisUser {
         return profile;
     }
 
-    public static boolean isRegistered() {
-        return profile.id != 0;
+    public static boolean hasCompleteProfile() {
+        return profile != null && profile.id != 0;
     }
 
     public static Bitmap getPhoto() {
@@ -43,9 +50,10 @@ public class ThisUser {
     public static void updateContent(GoogleSignInAccount account) {
         //TODO Replace dummy initialization with data base query
         UserProfileBuilder.setCnt(0);
-        profile = UserProfileBuilder.build();
-        profile.id = 2000000008;
-//        profile.id = 0;
+//        profile = UserProfileBuilder.build();
+        profile = new UserProfile();
+//        profile.id = 2000000008;
+        profile.id = 0;
 
         googleAccount = account;
 

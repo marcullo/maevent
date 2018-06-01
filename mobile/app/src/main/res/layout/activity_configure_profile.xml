@@ -3,42 +3,57 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="0dp"
-    android:paddingLeft="0dp"
-    android:paddingRight="0dp"
-    android:paddingTop="0dp"
-    tools:context=".ConfigureProfileActivity">
 
-    <include
-        android:id="@+id/configure_profile_introduction_label"
-        layout="@layout/configure_profile_item" />
+    <LinearLayout
+        android:id="@+id/activity_configure_profile_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="0dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="0dp"
+        tools:context=".ConfigureProfileActivity">
 
-    <include
-        android:id="@+id/configure_profile_introduction"
-        android:visibility="visible"
-        layout="@layout/configure_profile_introduction" />
+        <include
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/default_vertical_margin"
+            android:layout_marginBottom="@dimen/default_vertical_margin"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/configure_profile_loading"
+            layout="@layout/item_loading" />
 
-    <include
-        android:id="@+id/configure_profile_contact_label"
-        layout="@layout/configure_profile_item" />
+        <include
+            android:id="@+id/configure_profile_introduction_label"
+            android:visibility="gone"
+            layout="@layout/configure_profile_item" />
 
-    <include
-        android:id="@+id/configure_profile_contact"
-        android:visibility="visible"
-        layout="@layout/configure_profile_contact" />
+        <include
+            android:id="@+id/configure_profile_introduction"
+            android:visibility="gone"
+            layout="@layout/configure_profile_introduction" />
 
-    <include
-        android:id="@+id/configure_profile_tags_label"
-        layout="@layout/configure_profile_item" />
+        <include
+            android:id="@+id/configure_profile_contact_label"
+            android:visibility="gone"
+            layout="@layout/configure_profile_item" />
 
-    <include
-        android:id="@+id/configure_profile_tags"
-        android:visibility="visible"
-        layout="@layout/edit_tags" />
+        <include
+            android:id="@+id/configure_profile_contact"
+            android:visibility="gone"
+            layout="@layout/configure_profile_contact" />
 
-</LinearLayout>
+        <include
+            android:id="@+id/configure_profile_tags_label"
+            android:visibility="gone"
+            layout="@layout/configure_profile_item" />
+
+        <include
+            android:id="@+id/configure_profile_tags"
+            android:visibility="gone"
+            layout="@layout/edit_tags" />
+
+    </LinearLayout>
+
 </ScrollView>

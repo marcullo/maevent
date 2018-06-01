@@ -44,7 +44,7 @@ public class MaeventAccountManager {
                 task.getResult(ApiException.class);
                 result = true;
             } catch (ApiException e) {
-                Log.w(LOG_TAG, "Sign in failed. Code: " + e.getStatusCode());
+                Log.e(LOG_TAG, "Sign in failed. Code: " + e.getStatusCode());
             }
         }
         return result;
@@ -55,6 +55,9 @@ public class MaeventAccountManager {
     }
 
     public static void signOut(Activity activity, OnCompleteListener<Void> listener) {
+        if (mSignInClient == null) {
+            return;
+        }
         mSignInClient.signOut()
                 .addOnCompleteListener(activity, listener);
     }
