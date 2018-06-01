@@ -184,6 +184,8 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     protected void onPause() {
         super.onPause();
 
+        mPreviewDialog.cancel();
+
         mIntroductionViewAdapter.unbindListeners();
         mContactViewAdapter.unbindListeners();
         mTagsItemAdapter.unbindListeners();
@@ -215,7 +217,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
             UserProfile profile = extractProfileFromViews();
             mPreviewDialog.show();
             mUserDetailsAdapter.adaptContent(profile);
-            return true;
+            return false;
         }
         if (id == R.id.configure_profile_action_save) {
             mValidator.validate();
@@ -543,9 +545,5 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         profile.tags.addAll(tvh.mEditTagView.getTagList());
 
         return profile;
-    }
-
-    private void setViewsFromProfile() {
-
     }
 }

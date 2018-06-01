@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 public class DetailsDialog {
@@ -31,6 +32,8 @@ public class DetailsDialog {
 
         public DetailsDialog build(boolean transparentBackground) {
             builder = new AlertDialog.Builder(context);
+            if(detailsView.getParent() != null)
+                ((ViewGroup)detailsView.getParent()).removeView(detailsView);
             builder.setView(detailsView);
             dialog = builder.create();
 
@@ -47,5 +50,9 @@ public class DetailsDialog {
 
     public void hide() {
         dialog.hide();
+    }
+
+    public void cancel() {
+        dialog.cancel();
     }
 }
