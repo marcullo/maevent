@@ -550,7 +550,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
             @Override
             public void onError(Exception exception) {
                 if (exception instanceof ClientError) {
-                    Prompt.displayShort("Your profile is invalid - probably name exists! Contact with support.", context);
+                    ThisUser.setProfile(null);
+                    updateUi(null);
+                    mRequestFinished = true;
                 }
                 else if (exception instanceof ServerError) {
                     Prompt.displayShort("No connection with server.", context);
@@ -558,8 +560,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
                 }
                 else {
                     Prompt.displayShort("Internal error.", context);
+                    updateUi(null);
+                    mRequestFinished = true;
                 }
-                mRequestFinished = true;
             }
         });
     }

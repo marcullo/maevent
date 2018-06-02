@@ -26,6 +26,7 @@ import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.apis.models.MaeventsModel;
 import com.devmarcul.maevent.apis.models.UserModel;
+import com.devmarcul.maevent.apis.models.UsersModel;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
@@ -90,6 +91,9 @@ public class NetworkService extends IntentService implements MaeventApi {
         else if (Action.CREATE_EVENT.name().equals(action)) {
             final MaeventModel model = intent.getParcelableExtra(Param.EVENT.name());
             handleCreateEvent(receiver, model);
+        }
+        else if (Action.GET_USERS.name().equals(action)) {
+            handleGetUsers(receiver);
         }
         else if (Action.GET_USER.name().equals(action)) {
             final String identifier = intent.getStringExtra(Param.STRING.name());
@@ -228,9 +232,55 @@ public class NetworkService extends IntentService implements MaeventApi {
     }
 
     @Override
-    public void handleGetUser(final ResultReceiver receiver, String uid) {
+    public void handleGetUsers(final ResultReceiver receiver) {
+        final Bundle bundle = new Bundle();
+
+        StringRequest request = new StringRequest
+                (Request.Method.GET, MaeventApi.URL_USERS, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        UsersModel model;
+                        try {
+                            Gson gson = new Gson();
+                            List<UserModel> content = gson.fromJson(response, new TypeToken<List<UserModel>>(){}.getType());
+                            model = new UsersModel(content);
+                        }
+                        catch (JsonSyntaxException ex) {
+                            Log.e(LOG_TAG, "Error while parsing JSON");
+                            model = null;
+                        }
+                        catch (Exception ex) {
+                            Log.e(LOG_TAG, ex.toString());
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response);
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
+                            receiver.send(RESULT_CODE_OK_PARCEL, bundle);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof ClientError) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ClientError());
+                        }
+                        else {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ServerError());
+                        }
+                        receiver.send(RESULT_CODE_ERROR, bundle);
+                    }
+                });
+        mRequestQueue.add(request);
+    }
+
+    @Override
+    public void handleGetUser(final ResultReceiver receiver, String identifier) {
         StringBuilder builder = new StringBuilder();
-        builder.append(MaeventApi.URL_USERS).append(uid);
+        builder.append(MaeventApi.URL_USERS).append(identifier);
         String url = builder.toString();
 
         final Bundle bundle = new Bundle();

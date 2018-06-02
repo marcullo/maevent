@@ -73,8 +73,6 @@ public class AgendaFragment extends Fragment implements
     private EventDetailsHandler mEventDetailsHandler;
     private ProgressBar mEventDetailsLoading;
 
-    private Exception mNetworkServiceException;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +120,11 @@ public class AgendaFragment extends Fragment implements
     public void onClick(Maevent event) {
         boolean isPendingEvent = MainActivity.pendingEvent != null
                     && MainActivity.pendingEvent.getId() == event.getId();
+
+        //TODO Find better solution for events with empty host
+        if (event.getParams() == null) {
+            return;
+        }
 
         mEventDetailsHandler.focus(event, null);
         mEventDetailsLoading.setVisibility(View.VISIBLE);
@@ -171,7 +174,6 @@ public class AgendaFragment extends Fragment implements
     }
 
     private void initIncomingEvents() {
-        //TODO Load content
         mIncomingEventsData = new Maevents();
 
         mIncomingEventsRecyclerView = view.findViewById(R.id.rv_incoming_events);
@@ -314,7 +316,6 @@ public class AgendaFragment extends Fragment implements
     }
 
     public void updateEvents() {
-        mNetworkServiceException = null;
         final Context context = getContext();
 
         MaeventManager.getInstance().getAllEvents(parent, new NetworkReceiver.Callback<Maevents>() {
@@ -322,6 +323,7 @@ public class AgendaFragment extends Fragment implements
             public void onSuccess(Maevents events) {
                 mIncomingEventsData.clear();
                 mIncomingEventsData = events;
+
                 mIncomingEventAdapter.setIncomingEventsData(mIncomingEventsData);
 
                 String size = String.valueOf(mIncomingEventsData.size());

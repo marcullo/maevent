@@ -1,6 +1,7 @@
 package com.devmarcul.maevent.main.live_event;
 
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +9,16 @@ import android.view.ViewGroup;
 
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.data.UserDummy;
 import com.devmarcul.maevent.data.UserProfile;
+import com.devmarcul.maevent.data.Users;
 
 public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder> {
 
-    //TODO Replace with Content Provider / etc.
-    private Attendees mAttendees;
+    // Watch out! attendees data has always evem number of elems.
+    // In case of odd number of attendees one dummy elem is added.
+    private Users mAttendees;
+    private int mDummyPosition;
 
     private OnClickHandler mClickHandler;
 
@@ -31,11 +36,17 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
         int layoutId = R.layout.main_profile;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(layoutId, null);
+
         return new AttendeeViewHolder(view) {
             @Override
             public void onClick(View v) {
                 int adapterPosition = getAdapterPosition();
                 User attendee = mAttendees.get(adapterPosition);
+
+                if (attendee instanceof UserDummy) {
+                    return;
+                }
+
                 mClickHandler.onClick(attendee);
             }
         };
@@ -44,7 +55,13 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
     @Override
     public void onBindViewHolder(@NonNull AttendeeViewHolder holder, int position) {
         User attendee = mAttendees.get(position);
-        adaptContent(holder, attendee);
+
+        if (attendee instanceof UserDummy) {
+            adaptDummyContent(holder);
+        }
+        else {
+            adaptContent(holder, attendee);
+        }
     }
 
     @Override
@@ -52,11 +69,24 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
         if (mAttendees == null) {
             return 0;
         }
-        return mAttendees.size();
+        int size = mAttendees.size();
+        /*if (mAttendees.getLast() instanceof UserDummy) {
+            size--;
+        }*/
+        return size;
     }
 
-    public void setAttendeesData(Attendees attendees) {
+    public void setAttendeesData(Users attendees) {
         mAttendees = attendees;
+
+        final int size = attendees.size();
+        final boolean dummyShouldBeUsed = size % 2 == 1;
+
+        if (dummyShouldBeUsed) {
+            // For better user experience
+            mAttendees.add(new UserDummy());
+        }
+
         notifyDataSetChanged();
     }
 
@@ -69,5 +99,9 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
         holder.mAttendeeLastName.setText(profile.lastName);
         holder.mAttendeeLocationView.setText(profile.location);
         holder.mAttendeeHeadlineView.setText(profile.headline);
+    }
+
+    public void adaptDummyContent(AttendeeViewHolder holder) {
+        holder.mAttendeePhotoView.setImageResource(R.drawable.ic_refresh_smaller);
     }
 }

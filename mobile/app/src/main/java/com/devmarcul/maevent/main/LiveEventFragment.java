@@ -1,8 +1,8 @@
 package com.devmarcul.maevent.main;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -14,19 +14,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.android.volley.ClientError;
+import com.android.volley.ServerError;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.business_logic.MaeventUserManager;
+import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.common.TagsViewAdapter;
 import com.devmarcul.maevent.content_providers.hardcoded.UserBuilder;
 import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.data.UserDummy;
+import com.devmarcul.maevent.data.Users;
 import com.devmarcul.maevent.main.common.EventDetailsHandler;
 import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;
 import com.devmarcul.maevent.common.UserDetailsViewAdapter;
 import com.devmarcul.maevent.utils.CustomTittleSetter;
+import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.main.live_event.AttendeeViewAdapter;
-import com.devmarcul.maevent.main.live_event.Attendees;
 
 public class LiveEventFragment extends Fragment implements
         AttendeeViewAdapter.OnClickHandler,
@@ -40,17 +46,18 @@ public class LiveEventFragment extends Fragment implements
     private EventDetailsViewAdapter mEventDetailsAdapter;
     private EventDetailsHandler mEventDetailsHandler;
 
-    private Attendees mAttendeesData;
+    private Users mAttendeesData;
+    private ProgressBar mAttendeesProgressBar;
     private RecyclerView mAttendeeRecyclerView;
     private AttendeeViewAdapter mAttendeeViewAdapter;
-    private Handler mAttendeesHandler;
 
+    private ProgressBar mAttendeeDetailsProgressBar;
     private View mAttendeeDetailsView;
     private View mAttendeeDetailsContentView;
     private DetailsDialog mAttendeeDetailsDialog;
     private UserDetailsViewAdapter mAttendeeDetailsAdapter;
-    private ProgressBar mAttendeeDetailsLoading;
 
+    private View mLiveEventToolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,8 @@ public class LiveEventFragment extends Fragment implements
         initEventDetails();
         initAttendees();
         initAttendeeDetailsDialog();
+
+        updateUsers();
 
         return view;
     }
@@ -94,17 +103,22 @@ public class LiveEventFragment extends Fragment implements
 
     @Override
     public void onClick(User attendee) {
-        mAttendeeDetailsLoading.setVisibility(View.VISIBLE);
+        if (attendee instanceof UserDummy) {
+            return;
+        }
+
+        mAttendeeDetailsProgressBar.setVisibility(View.VISIBLE);
         mAttendeeDetailsContentView.setVisibility(View.INVISIBLE);
 
         mAttendeeDetailsDialog.show();
         mAttendeeDetailsAdapter.adaptContent(attendee);
 
-        mAttendeeDetailsLoading.setVisibility(View.INVISIBLE);
+        mAttendeeDetailsProgressBar.setVisibility(View.INVISIBLE);
         mAttendeeDetailsContentView.setVisibility(View.VISIBLE);
     }
 
     private void initEventDetails() {
+        mLiveEventToolbar = view.findViewById(R.id.main_live_event_toolbar);
         mEventDetailsView = view.findViewById(R.id.main_event_details);
 
         mEventDetailsHandler = MainActivity.eventDetailsHandler;
@@ -124,12 +138,7 @@ public class LiveEventFragment extends Fragment implements
     }
 
     private void initAttendees() {
-        //TODO Load content
-        mAttendeesData = new Attendees();
-        for (int i = 0; i < 10; i++) {
-            User user = UserBuilder.build();
-            mAttendeesData.add(user);
-        }
+        mAttendeesData = new Users();
 
         GridLayoutManager attendeeGridLayoutManager = new GridLayoutManager(parent, 2);
         mAttendeeRecyclerView = view.findViewById(R.id.rv_attendees);
@@ -139,16 +148,7 @@ public class LiveEventFragment extends Fragment implements
         mAttendeeViewAdapter = new AttendeeViewAdapter(this);
         mAttendeeRecyclerView.setAdapter(mAttendeeViewAdapter);
 
-        mAttendeesHandler = new Handler();
-        mAttendeesHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ProgressBar pb = view.findViewById(R.id.pb_attendees_loading);
-                pb.setVisibility(View.VISIBLE);
-                mAttendeeViewAdapter.setAttendeesData(mAttendeesData);
-                pb.setVisibility(View.GONE);
-            }
-        }, 1000);
+        mAttendeesProgressBar = view.findViewById(R.id.pb_attendees_loading);
     }
 
     private void initAttendeeDetailsDialog() {
@@ -157,11 +157,41 @@ public class LiveEventFragment extends Fragment implements
         mAttendeeDetailsDialog = builder.build(true);
 
         mAttendeeDetailsContentView = attendeeDetailsView.findViewById(R.id.person_details);
-        mAttendeeDetailsLoading = attendeeDetailsView.findViewById(R.id.pb_person_details_loading);
+        mAttendeeDetailsProgressBar = attendeeDetailsView.findViewById(R.id.pb_person_details_loading);
 
         View editTagsView = mAttendeeDetailsContentView.findViewById(R.id.edit_tags);
         mAttendeeDetailsAdapter = new UserDetailsViewAdapter(
                 attendeeDetailsView,
                 new TagsViewAdapter(editTagsView, R.id.et_tags));
+    }
+
+    private void updateUsers() {
+        final Context context = getContext();
+
+        MaeventUserManager.getInstance().getAllUsers(parent, new NetworkReceiver.Callback<Users>() {
+            @Override
+            public void onSuccess(Users users) {
+                mAttendeesData.clear();
+                mAttendeesData = users;
+                mAttendeeViewAdapter.setAttendeesData(mAttendeesData);
+
+                mLiveEventToolbar.setVisibility(View.VISIBLE);
+                mAttendeesProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Your profile is invalid - probably name exists! Contact with support.", context);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", context);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", context);
+                }
+                mAttendeesProgressBar.setVisibility(View.GONE);
+            }
+        });
     }
 }

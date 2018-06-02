@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sv_main_live_event"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,15 +19,27 @@
             layout="@layout/main_event_details" />
 
         <include
+            android:visibility="gone"
             android:id="@+id/main_live_event_toolbar"
             layout="@layout/main_live_event_toolbar" />
 
-        <include
-            android:id="@+id/pb_attendees_loading"
-            layout="@layout/item_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal" />
+        <android.support.v7.widget.CardView
+            android:backgroundTint="@color/colorAccent"
+            android:background="@color/colorAccent"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="0dp" >
+
+            <include
+                android:id="@+id/pb_attendees_loading"
+                layout="@layout/item_loading_reverted"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal" />
+
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_attendees"

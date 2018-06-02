@@ -6,6 +6,7 @@ import android.util.Log;
 import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.apis.models.MaeventsModel;
+import com.devmarcul.maevent.business_logic.interfaces.MaeventContentUpdater;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
@@ -14,7 +15,7 @@ import com.devmarcul.maevent.data.Maevents;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 
-public class MaeventManager {
+public class MaeventManager implements MaeventContentUpdater {
 
     private static final MaeventManager instance = new MaeventManager();
 
@@ -25,6 +26,7 @@ public class MaeventManager {
     protected MaeventManager() {
     }
 
+    @Override
     public void createEvent(final Context context, MaeventParams params, NetworkReceiver.Callback<Boolean> callback) {
         if (!Maevent.areParamsValid(params)) {
             return;
@@ -49,12 +51,13 @@ public class MaeventManager {
                 .startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, model, callback);
     }
 
+    @Override
     public void getAllEvents(final Context context, final NetworkReceiver.Callback<Maevents> callback) {
         NetworkService.getInstance()
                 .startService(context, MaeventApi.Action.GET_EVENTS, MaeventApi.Param.NONE, new NetworkReceiver.Callback<MaeventsModel>() {
                     @Override
-                    public void onSuccess(MaeventsModel eventsModel) {
-                        Maevents events = eventsModel.toMaevents();
+                    public void onSuccess(MaeventsModel model) {
+                        Maevents events = model.toMaevents();
                         callback.onSuccess(events);
                     }
 

@@ -7,6 +7,8 @@ import com.devmarcul.maevent.common.ContentAdapter;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.utils.StringUtils;
 import com.devmarcul.maevent.utils.TimeUtils;
 
@@ -34,12 +36,31 @@ public class EventDetailsViewAdapter implements
     @Override
     public void adaptContent(Maevent event) {
         MaeventParams params = event.getParams();
+
+        if (event.getHost() == null
+                || event.getHost().getProfile() == null) {
+            return;
+        }
+
+        UserProfile hostProfile = event.getHost().getProfile();
+        if (hostProfile == null) {
+            return;
+        }
+
+        String hostFirstName = hostProfile.firstName;
+        String hostLastName = hostProfile.lastName;
+        if (params == null) {
+            return;
+        }
+        if (hostProfile == null)
+
+        if (event.getHost() == null) {
+            return;
+        }
+
         String eventName = params.name;
         StringBuilder builder = new StringBuilder();
-        String hostFirstName = event.getHost().getProfile().firstName;
-        String hostLastName = event.getHost().getProfile().lastName;
         builder.append(hostFirstName).append(StringUtils.getNewLine()).append(hostLastName);
-        String host = builder.toString();
         String place = params.place;
         String street = params.addressStreet;
         String postCode = params.addressPostCode;
@@ -48,7 +69,7 @@ public class EventDetailsViewAdapter implements
         String duration = getDurationString(params.beginTime, params.endTime);
 
         mViewHolder.mNameView.setText(eventName);
-        mViewHolder.mHostView.setText(host);
+        mViewHolder.mHostView.setText(builder.toString());
         mViewHolder.mPlaceView.setText(place);
         mViewHolder.mStreetView.setText(street);
         mViewHolder.mPostalCodeView.setText(postCode);

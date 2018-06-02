@@ -4,18 +4,17 @@ import android.content.Context;
 import android.util.Log;
 
 import com.devmarcul.maevent.apis.MaeventApi;
-import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.apis.models.UserModel;
-import com.devmarcul.maevent.content_providers.hardcoded.UserProfileBuilder;
-import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.apis.models.UsersModel;
+import com.devmarcul.maevent.business_logic.interfaces.UserContentUpdater;
+import com.devmarcul.maevent.data.Maevents;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.business_logic.services.NetworkService;
+import com.devmarcul.maevent.data.Users;
 
-public class MaeventUserManager implements
-        UserContentUpdater,
-        UserSearcher {
+public class MaeventUserManager implements UserContentUpdater {
 
     public static final String LOG_TAG = "MaeventUserManager";
 
@@ -37,6 +36,7 @@ public class MaeventUserManager implements
                 .startService(context, MaeventApi.Action.GET_USER, MaeventApi.Param.STRING, identifier, callback);
     }
 
+    @Override
     public void createUser(final Context context, UserProfile profile, NetworkReceiver.Callback<String> callback) {
         if (!User.isProfileValid(profile)) {
             Log.e(LOG_TAG, "User profile invalid!");
@@ -66,41 +66,20 @@ public class MaeventUserManager implements
                 .startService(context, MaeventApi.Action.UPDATE_USER, MaeventApi.Param.USER, model, callback);
     }
 
-    public void updateContent(User user) {
-        UserProfile profile = user.getProfile();
-
-        //TODO Replace dummy initialization with data base query
-        profile = UserProfileBuilder.build();
-
-        if (User.isProfileValid(profile)) {
-            user.setProfile(profile);
-            user.setRegistered(true);
-            final String debugContent = user.getContentForDebug();
-            Log.d(LOG_TAG, "Profile: " + debugContent);
-        }
-    }
-
     @Override
-    public String getUserPhone(int userId) {
-        //TODO Replace with query
-        UserProfile[] userProfiles = UserProfileBuilder.getObjects();
-        for (int i = 0; i < userProfiles.length; i++) {
-            if (userProfiles[i].id == userId) {
-                return userProfiles[i].phone;
-            }
-        }
-        return "Empty";
-    }
+    public void getAllUsers(final Context context, final NetworkReceiver.Callback<Users> callback) {
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.GET_USERS, MaeventApi.Param.NONE, new NetworkReceiver.Callback<UsersModel>() {
+                    @Override
+                    public void onSuccess(UsersModel model) {
+                        Users users = model.toUsers();
+                        callback.onSuccess(users);
+                    }
 
-    @Override
-    public String getUserName(int userId) {
-        //TODO Replace with query
-        UserProfile[] userProfiles = UserProfileBuilder.getObjects();
-        for (int i = 0; i < userProfiles.length; i++) {
-            if (userProfiles[i].id == userId) {
-                return userProfiles[i].firstName + " " + userProfiles[i].lastName;
-            }
-        }
-        return "Noname";
+                    @Override
+                    public void onError(Exception exception) {
+                        callback.onError(exception);
+                    }
+                });
     }
 }

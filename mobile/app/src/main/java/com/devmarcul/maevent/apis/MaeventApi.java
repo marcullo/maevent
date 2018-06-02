@@ -12,7 +12,7 @@ public interface MaeventApi {
     String TAG = "MaeventApi";
     String RESULT_RECEIVER = "RESULT_RECEIVER";
 
-    enum Action { GET_EVENTS, CREATE_EVENT, GET_USER, CREATE_USER, UPDATE_USER };
+    enum Action { GET_EVENTS, CREATE_EVENT, GET_USERS, GET_USER, CREATE_USER, UPDATE_USER };
     enum Param { NONE, STRING, EVENT, USER };
 
     String URL_BASE = "https://maevent-api.conveyor.cloud/api/";
@@ -20,9 +20,15 @@ public interface MaeventApi {
     String URL_USERS = builder.setBase(URL_BASE).build("users/");
 
     void cancelAllRequests();
+
+    /* /api/events */
     void handleGetEvents(final ResultReceiver receiver);
     void handleCreateEvent(final ResultReceiver receiver, MaeventModel model);
-    void handleGetUser(final ResultReceiver receiver, String uid);
+
+    /* /api/users */
+    void handleGetUsers(final ResultReceiver receiver);
     void handleCreateUser(final ResultReceiver receiver, UserModel model);
+    /* /api/users/identifier */
+    void handleGetUser(final ResultReceiver receiver, String identifier);
     void handleUpdateUser(final ResultReceiver receiver, UserModel model);
 }

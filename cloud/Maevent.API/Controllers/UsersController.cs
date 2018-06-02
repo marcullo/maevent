@@ -89,6 +89,7 @@ namespace Maevent.API.Controllers
                     return BadRequest();
                 }
 
+                model.Id = 0;
                 var user = Mapper.Map<User>(model);
 
                 var seeked = _repo.GetUserByName(model.FirstName, model.LastName);

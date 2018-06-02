@@ -122,8 +122,9 @@ public class MaeventModel extends MaeventApiModel implements Parcelable {
         MaeventParams params = new MaeventParams();
 
         User host = new User();
-        host.setProfile(this.Host.toUserProfile());
-
+        if (this.Host != null) {
+            host.setProfile(this.Host.toUserProfile());
+        }
 
         final String begin =
                 TimeUtils.convertTimeStringToOtherFormat(this.BeginTime,
