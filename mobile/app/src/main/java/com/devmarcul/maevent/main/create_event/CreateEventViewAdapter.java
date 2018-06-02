@@ -190,10 +190,7 @@ public class CreateEventViewAdapter implements
             end = endDate;
         }
 
-        String startDateText = TimeUtils.getStringFromCalendar(start, CreateEventViewHolder.TIME_FORMAT);
-        String endDateText = TimeUtils.getStringFromCalendar(end, CreateEventViewHolder.TIME_FORMAT);
-
-        updateTimeViews(startDateText, endDateText);
+        updateTimeViews(start, end);
         updateCreateEventButtonVisibility();
         mDialog.hide();
     }
@@ -233,9 +230,18 @@ public class CreateEventViewAdapter implements
         }
     }
 
-    private void updateTimeViews(String start, String end) {
-        String newTime = TimeUtils.getTimeStringFromStringDuration(start, end, CreateEventViewHolder.TIME_FORMAT);
+    private void updateTimeViews(Calendar start, Calendar end) {
+        String startDateBuf = TimeUtils.getStringFromCalendar(start, MaeventParams.TIME_FORMAT);
+        String endDateBuf = TimeUtils.getStringFromCalendar(end, MaeventParams.TIME_FORMAT);
+        StringBuilder builder = new StringBuilder();
+        builder.append(startDateBuf).append(" ").append(endDateBuf);
+        mViewHolder.mSelectedTimeBuffer.setText(builder);
+
+        String startDateVisible = TimeUtils.getStringFromCalendar(start, CreateEventViewHolder.TIME_FORMAT);
+        String endDateVisible = TimeUtils.getStringFromCalendar(end, CreateEventViewHolder.TIME_FORMAT);
+        String newTime = TimeUtils.getTimeStringFromStringDuration(startDateVisible, endDateVisible, CreateEventViewHolder.TIME_FORMAT);
         mViewHolder.mSelectedTimeView.setText(newTime);
+
         setTimeSelected();
     }
 
@@ -351,16 +357,20 @@ public class CreateEventViewAdapter implements
 
 
         //TODO REFACTOR SO AS TO DATA HAS YEAR
-        String[] timeStr = TimeUtils.splitCalendarDuration(mViewHolder.mSelectedTimeView.getText().toString(),
-                EventDetailsViewHolder.TIME_FORMAT, EventDetailsViewHolder.TIME_FORMAT);
+        String[] timeTextBuf = mViewHolder.mSelectedTimeBuffer.getText().toString().split(" ");
+        if (timeTextBuf.length < 2) {
+            return null;
+        }
+        String begin = timeTextBuf[0];
+        String end = timeTextBuf[1];
 
         MaeventParams params = new MaeventParams();
         params.name = mViewHolder.mSelectedNameView.getText().toString();
         params.place = wholePlace[0];
         params.addressStreet = wholePlace[1];
         params.addressPostCode = wholePlace[2];
-        params.beginTime = timeStr[0];
-        params.endTime = timeStr[1];
+        params.beginTime = begin;
+        params.endTime = end;
         params.rsvp = textYes.equals(rsvpStr);
 
         return params;

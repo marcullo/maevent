@@ -6,6 +6,7 @@ import com.devmarcul.maevent.business_logic.MaeventSteward;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.data.UserProfile;
 
 public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandler {
 
@@ -78,9 +79,25 @@ public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandl
 
     @Override
     public void onClickCalendar() {
-        //TODO Get host name and phone from bundled data about event/invitation
-        String hostName = "Andrew Block";
-        String hostPhone = "+48123456789";
+        Maevent focused;
+        if (mFocusedEvent != null) {
+            focused = mFocusedEvent;
+        }
+        else if (mFocusedInvitation != null) {
+            focused = mFocusedInvitation;
+        }
+        else {
+            return;
+        }
+
+        UserProfile profile = focused.getHost().getProfile();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(profile.firstName).append(" ").append(profile.lastName);
+
+        String hostName = builder.toString();
+        String hostPhone = profile.phone;
+
         if (mFocusedEvent != null) {
             MaeventSteward.saveEventToCalendar(mFocusedEvent, hostName, hostPhone, parent);
         }

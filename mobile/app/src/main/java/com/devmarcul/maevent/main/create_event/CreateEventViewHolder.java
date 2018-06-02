@@ -23,6 +23,7 @@ public class CreateEventViewHolder {
         public ImageView mNameValidIndicator;
         public TextView mNameValidLabel;
 
+    public EditText mSelectedTimeBuffer;
     public TextView mSelectedTimeView;
     public View mSelectTimeView;
         public ImageView mTimeValidIndicator;
@@ -47,6 +48,7 @@ public class CreateEventViewHolder {
         mWriteNameView = view.findViewById(R.id.et_create_event_write_name);
         mNameValidIndicator = view.findViewById(R.id.iv_create_event_name_valid_indicator);
         mNameValidLabel = view.findViewById(R.id.tv_create_event_name_valid_label);
+        mSelectedTimeBuffer = view.findViewById(R.id.tv_create_event_selected_time_buffer);
         mSelectedTimeView = view.findViewById(R.id.tv_create_event_selected_time);
         mSelectTimeView = view.findViewById(R.id.create_event_select_time);
         mTimeValidIndicator = view.findViewById(R.id.iv_create_event_time_valid_indicator);

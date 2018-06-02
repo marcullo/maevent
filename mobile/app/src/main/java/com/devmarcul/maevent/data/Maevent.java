@@ -91,6 +91,14 @@ public class Maevent implements DataValidator {
         return sb.toString();
     }
 
+    public int getAttendeesNumber() {
+        if (attendeesIds == null) {
+            return 0;
+        }
+        String[] ids = attendeesIds.trim().split(";");
+        return ids.length;
+    }
+
     public static boolean isNameValid(String name) {
         return name != null && name.length() > 5;
     }

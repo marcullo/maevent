@@ -13,4 +13,5 @@
 
     <color name="colorCreateEventItemSelected">@color/colorPrimary</color>
     <color name="colorCreateEventItemUnselected">@color/colorSecondaryText</color>
+    <color name="colorSubleGray">#F1F1F1</color>
 </resources>

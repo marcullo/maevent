@@ -33,10 +33,8 @@ public class EventDetailsViewAdapter implements
 
     @Override
     public void adaptContent(Maevent event) {
-        //TODO get bundle with all necessary data instead of only event
         MaeventParams params = event.getParams();
         String eventName = params.name;
-        //TODO Host !
         StringBuilder builder = new StringBuilder();
         String hostFirstName = event.getHost().getProfile().firstName;
         String hostLastName = event.getHost().getProfile().lastName;
@@ -46,9 +44,7 @@ public class EventDetailsViewAdapter implements
         String street = params.addressStreet;
         String postCode = params.addressPostCode;
         String time = getTimeSting(params.beginTime, params.endTime);
-        //TODO Add parsing attendees ids count
-        String usersNumber = String.valueOf("0");
-        //TODO Consider replacing with remaining time
+        String usersNumber = String.valueOf(event.getAttendeesNumber());
         String duration = getDurationString(params.beginTime, params.endTime);
 
         mViewHolder.mNameView.setText(eventName);
@@ -66,8 +62,7 @@ public class EventDetailsViewAdapter implements
         int usersNumberIconRes;
 
         if (usersAreAttendees) {
-            //TODO Add parsing attendees ids count
-            usersNumber = String.valueOf("0");
+            usersNumber = String.valueOf(event.getAttendeesNumber());
             usersNumberIconRes = R.drawable.ic_people;
         }
         else {

@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.main.AgendaFragment;
 import com.devmarcul.maevent.main.LiveEventFragment;
 import com.devmarcul.maevent.main.CreateEventFragment;
