@@ -554,12 +554,11 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
                 }
                 else if (exception instanceof ServerError) {
                     Prompt.displayShort("No connection with server.", context);
+                    logout();
                 }
                 else {
                     Prompt.displayShort("Internal error.", context);
                 }
-                ThisUser.updateContent(context);
-                updateUi(ThisUser.getProfile());
                 mRequestFinished = true;
             }
         });
