@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class TimeUtils {
@@ -15,10 +16,13 @@ public class TimeUtils {
         Date date;
 
         try {
-            SimpleDateFormat fmt = new SimpleDateFormat(format);
-            date = fmt.parse(timeStr);
+            String fmt = format.replace("T", "");
+            timeStr = timeStr.replace("T", "");
+            SimpleDateFormat sdf = new SimpleDateFormat(fmt, Locale.US);
+            date = sdf.parse(timeStr);
         } catch (ParseException e) {
-            return null;
+            time.set(2000, 12, 31);
+            return time;
         }
 
         time.setTime(date);

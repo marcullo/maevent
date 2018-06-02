@@ -14,7 +14,7 @@ namespace Maevent.API.Models
         [MinLength(5)]
         [MaxLength(50)]
         public string Name { get; set; }
-        public int HostId { get; set; }
+        public UserModel Host { get; set; }
         public string Place { get; set; }
         public string AddressStreet { get; set; }
         public string AddressPostCode { get; set; }

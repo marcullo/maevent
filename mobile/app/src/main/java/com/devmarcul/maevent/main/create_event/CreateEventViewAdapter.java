@@ -349,6 +349,8 @@ public class CreateEventViewAdapter implements
         Context context = mDialogView.getContext();
         String textYes = context.getString(R.string.text_yes);
 
+
+        //TODO REFACTOR SO AS TO DATA HAS YEAR
         String[] timeStr = TimeUtils.splitCalendarDuration(mViewHolder.mSelectedTimeView.getText().toString(),
                 EventDetailsViewHolder.TIME_FORMAT, EventDetailsViewHolder.TIME_FORMAT);
 

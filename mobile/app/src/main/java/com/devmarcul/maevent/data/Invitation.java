@@ -9,10 +9,10 @@ public class Invitation extends Maevent {
     private User inviter;
     private int inviteesNr;
 
-    public Invitation(MaeventParams params, int hostId, User inviter, int inviteesNr) {
+    public Invitation(MaeventParams params, User host, User inviter, int inviteesNr) {
         super();
         this.params = params;
-        this.hostId = hostId;
+        this.host = host;
         this.inviter = inviter;
         this.inviteesNr = inviteesNr;
     }
@@ -36,7 +36,6 @@ public class Invitation extends Maevent {
         final String ENDL = StringUtils.getNewLine();
         StringBuilder sb = new StringBuilder();
 
-        //TODO Hide sensitive data
         sb.append(ENDL);
         sb.append(Invitation.LOG_TAG).append(ENDL);
         sb.append(super.getContentForDebug()).append(ENDL);

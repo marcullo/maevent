@@ -7,6 +7,7 @@ import com.devmarcul.maevent.common.ContentAdapter;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.utils.StringUtils;
 import com.devmarcul.maevent.utils.TimeUtils;
 
 import java.util.Calendar;
@@ -36,7 +37,11 @@ public class EventDetailsViewAdapter implements
         MaeventParams params = event.getParams();
         String eventName = params.name;
         //TODO Host !
-        String host = "Andrew Block";
+        StringBuilder builder = new StringBuilder();
+        String hostFirstName = event.getHost().getProfile().firstName;
+        String hostLastName = event.getHost().getProfile().lastName;
+        builder.append(hostFirstName).append(StringUtils.getNewLine()).append(hostLastName);
+        String host = builder.toString();
         String place = params.place;
         String street = params.addressStreet;
         String postCode = params.addressPostCode;

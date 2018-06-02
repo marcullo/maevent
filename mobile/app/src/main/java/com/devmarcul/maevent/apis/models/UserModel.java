@@ -13,9 +13,9 @@ public class UserModel extends MaeventApiModel implements Parcelable {
 
     @SerializedName(value = "Id", alternate = {"id"})
     public String Id;
-    @SerializedName(value = "FirstName", alternate = {"firstName", "firstname"})
+    @SerializedName(value = "FirstName", alternate = {"firstName"})
     public String FirstName;
-    @SerializedName(value = "LastName", alternate = {"lastName", "lastname"})
+    @SerializedName(value = "LastName", alternate = {"lastName"})
     public String LastName;
     @SerializedName(value = "Title", alternate = {"title"})
     public String Title;
@@ -80,35 +80,6 @@ public class UserModel extends MaeventApiModel implements Parcelable {
         Tags = in.readString();
     }
 
-    public UserProfile toUserProfile() {
-        Tags tags = null;
-        if (this.Tags != null) {
-            String tagsArray[] = this.Tags.split(";");
-            tags = new Tags();
-            for (String tag:
-                    tagsArray) {
-                if (tag != null && tag != ";") {
-                    tags.add(tag);
-                }
-            }
-        }
-
-        UserProfile profile = new UserProfile();
-        profile.id = Integer.valueOf(this.Id);
-        profile.firstName = this.FirstName;
-        profile.lastName = this.LastName;
-        profile.title = this.Title;
-        profile.pose = this.Pose;
-        profile.headline = this.Headline;
-        profile.phone = this.Phone;
-        profile.email = this.Email;
-        profile.linkedin = this.Linkedin;
-        profile.location = this.Location;
-        profile.tags = tags;
-
-        return profile;
-    }
-
     public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
         @Override
         public UserModel createFromParcel(Parcel in) {
@@ -139,5 +110,34 @@ public class UserModel extends MaeventApiModel implements Parcelable {
         dest.writeString(Linkedin);
         dest.writeString(Location);
         dest.writeString(Tags);
+    }
+
+    public UserProfile toUserProfile() {
+        Tags tags = null;
+        if (this.Tags != null) {
+            String tagsArray[] = this.Tags.split(";");
+            tags = new Tags();
+            for (String tag:
+                    tagsArray) {
+                if (tag != null && tag != ";") {
+                    tags.add(tag);
+                }
+            }
+        }
+
+        UserProfile profile = new UserProfile();
+        profile.id = Integer.valueOf(this.Id);
+        profile.firstName = this.FirstName;
+        profile.lastName = this.LastName;
+        profile.title = this.Title;
+        profile.pose = this.Pose;
+        profile.headline = this.Headline;
+        profile.phone = this.Phone;
+        profile.email = this.Email;
+        profile.linkedin = this.Linkedin;
+        profile.location = this.Location;
+        profile.tags = tags;
+
+        return profile;
     }
 }

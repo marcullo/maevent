@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.devmarcul.maevent.business_logic.MaeventSteward;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.data.User;
 
 public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandler {
 
@@ -49,18 +50,20 @@ public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandl
 
     @Override
     public void onClickCall() {
-        //TODO Get host phone from bundled data about event
-        int hostId;
+        Maevent focused;
         if (mFocusedEvent != null) {
-            hostId = mFocusedEvent.getHostId();
+            focused = mFocusedEvent;
         }
         else if (mFocusedInvitation != null) {
-            hostId = mFocusedInvitation.getHostId();
+            focused = mFocusedInvitation;
         }
         else {
             return;
         }
-        MaeventSteward.callHost("+48123456789", parent);
+
+        User host = focused.getHost();
+        String hostPhone = host.getProfile().phone;
+        MaeventSteward.callHost(hostPhone, parent);
     }
 
     @Override

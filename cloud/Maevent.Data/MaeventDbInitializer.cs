@@ -30,7 +30,8 @@ namespace Maevent.Data
             new Event()
             {
                 Name = "Presidential Banquet",
-                HostId = 2,
+                HostFirstName = "Andrew",
+                HostLastName = "Block",
                 Place = "Belveder",
                 AddressStreet = "ul. Belwederska 54/56",
                 AddressPostCode = "00-001 Warszawa",
@@ -43,7 +44,8 @@ namespace Maevent.Data
             new Event()
             {
                 Name = "Young Leaders Conference",
-                HostId = 3,
+                HostFirstName = "Andrew",
+                HostLastName = "Block",
                 Place = "Palladium",
                 AddressStreet = "ul. Zlota 9",
                 AddressPostCode = "00-019 Warszawa",
@@ -56,7 +58,8 @@ namespace Maevent.Data
             new Event()
             {
                 Name = "Google IO",
-                HostId = 3,
+                HostFirstName = "Vincent",
+                HostLastName = "Company",
                 Place = "Shoreline Amphitheatre",
                 AddressStreet = "1 Amphitheatre Pkwy",
                 AddressPostCode = "Mountain View. Ca 94043",
@@ -69,7 +72,8 @@ namespace Maevent.Data
             new Event()
             {
                 Name = "Will It Fly?",
-                HostId = 2,
+                HostFirstName = "Morgan",
+                HostLastName = "Freeman",
                 Place = "Boston City Centre Poland",
                 AddressStreet = "Marszalka 23/11",
                 AddressPostCode = "33-002 Zlotnik",
@@ -81,7 +85,8 @@ namespace Maevent.Data
             new Event()
             {
                 Name = "Neu Ride Conference",
-                HostId = 3,
+                HostFirstName = "Andrew",
+                HostLastName = "Block",
                 Place = "Warsaw Expo",
                 AddressStreet = "Admirala 32",
                 AddressPostCode = "00-241 Warszawa",

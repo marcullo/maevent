@@ -31,9 +31,6 @@ public class IntroductionViewHolder {
         mProfileImage = mContentView.findViewById(R.id.ibtn_configure_profile_image);
         mTitleSpinner = mContentView.findViewById(R.id.sp_configure_profile_title);
 
-        mFirstNameEditText.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
-        mLastNameEditText.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
-
         initializeTitleSpinner();
     }
 

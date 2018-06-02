@@ -13,7 +13,8 @@ namespace Maevent.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
-        public int HostId { get; set; }
+        public string HostFirstName { get; set; }
+        public string HostLastName { get; set; }
         public string Place { get; set; }
         public string AddressStreet { get; set; }
         public string AddressPostCode { get; set; }

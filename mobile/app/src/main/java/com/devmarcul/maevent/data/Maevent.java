@@ -7,7 +7,7 @@ public class Maevent implements DataValidator {
     private static String LOG_TAG = "Maevent";
 
     protected int id;
-    protected int hostId;
+    protected User host;
     protected MaeventParams params;
     protected String attendeesIds;
     protected int inviteesNumber;
@@ -20,8 +20,8 @@ public class Maevent implements DataValidator {
         return id;
     }
 
-    public int getHostId() {
-        return hostId;
+    public User getHost() {
+        return host;
     }
 
     public String getAttendeesIds() {
@@ -44,8 +44,8 @@ public class Maevent implements DataValidator {
         this.id = id;
     }
 
-    public void setHostId(int hostId) {
-        this.hostId = hostId;
+    public void setHost(User host) {
+        this.host = host;
     }
 
     public void setAttendeesIds(String attendeesIds) {
@@ -77,7 +77,6 @@ public class Maevent implements DataValidator {
         final String ENDL = StringUtils.getNewLine();
         StringBuilder sb = new StringBuilder();
 
-        //TODO Hide sensitive data
         sb.append(ENDL);
         sb.append(Maevent.LOG_TAG).append(ENDL);
         sb.append(MaeventParams.LOG_TAG).append(":").append(ENDL);

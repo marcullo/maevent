@@ -1,6 +1,7 @@
 package com.devmarcul.maevent.main;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -17,21 +18,26 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.ClientError;
+import com.android.volley.ServerError;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.business_logic.MaeventSteward;
+import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.content_providers.hardcoded.InvitationBuilder;
-import com.devmarcul.maevent.content_providers.hardcoded.MaeventBuilder;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Invitations;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.Maevents;
+import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.main.agenda.IncomingEventAdapter;
 import com.devmarcul.maevent.main.agenda.InvitationAdapter;
 import com.devmarcul.maevent.main.agenda.ItemViewHolder;
 import com.devmarcul.maevent.main.common.EventDetailsHandler;
 import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;
 import com.devmarcul.maevent.utils.CustomTittleSetter;
+import com.devmarcul.maevent.utils.Prompt;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.utils.SwipeAcceptDeleteCallback;
@@ -42,11 +48,14 @@ public class AgendaFragment extends Fragment implements
         ViewScroller,
         CustomTittleSetter {
 
+    private static final String LOG_TAG = "AgendaFragment";
+
     private View view;
     private Activity parent;
 
     private Maevents mIncomingEventsData;
-    private Handler mIncomingEventsHandler;
+    private ProgressBar mIncomingEventsProgressBar;
+    private TextView mIncomingEventsNumberView;
     private RecyclerView mIncomingEventsRecyclerView;
     private IncomingEventAdapter mIncomingEventAdapter;
     private ItemViewHolder mIncomingEventsLabel;
@@ -64,6 +73,8 @@ public class AgendaFragment extends Fragment implements
     private EventDetailsHandler mEventDetailsHandler;
     private ProgressBar mEventDetailsLoading;
 
+    private Exception mNetworkServiceException;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +88,12 @@ public class AgendaFragment extends Fragment implements
         parent = getActivity();
 
         initIncomingEvents();
-        initInvitations();
+//        initInvitations();
+        final View invitationsLabelView = view.findViewById(R.id.main_invitations_label);
+        invitationsLabelView.setVisibility(View.INVISIBLE);
         initEventDetailsDialog();
+
+        updateEvents();
 
         return view;
     }
@@ -101,7 +116,6 @@ public class AgendaFragment extends Fragment implements
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mIncomingEventsHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -141,10 +155,9 @@ public class AgendaFragment extends Fragment implements
 
     @Override
     public void onClickCall(Maevent event) {
-        //TODO Replace with bundle with all necessary data instead of event
-        int id = event.getHostId();
-        //TODO Host phone!
-        MaeventSteward.callHost("+48123456789", parent);
+        User host = event.getHost();
+        String hostPhone = host.getProfile().phone;
+        MaeventSteward.callHost(hostPhone, parent);
     }
 
     @Override
@@ -160,10 +173,6 @@ public class AgendaFragment extends Fragment implements
     private void initIncomingEvents() {
         //TODO Load content
         mIncomingEventsData = new Maevents();
-        for (int i = 0; i < 3; i++) {
-            Maevent maevent = MaeventBuilder.build();
-            mIncomingEventsData.add(maevent);
-        }
 
         mIncomingEventsRecyclerView = view.findViewById(R.id.rv_incoming_events);
         LinearLayoutManager layoutManager
@@ -183,21 +192,8 @@ public class AgendaFragment extends Fragment implements
             }
         });
 
-        mIncomingEventsHandler = new Handler();
-        mIncomingEventsHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ProgressBar pb = view.findViewById(R.id.pb_incoming_events_number_loading_indicator);
-                pb.setVisibility(View.VISIBLE);
-                mIncomingEventAdapter.setIncomingEventsData(mIncomingEventsData);
-                pb.setVisibility(View.GONE);
-
-                String size = String.valueOf(mIncomingEventsData.size());
-                TextView incomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
-                incomingEventsNumberView.setText(size);
-                incomingEventsNumberView.setVisibility(View.VISIBLE);
-            }
-        }, 1000);
+        mIncomingEventsProgressBar = view.findViewById(R.id.pb_incoming_events_number_loading_indicator);
+        mIncomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
     }
 
     private void initInvitations() {
@@ -315,5 +311,38 @@ public class AgendaFragment extends Fragment implements
         TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
         invitationsNumberView.setText(size);
         invitationsNumberView.setVisibility(View.VISIBLE);
+    }
+
+    public void updateEvents() {
+        mNetworkServiceException = null;
+        final Context context = getContext();
+
+        MaeventManager.getInstance().getAllEvents(parent, new NetworkReceiver.Callback<Maevents>() {
+            @Override
+            public void onSuccess(Maevents events) {
+                mIncomingEventsData.clear();
+                mIncomingEventsData = events;
+                mIncomingEventAdapter.setIncomingEventsData(mIncomingEventsData);
+
+                String size = String.valueOf(mIncomingEventsData.size());
+                mIncomingEventsNumberView.setText(size);
+                mIncomingEventsNumberView.setVisibility(View.VISIBLE);
+                mIncomingEventsProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Your profile is invalid - probably name exists! Contact with support.", context);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", context);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", context);
+                }
+                mIncomingEventsProgressBar.setVisibility(View.GONE);
+            }
+        });
     }
 }

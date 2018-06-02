@@ -52,7 +52,6 @@ public class User implements DataValidator {
         final String ENDL = StringUtils.getNewLine();
         StringBuilder sb = new StringBuilder();
 
-        //TODO Hide sensitive data
         sb.append(ENDL);
         sb.append(profile.firstName).append(", ").append(profile.lastName).append(ENDL);
         sb.append(profile.email).append(", ").append(profile.phone).append(ENDL);

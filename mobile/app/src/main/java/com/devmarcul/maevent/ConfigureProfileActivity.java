@@ -48,6 +48,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
@@ -147,37 +148,28 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
 
-        if (!mConfigProfileRequested) {
-            GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
-            ThisUser.updateContent(this, account);
-        }
-
-        if (ThisUser.hasCompleteProfile() && !mConfigProfileRequested) {
-            setMainActivity();
-            return;
-        }
-        else if (ThisUser.hasCompleteProfile()) {
-            mLoadingLocationView.setVisibility(View.GONE);
-            mLoadingView.setVisibility(View.GONE);
-            adaptContent(ThisUser.getProfile());
-            enableContent();
-            bindListeners();
-            initPreviewDialog();
-            initCancelDialog();
-            mRequestFinished = true;
-            return;
-        }
-
-        adaptContent(null);
-        enableContent();
-        bindListeners();
-        initPreviewDialog();
-        invalidateOptionsMenu();
         mRequestFinished = true;
 
-        mContentView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorTextIcons));
-        mLoadingLocationView.setVisibility(View.GONE);
-        mLoadingView.setVisibility(View.GONE);
+        if (!mConfigProfileRequested) {
+            GoogleSignInAccount account = MaeventAccountManager.getLastSignedAccount(this);
+            ThisUser.initializeContent(this, account);
+        }
+
+        if (ThisUser.hasCompleteProfile() && mConfigProfileRequested) {
+            Log.i(LOG_TAG, "Let's go to configuring profile");
+            mLoadingLocationView.setVisibility(View.GONE);
+            mLoadingView.setVisibility(View.GONE);
+            initCancelDialog();
+            updateUi(ThisUser.getProfile());
+            return;
+        }
+        else if (ThisUser.isRegistered()) {
+            Prompt.displayShort("Fetching data", this);
+            Log.i(LOG_TAG, "Profile exists but is incomplete. Let's fetch data");
+            getUserProfile();
+            return;
+        }
+        updateUi(null);
     }
 
     @Override
@@ -197,17 +189,21 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_configure_profile, menu);
-        MenuItem cancelItem = menu.findItem(R.id.configure_profile_action_cancel);
-        cancelItem.setVisible(true);
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (!mConfigProfileRequested) {
-            MenuItem cancelItem = menu.findItem(R.id.configure_profile_action_cancel);
-            cancelItem.setVisible(false);
-        }
+        MenuItem saveItem = menu.findItem(R.id.configure_profile_action_save);
+        MenuItem supportItem = menu.findItem(R.id.configure_profile_action_support);
+        MenuItem previewItem = menu.findItem(R.id.configure_profile_action_preview);
+        MenuItem cancelItem = menu.findItem(R.id.configure_profile_action_cancel);
+
+        saveItem.setVisible(mRequestFinished);
+        supportItem.setVisible(mRequestFinished);
+        previewItem.setVisible(mRequestFinished);
+        cancelItem.setVisible(mRequestFinished && mConfigProfileRequested);
+
         return true;
     }
 
@@ -225,7 +221,6 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
             mValidator.validate();
             return true;
         }
-        //TODO Move logout to the proper place
         if (id == R.id.configure_profile_action_logout) {
             logout();
             return true;
@@ -251,8 +246,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         }
 
         hideContent();
-        mLoadingView.setVisibility(View.VISIBLE);
+        invalidateOptionsMenu();
         unbindListeners();
+        mLoadingView.setVisibility(View.VISIBLE);
         mRequestFinished = false;
 
         UserProfile profile = extractProfileFromViews();
@@ -328,6 +324,9 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
         mTagsItemAdapter = new TagsItemAdapter(this, tagsLabelView, tagsView);
         mLoadingLocationView = findViewById(R.id.configure_profile_loading_contact);
         mLoadingView = findViewById(R.id.configure_profile_loading);
+
+        mLoadingLocationView.setVisibility(View.GONE);
+        mLoadingView.setVisibility(View.VISIBLE);
     }
 
     private void initCancelDialog() {
@@ -495,7 +494,87 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
                 mLoadingView.setVisibility(View.GONE);
             }
         });
+    }
 
+    private void getUserProfile() {
+        ThisUser.updateContent(this);
+        int profileId = ThisUser.getProfile().id;
+        if (profileId == 0) {
+            Prompt.displayShort("Invalid user", getParent());
+            return;
+        }
+
+        if (!mRequestFinished) {
+            return;
+        }
+        mRequestFinished = false;
+
+        invalidateOptionsMenu();
+
+        final Context context = this;
+
+        String identifier = String.valueOf(profileId);
+        MaeventUserManager.getInstance().getUser(context, identifier, new NetworkReceiver.Callback<String>() {
+            @Override
+            public void onSuccess(String data) {
+                UserModel model;
+                try {
+                    Gson gson = new Gson();
+                    model = gson.fromJson(data, UserModel.class);
+                }
+                catch (Exception ex) {
+                    model = null;
+                }
+
+                if (model == null) {
+                    Prompt.displayShort("Error during parsing received data.", context);
+                    ThisUser.updateContent(context);
+                    updateUi(ThisUser.getProfile());
+                    mRequestFinished = true;
+                    return;
+                }
+
+                UserProfile profile = model.toUserProfile();
+                ThisUser.setProfile(profile);
+                ThisUser.saveContent(context);
+
+                if (ThisUser.hasCompleteProfile()) {
+                    setMainActivity();
+                    return;
+                }
+
+                updateUi(profile);
+                mRequestFinished = true;
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Your profile is invalid - probably name exists! Contact with support.", context);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", context);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", context);
+                }
+                ThisUser.updateContent(context);
+                updateUi(ThisUser.getProfile());
+                mRequestFinished = true;
+            }
+        });
+    }
+
+    private void updateUi(UserProfile profile) {
+        adaptContent(profile);
+        enableContent();
+        bindListeners();
+        initPreviewDialog();
+        invalidateOptionsMenu();
+
+        mContentView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorTextIcons));
+        mLoadingLocationView.setVisibility(View.GONE);
+        mLoadingView.setVisibility(View.GONE);
     }
 
     private void setWelcomeActivity() {

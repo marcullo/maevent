@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.ClientError;
 import com.android.volley.ServerError;
 import com.devmarcul.maevent.MainActivity;
@@ -124,11 +125,11 @@ public class CreateEventFragment extends Fragment implements
                 if (exception instanceof ClientError) {
                     Prompt.displayShort("Event name exists. Choose another one.", parent);
                 }
-                else if (exception instanceof ServerError) {
-                    Prompt.displayShort("No connection with server.", parent);
+                else if (exception instanceof AuthFailureError) {
+                    Prompt.displayShort("Your profile is not registered in the system!", parent);
                 }
                 else {
-                    Prompt.displayShort("Internal error.", parent);
+                    Prompt.displayShort("No connection with server.", parent);
                 }
                 mCreateEventAdapter.setCreateEventLoadingGone();
                 mCreateEventAdapter.updateCreateEventButtonVisibility();

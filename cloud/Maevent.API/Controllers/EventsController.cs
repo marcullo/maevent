@@ -18,6 +18,18 @@ namespace Maevent.API.Controllers
         private ILogger<EventsController> _logger;
         private IMaeventRepository _repo;
 
+        private UserModel GetHostModel(Event ev)
+        {
+            if (ev == null)
+            {
+                return null;
+            }
+            var firstName = ev.HostFirstName;
+            var lastName = ev.HostLastName;
+            var host = _repo.GetUserByName(firstName, lastName);
+            return Mapper.Map<UserModel>(host);
+        }
+
         public EventsController(IMaeventRepository repo,
                 ILogger<EventsController> logger)
         {
@@ -29,8 +41,16 @@ namespace Maevent.API.Controllers
         public IActionResult Get()
         {
             var events = _repo.GetAllEvents();
+            var eventsModel = Mapper.Map<IEnumerable<EventModel>>(events);
 
-            return Ok(Mapper.Map<IEnumerable<EventModel>>(events));
+            for (int i = 0; i < events.Count(); i++)
+            {
+                var ev = events.ElementAt(i);
+                var host = GetHostModel(ev);
+                eventsModel.ElementAt(i).Host = host;
+            }
+
+            return Ok(eventsModel);
         }
 
         [HttpDelete]
@@ -70,6 +90,8 @@ namespace Maevent.API.Controllers
                 }
 
                 var model = Mapper.Map<EventModel>(ev);
+                model.Host = GetHostModel(ev);
+                
                 return Ok(model);
 
             }
@@ -91,7 +113,9 @@ namespace Maevent.API.Controllers
                     return BadRequest();
                 }
 
+                var hostId = model.Host.Id;
                 var ev = Mapper.Map<Event>(model);
+                
 
                 var seeked = _repo.GetEventByName(model.Name);
                 if (seeked != null)
@@ -100,7 +124,19 @@ namespace Maevent.API.Controllers
                     return BadRequest();
                 }
 
+                var hostFirstName = model.Host.FirstName;
+                var hostLastName = model.Host.LastName;
+                var seekedHost = _repo.GetUserByName(hostFirstName, hostLastName);
+                if (seekedHost == null)
+                {
+                    _logger.LogWarning($"User which which wants to be a host is not registered in data base");
+                    return Unauthorized();
+                }
+
                 _logger.LogInformation("Creating new Event");
+
+                ev.HostFirstName = hostFirstName;
+                ev.HostLastName = hostLastName;
 
                 _repo.Add(ev);
                 if (await _repo.SaveAllAsync())
@@ -176,7 +212,8 @@ namespace Maevent.API.Controllers
                 }
 
                 ev.Name = model.Name;
-                ev.HostId = model.HostId;
+                ev.HostFirstName = model.Host.FirstName;
+                ev.HostLastName = model.Host.LastName;
                 ev.Place = model.Place;
                 ev.AddressStreet = model.AddressStreet;
                 ev.AddressPostCode = model.AddressPostCode;

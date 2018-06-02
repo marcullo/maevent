@@ -45,8 +45,12 @@ public class ThisUser {
         return profile;
     }
 
+    public static boolean isRegistered() {
+        return profile != null && profile.id != 0;
+    }
+
     public static boolean hasCompleteProfile() {
-        return profile.id != 0;
+        return isRegistered() && User.isProfileValid(profile);
     }
 
     public static Bitmap getPhoto() {
@@ -57,7 +61,11 @@ public class ThisUser {
         ThisUser.profile = profile;
     }
 
-    public static synchronized void updateContent(Context context, GoogleSignInAccount account) {
+    public static synchronized void initializeContent(Context context, GoogleSignInAccount account) {
+        if (account == null
+                || account.getEmail() == null) {
+            return;
+        }
         if (profile == null) {
             profile = new UserProfile();
         }
@@ -70,25 +78,10 @@ public class ThisUser {
             return;
         }
 
-        profile.email = accountEmail;
-        accountEmail = account.getEmail();
-        if (accountEmail == null) {
-            profile.id = 0;
-            profile.email = null;
-            Log.d(LOG_TAG, "No account email");
-            return;
-        }
-
-        if (accountEmail.contentEquals(profile.email)) {
-            profile.id = accountId;
-            Log.d(LOG_TAG, "Content updated for " + profile.email);
-        }
-
-        final String debugContent = getContentForDebug();
-        Log.d(LOG_TAG, "Profile: " + debugContent);
+        profile.id = accountId;
     }
 
-    public static void updateContent(Context context) {
+    public static synchronized void updateContent(Context context) {
         if (profile == null) {
             profile = new UserProfile();
         }
@@ -106,7 +99,6 @@ public class ThisUser {
 
     public static synchronized void saveContent(Context context) {
         saveStatus(context);
-        boolean res = restoreStatus(context);
     }
 
     public static String getContentForDebug() {
@@ -144,9 +136,7 @@ public class ThisUser {
                 return false;
             }
 
-            StringBuilder builder = new StringBuilder();
-            builder.append(profile.id).append(" ").append(profile.email);
-            editor.putString(PREFERENCE_THISUSER, builder.toString());
+            editor.putInt(PREFERENCE_THISUSER, profile.id);
             editor.apply();
             return true;
         }
@@ -165,18 +155,12 @@ public class ThisUser {
                 return false;
             }
 
-            String content = prefs.getString(PREFERENCE_THISUSER, null);
-            if (content == null) {
+            int content = prefs.getInt(PREFERENCE_THISUSER, 0);
+            if (content == 0) {
                 return false;
             }
+            accountId = content;
 
-            String vals[] = content.split(" ");
-            if (vals.length != 2) {
-                return false;
-            }
-
-            accountId = Integer.valueOf(vals[0]);
-            accountEmail = vals[1];
             return true;
         }
         catch (Exception ex) {

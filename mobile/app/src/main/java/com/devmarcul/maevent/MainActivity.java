@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
             Prompt.displayTodo(this);
             return true;
         }
-        //TODO Move logout to the proper place
         if (id == R.id.main_action_logout) {
             MaeventAccountManager.signOut(this, new OnCompleteListener<Void>() {
                 @Override

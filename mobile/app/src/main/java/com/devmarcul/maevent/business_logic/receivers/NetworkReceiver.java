@@ -11,7 +11,7 @@ public class NetworkReceiver<T> extends ResultReceiver {
 
     public static final String LOG_TAG = "NetworkReceiver";
     public static final String PARAM_EXCEPTION = "exception";
-    public static final String PARAM_RESULT = "result";
+    public static final String PARAM_RESULT = "result-serializable";
 
     private Callback mCallback;
 
@@ -23,7 +23,10 @@ public class NetworkReceiver<T> extends ResultReceiver {
 
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
-        if (resultCode == NetworkService.RESULT_CODE_OK) {
+        if (resultCode == NetworkService.RESULT_CODE_OK_PARCEL) {
+            mCallback.onSuccess(resultData.getParcelable(PARAM_RESULT));
+        }
+        else if (resultCode == NetworkService.RESULT_CODE_OK) {
             mCallback.onSuccess(resultData.getSerializable(PARAM_RESULT));
         }
         else if (resultCode == NetworkService.RESULT_CODE_INTERNAL_ERROR) {

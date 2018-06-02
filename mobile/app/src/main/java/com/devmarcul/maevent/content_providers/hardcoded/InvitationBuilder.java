@@ -22,7 +22,7 @@ public class InvitationBuilder {
         Invitation objectCopy = InvitationBuilder.objects[cnt];
         Invitation object = new Invitation(
                 objectCopy.getParams(),
-                objectCopy.getHostId(),
+                objectCopy.getHost(),
                 objectCopy.getInviter(),
                 objectCopy.getInviteesNr());
 
@@ -36,39 +36,33 @@ public class InvitationBuilder {
 
     private static void initialize() {
         MaeventParams params;
-        int hostId = 100;
         User inviter;
         int inviteesNr = 2;
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         inviter = UserBuilder.build();
         inviteesNr++;
-        object0 = new Invitation(params, hostId, inviter, inviteesNr);
+        object0 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         inviter = UserBuilder.build();
         inviteesNr++;
-        object1 = new Invitation(params, hostId, inviter, inviteesNr);
+        object1 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         inviter = UserBuilder.build();
         inviteesNr++;
-        object2 = new Invitation(params, hostId, inviter, inviteesNr);
+        object2 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         inviter = UserBuilder.build();
         inviteesNr++;
-        object3 = new Invitation(params, hostId, inviter, inviteesNr);
+        object3 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         inviter = UserBuilder.build();
         inviteesNr++;
-        object4 = new Invitation(params, hostId, inviter, inviteesNr);
+        object4 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
     }
 
     private static void assignObjects() {

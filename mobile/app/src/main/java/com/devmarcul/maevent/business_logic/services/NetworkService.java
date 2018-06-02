@@ -10,6 +10,7 @@ import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.ClientError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,17 +19,34 @@ import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.models.MaeventModel;
+import com.devmarcul.maevent.apis.models.MaeventsModel;
 import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
+import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.data.UserProfile;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class NetworkService extends IntentService implements MaeventApi {
 
@@ -36,6 +54,7 @@ public class NetworkService extends IntentService implements MaeventApi {
 
     public static final String REQUEST_METHODS[] = { "GET", "POST"," PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH" };
     public static final int RESULT_CODE_OK = 200;
+    public static final int RESULT_CODE_OK_PARCEL = 290;
     public static final int RESULT_CODE_CLIENT_ERROR = 400;
     public static final int RESULT_CODE_SERVER_ERROR = 500;
     public static final int RESULT_CODE_INTERNAL_ERROR = 999;
@@ -99,8 +118,7 @@ public class NetworkService extends IntentService implements MaeventApi {
         intent.putExtra(RESULT_RECEIVER, receiver);
         context.startService(intent);
 
-        Log.d(LOG_TAG, action.name() + " Handling network intent service:");
-        Log.d(LOG_TAG, action.name() + " " + str);
+        Log.d(LOG_TAG, action.name() + " Handling network intent service: " + str);
     }
 
     public void startService(Context context, MaeventApi.Action action, MaeventApi.Param param, Parcelable parcel, NetworkReceiver.Callback callback) {
@@ -112,8 +130,18 @@ public class NetworkService extends IntentService implements MaeventApi {
         intent.putExtra(RESULT_RECEIVER, receiver);
         context.startService(intent);
 
-        Log.d(LOG_TAG, action.name() + " Handling network intent service:");
-        Log.d(LOG_TAG, action.name() + " " + parcel);
+        Log.d(LOG_TAG, action.name() + " Handling network intent service: parcel");
+    }
+
+    public void startService(Context context, MaeventApi.Action action, MaeventApi.Param param, NetworkReceiver.Callback callback) {
+        NetworkReceiver receiver = new NetworkReceiver(new Handler(context.getMainLooper()), callback);
+
+        Intent intent = new Intent(context, NetworkService.class);
+        intent.setAction(action.name());
+        intent.putExtra(RESULT_RECEIVER, receiver);
+        context.startService(intent);
+
+        Log.d(LOG_TAG, action.name() + " Handling network intent service (without passing content)");
     }
 
     @Override
@@ -127,13 +155,31 @@ public class NetworkService extends IntentService implements MaeventApi {
     public void handleGetEvents(final ResultReceiver receiver) {
         final Bundle bundle = new Bundle();
 
-        JsonArrayRequest request = new JsonArrayRequest
-                (Request.Method.GET, MaeventApi.URL_EVENTS, null, new Response.Listener<JSONArray>() {
+        StringRequest request = new StringRequest
+                (Request.Method.GET, MaeventApi.URL_EVENTS, new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        if (receiver != null) {
-                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response.toString());
-                            receiver.send(RESULT_CODE_OK, bundle);
+                    public void onResponse(String response) {
+                        MaeventsModel model;
+                        try {
+                            Gson gson = new Gson();
+                            List<MaeventModel> content = gson.fromJson(response, new TypeToken<List<MaeventModel>>(){}.getType());
+                            model = new MaeventsModel(content);
+                        }
+                        catch (JsonSyntaxException ex) {
+                            Log.e(LOG_TAG, "Error while parsing JSON");
+                            model = null;
+                        }
+                        catch (Exception ex) {
+                            Log.e(LOG_TAG, ex.toString());
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response);
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
+                            receiver.send(RESULT_CODE_OK_PARCEL, bundle);
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -174,12 +220,7 @@ public class NetworkService extends IntentService implements MaeventApi {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if (error instanceof ClientError) {
-                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ClientError());
-                        }
-                        else {
-                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ServerError());
-                        }
+                        bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, error);
                         receiver.send(RESULT_CODE_ERROR, bundle);
                     }
                 });

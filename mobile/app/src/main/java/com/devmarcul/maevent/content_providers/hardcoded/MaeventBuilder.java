@@ -2,6 +2,7 @@ package com.devmarcul.maevent.content_providers.hardcoded;
 
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.data.User;
 
 public class MaeventBuilder {
 
@@ -22,7 +23,7 @@ public class MaeventBuilder {
         Maevent object = new Maevent();
 
         object.setParams(objectCopy.getParams());
-        object.setHostId(objectCopy.getHostId());
+        object.setHost(objectCopy.getHost());
         object.setId(objectCopy.getId());
         object.setInviteesNumber(objectCopy.getInviteesNumber());
 
@@ -42,46 +43,40 @@ public class MaeventBuilder {
 
     private static void initialize() {
         MaeventParams params;
-        int hostId = UserProfileBuilder.INTITIAL_USER_ID;
         int id;
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         id = 0;
         object0.setParams(params);
-        object0.setHostId(hostId);
+        object0.setHost(UserBuilder.build());
         object0.setId(id);
         object0.setInviteesNumber(220);
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         id = 1;
         object1.setParams(params);
-        object1.setHostId(hostId);
+        object1.setHost(UserBuilder.build());
         object1.setId(id);
         object1.setInviteesNumber(44);
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         id = 2;
         object2.setParams(params);
-        object2.setHostId(hostId);
+        object2.setHost(UserBuilder.build());
         object2.setId(id);
         object2.setInviteesNumber(23);
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         id = 3;
         object3.setParams(params);
-        object3.setHostId(hostId);
+        object3.setHost(UserBuilder.build());
         object3.setId(id);
         object3.setInviteesNumber(100);
 
         params = MaeventParamsBuilder.build();
-        hostId++;
         id = 4;
         object4.setParams(params);
-        object4.setHostId(hostId);
+        object4.setHost(UserBuilder.build());
         object4.setId(id);
         object4.setInviteesNumber(60);
     }
