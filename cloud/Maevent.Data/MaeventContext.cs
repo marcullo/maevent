@@ -21,6 +21,8 @@ namespace Maevent.Data
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Invitation> Invitations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -32,6 +34,7 @@ namespace Maevent.Data
                 .Property(c => c.RowVersion)
                 .ValueGeneratedOnAddOrUpdate()
                 .IsConcurrencyToken();
+
             builder.Entity<User>()
                 .Property(c => c.FirstName)
                 .IsRequired();
@@ -39,6 +42,20 @@ namespace Maevent.Data
                 .Property(c => c.LastName)
                 .IsRequired();
             builder.Entity<User>()
+                .Property(c => c.RowVersion)
+                .ValueGeneratedOnAddOrUpdate()
+                .IsConcurrencyToken();
+
+            builder.Entity<Invitation>()
+               .Property(c => c.InviteeId)
+               .IsRequired();
+            builder.Entity<Invitation>()
+               .Property(c => c.InviterId)
+               .IsRequired();
+            builder.Entity<Invitation>()
+               .Property(c => c.EventId)
+               .IsRequired();
+            builder.Entity<Invitation>()
                 .Property(c => c.RowVersion)
                 .ValueGeneratedOnAddOrUpdate()
                 .IsConcurrencyToken();

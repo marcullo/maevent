@@ -35,6 +35,7 @@ namespace Maevent.API
                 {
                     cfg.AddProfile(new EventProfileMapping());
                     cfg.AddProfile(new UserProfileMapping());
+                    cfg.AddProfile(new InvitationProfileMapping());
                 });
 
             services.AddMvc()

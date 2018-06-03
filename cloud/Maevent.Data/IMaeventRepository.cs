@@ -16,15 +16,24 @@ namespace Maevent.Data
         Task<bool> SaveAllAsync();
 
         // Events
-        IEnumerable<Entities.Event> GetAllEvents();
-        IEnumerable<Entities.Event> GetAllEventsOfHost(User host);
+        IEnumerable<Event> GetAllEvents();
+        IEnumerable<Event> GetAllEventsOfHost(User host);
         Event GetEvent(int id);
         Event GetEventByName(string name);
-        bool EventExists(string name);
+        int GetEventInviteesNumber(int id);
 
         // Users
         User GetUser(int id);
         User GetUserByName(string firstName, string lastName);
         IEnumerable<Entities.User> GetAllUsers();
+
+        // Invitations
+        IEnumerable<Invitation> GetAllInvitations();
+        IEnumerable<Invitation> GetInvitationsByInviter(int inviteeId);
+        IEnumerable<Invitation> GetInvitationsByInvitee(int inviteeId);
+        IEnumerable<Invitation> GetInvitationsByInviterAndEvent(int inviterId, int eventId);
+        IEnumerable<Invitation> GetInvitationsByInviteeAndEvent(int inviteeId, int eventId);
+        Invitation GetInvitation(int id);
+        Invitation GetInvitationByIds(int inviterId, int inviteeId, int eventId);
     }
 }

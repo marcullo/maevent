@@ -27,9 +27,18 @@ namespace Maevent.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var users = _repo.GetAllUsers();
+            try
+            {
+                var users = _repo.GetAllUsers();
 
-            return Ok(Mapper.Map<IEnumerable<UserModel>>(users));
+                return Ok(Mapper.Map<IEnumerable<UserModel>>(users));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Threw exception while fetching users: {ex}");
+            }
+
+            return BadRequest("Could not fetch users");
         }
 
         [HttpDelete]
@@ -47,14 +56,14 @@ namespace Maevent.API.Controllers
                     }
                 }
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Threw exception while deleting Users: {ex}");
+                _logger.LogError($"Threw exception while deleting users: {ex}");
             }
 
-            return BadRequest();
+            return BadRequest("Could not delete users");
         }
 
         [HttpGet("{id}", Name = "UserGet")]
@@ -73,10 +82,10 @@ namespace Maevent.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Threw exception while deleting Users: {ex}");
+                _logger.LogError($"Threw exception while deleting users: {ex}");
             }
 
-            return BadRequest();
+            return BadRequest("Could not fetch user");
         }
 
         [HttpPost]
@@ -86,7 +95,7 @@ namespace Maevent.API.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
 
                 model.Id = 0;
@@ -96,7 +105,7 @@ namespace Maevent.API.Controllers
                 if (seeked != null)
                 {
                     _logger.LogWarning($"User {model.FirstName} {model.LastName} already exists");
-                    return BadRequest();
+                    return BadRequest("Could not create user");
                 }
 
                 _logger.LogInformation("Creating new User");
@@ -114,20 +123,20 @@ namespace Maevent.API.Controllers
                     }
                     else
                     {
-                        _logger.LogWarning("Could not save User to the database");
+                        _logger.LogWarning("Could not save user to the database");
                     }
                 }
                 else
                 {
-                    _logger.LogWarning("Could not save User to the database");
+                    _logger.LogWarning("Could not save user to the database");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Threw exception while saving User: {ex}");
+                _logger.LogError($"Threw exception while saving user: {ex}");
             }
 
-            return BadRequest();
+            return BadRequest("Could not create user");
         }
 
         [HttpDelete("{id}")]
@@ -138,22 +147,23 @@ namespace Maevent.API.Controllers
                 var user = _repo.GetUser(id);
                 if (user == null)
                 {
-                    return NotFound("Could not find requested User");
+                    return NotFound();
                 }
 
                 _repo.Delete(user);
 
                 if (await _repo.SaveAllAsync())
                 {
-                    return Ok();
+                    return NoContent();
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Threw exception while saving user: {ex}");
             }
 
-            return BadRequest();
+            return BadRequest("Could not update user");
         }
 
         [HttpPut("{id}")]

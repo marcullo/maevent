@@ -66,16 +66,17 @@ namespace Maevent.Data
                 .FirstOrDefault();
         }
 
-        public bool EventExists(string name)
+        public int GetEventInviteesNumber(int id)
         {
-            return GetEventByName(name) != null;
+            return _context.Invitations
+                .Where(c => c.Id == id)
+                .Count();
         }
 
         public User GetUser(int id)
         {
             return _context.Users
                 .Where(u => u.Id == id)
-                .Cast<User>()
                 .FirstOrDefault();
         }
 
@@ -84,7 +85,6 @@ namespace Maevent.Data
             return _context.Users
                 .Where(v => v.LastName == lastName)
                 .Where(u => u.FirstName == firstName)
-                .Cast<User>()
                 .FirstOrDefault();
         }
 
@@ -100,5 +100,57 @@ namespace Maevent.Data
             return (await _context.SaveChangesAsync()) > 0;
         }
 
+        public IEnumerable<Invitation> GetAllInvitations()
+        {
+            return _context.Invitations
+                .OrderBy(c => c.EventId)
+                .ToList();
+        }        
+
+        public IEnumerable<Invitation> GetInvitationsByInviter(int inviterId)
+        {
+            return _context.Invitations
+                .Where(c => c.InviterId == inviterId)
+                .ToList();
+        }
+
+        public IEnumerable<Invitation> GetInvitationsByInvitee(int inviteeId)
+        {
+            return _context.Invitations
+                .Where(c => c.InviteeId == inviteeId)
+                .ToList();
+        }
+
+        public IEnumerable<Invitation> GetInvitationsByInviterAndEvent(int inviterId, int eventId)
+        {
+            return _context.Invitations
+                .Where(c => c.InviterId == inviterId)
+                .Where(c => c.EventId == eventId)
+                .ToList();
+        }
+
+        public IEnumerable<Invitation> GetInvitationsByInviteeAndEvent(int inviteeId, int eventId)
+        {
+            return _context.Invitations
+                .Where(c => c.InviteeId == inviteeId)
+                .Where(c => c.EventId == eventId)
+                .ToList();
+        }
+
+        public Invitation GetInvitation(int id)
+        {
+            return _context.Invitations
+                .Where(c => c.Id == id)
+                .FirstOrDefault();
+        }
+
+        public Invitation GetInvitationByIds(int inviterId, int inviteeId, int eventId)
+        {
+            return _context.Invitations
+                .Where(c => c.InviterId == inviterId)
+                .Where(c => c.InviteeId == inviteeId)
+                .Where(c => c.EventId == eventId)
+                .FirstOrDefault();
+        }
     }
 }

@@ -2,7 +2,6 @@
 using Maevent.API.Models;
 using Maevent.Data;
 using Maevent.Data.Entities;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -30,6 +29,18 @@ namespace Maevent.API.Controllers
             return Mapper.Map<UserModel>(host);
         }
 
+        private User GetEventHost(EventModel model)
+        {
+            if (model == null)
+            {
+                return null;
+            }
+            var hostFirstName = model.Host.FirstName;
+            var hostLastName = model.Host.LastName;
+            var seekedHost = _repo.GetUserByName(hostFirstName, hostLastName);
+            return seekedHost;
+        }
+
         public EventsController(IMaeventRepository repo,
                 ILogger<EventsController> logger)
         {
@@ -40,17 +51,26 @@ namespace Maevent.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var events = _repo.GetAllEvents();
-            var eventsModel = Mapper.Map<IEnumerable<EventModel>>(events);
-
-            for (int i = 0; i < events.Count(); i++)
+            try
             {
-                var ev = events.ElementAt(i);
-                var host = GetHostModel(ev);
-                eventsModel.ElementAt(i).Host = host;
+                var events = _repo.GetAllEvents();
+                var eventsModel = Mapper.Map<IEnumerable<EventModel>>(events);
+
+                for (int i = 0; i < events.Count(); i++)
+                {
+                    var ev = events.ElementAt(i);
+                    var host = GetHostModel(ev);
+                    eventsModel.ElementAt(i).Host = host;
+                }
+
+                return Ok(eventsModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Threw exception while fetching events: {ex}");
             }
 
-            return Ok(eventsModel);
+            return BadRequest("Could not fetch events");
         }
 
         [HttpDelete]
@@ -64,18 +84,18 @@ namespace Maevent.API.Controllers
 
                     if (!await _repo.SaveAllAsync())
                     {
-                        return BadRequest("Could not delete a event");
+                        return BadRequest("Could not delete events");
                     }
                 }
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Threw exception while deleting Events: {ex}");
+                _logger.LogError($"Threw exception while deleting events: {ex}");
             }
 
-            return BadRequest();
+            return BadRequest("Could not delete events");
         }
 
         [HttpGet("{id}", Name = "EventGet")]
@@ -86,7 +106,7 @@ namespace Maevent.API.Controllers
                 var ev = _repo.GetEvent(id);
                 if (ev == null)
                 {
-                    return NotFound($"Requested event not found");
+                    return NotFound();
                 }
 
                 var model = Mapper.Map<EventModel>(ev);
@@ -95,48 +115,44 @@ namespace Maevent.API.Controllers
                 return Ok(model);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"Exception thrown while fetching event: {ex}");
             }
 
-            return BadRequest();
+            return BadRequest("Could not fetch event");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(
-            [FromBody]EventModel model)
+        public async Task<IActionResult> Post([FromBody]EventModel model)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
 
-                var hostId = model.Host.Id;
-                var ev = Mapper.Map<Event>(model);
-                
+                var seekedHost = GetEventHost(model);
+                if (seekedHost == null)
+                {
+                    _logger.LogWarning($"User which which wants to be a host is not registered in the database");
+                    return Unauthorized();
+                }
 
                 var seeked = _repo.GetEventByName(model.Name);
                 if (seeked != null)
                 {
                     _logger.LogWarning($"Event with name {model.Name} already exists");
-                    return BadRequest();
+                    return BadRequest("Could not create event");
                 }
 
-                var hostFirstName = model.Host.FirstName;
-                var hostLastName = model.Host.LastName;
-                var seekedHost = _repo.GetUserByName(hostFirstName, hostLastName);
-                if (seekedHost == null)
-                {
-                    _logger.LogWarning($"User which which wants to be a host is not registered in data base");
-                    return Unauthorized();
-                }
+                _logger.LogInformation($"Creating new event {model.Name}");
 
-                _logger.LogInformation("Creating new Event");
+                var ev = Mapper.Map<Event>(model);
 
-                ev.HostFirstName = hostFirstName;
-                ev.HostLastName = hostLastName;
+                ev.HostFirstName = seekedHost.FirstName;
+                ev.HostLastName = seekedHost.LastName;
 
                 _repo.Add(ev);
                 if (await _repo.SaveAllAsync())
@@ -147,24 +163,27 @@ namespace Maevent.API.Controllers
                     if (await _repo.SaveAllAsync())
                     {
                         var newUri = Url.Link("EventGet", new { id = ev.Id });
-                        return Created(newUri, Mapper.Map<EventModel>(ev));
+
+                        EventModel mapped = Mapper.Map<EventModel>(ev);
+                        mapped.Host = Mapper.Map<UserModel>(seekedHost);
+                        return Created(newUri, mapped);
                     }
                     else
                     {
-                        _logger.LogWarning("Could not save User to the database");
+                        _logger.LogWarning("Event created but could not be updated with its host");
                     }
                 }
                 else
                 {
-                    _logger.LogWarning("Could not save Event to the database");
+                    _logger.LogWarning("Could not save event to the database");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception thrown while saving Event: {ex}");
+                _logger.LogError($"Exception thrown while saving event: {ex}");
             }
 
-            return BadRequest();
+            return BadRequest("Could not create event");
         }
 
         [HttpDelete("{id}")]
@@ -175,14 +194,14 @@ namespace Maevent.API.Controllers
                 var oldEvent = _repo.GetEvent(id);
                 if (oldEvent == null)
                 {
-                    return NotFound("Could not find requested Event");
+                    return NotFound();
                 }
 
                 _repo.Delete(oldEvent);
 
                 if (await _repo.SaveAllAsync())
                 {
-                    return Ok();
+                    return NoContent();
                 }
 
             }
@@ -191,24 +210,39 @@ namespace Maevent.API.Controllers
                 _logger.LogError($"Exception thrown while deleting event: {ex}");
             }
 
-            return BadRequest();
+            return BadRequest("Could not delete event");
         }
         
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id,
-            [FromBody] EventModel model)
+        public async Task<IActionResult> Put(int id, [FromBody] EventModel model)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 var ev = _repo.GetEvent(id);
                 if (ev == null)
                 {
                     return NotFound();
                 }
 
-                if (ev.Name.Equals(model.Name) && id != ev.Id)
+                var seekedHost = GetEventHost(model);
+                if (seekedHost == null)
                 {
-                    return BadRequest("Event with requested name exists.");
+                    _logger.LogWarning($"User which which wants to be a host is not registered in the database");
+                    return Unauthorized();
+                }
+
+                if (!ev.Name.Equals(model.Name))
+                {
+                    var seeked = _repo.GetEventByName(model.Name);
+                    if (seeked != null)
+                    {
+                        return BadRequest("Event with requested name exists.");
+                    }
                 }
 
                 ev.Name = model.Name;
@@ -221,13 +255,14 @@ namespace Maevent.API.Controllers
                 ev.EndTime = model.EndTime;
                 ev.Rsvp = model.Rsvp;
                 ev.AttendeesIds = model.AttendeesIds;
-                ev.InviteesNumber = model.InviteesNumber;
 
                 _repo.Update(ev);
 
                 if (await _repo.SaveAllAsync())
                 {
-                    return Ok(Mapper.Map<EventModel>(ev));
+                    EventModel mapped = Mapper.Map<EventModel>(ev);
+                    mapped.Host = Mapper.Map <UserModel>(seekedHost);
+                    return Ok(mapped);
                 }
             }
             catch (Exception ex)

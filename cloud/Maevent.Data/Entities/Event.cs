@@ -22,7 +22,6 @@ namespace Maevent.Data.Entities
         public DateTime EndTime { get; set; }
         public Boolean Rsvp { get; set; }
         public string AttendeesIds { get; set; }
-        public int InviteesNumber { get; set; }
 
         public byte[] RowVersion { get; set; }
     }

@@ -6,6 +6,924 @@
 	},
 	"item": [
 		{
+			"name": "Events",
+			"description": "",
+			"item": [
+				{
+					"name": "GET Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Event",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Freeway Performance Exposition\",\n    \"host\": {\n        \"firstName\": \"Blaise\",\n        \"lastName\": \"Pascal\"\n    },\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesIds\": \"1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Event Invalid Host",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e802348f-6630-4ba6-af48-4a785889468b",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Freeway Performance Exposition Invalid\",\n    \"host\": {\n        \"firstName\": \"\",\n        \"lastName\": \"\"\n    },\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesIds\": \"999999999\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Event Totally Invalid",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e802348f-6630-4ba6-af48-4a785889468b",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Freeway Performance Exposition\",\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesIds\": \"999999999\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT (Update) Event",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Freeway Performance Exposition\",\n    \"host\": {\n        \"firstName\": \"Blaise\",\n        \"lastName\": \"Pascal\"\n    },\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesIds\": \"7\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT (Update) Event Invalid Host",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Freeway Performance Exposition\",\n    \"host\": {\n        \"firstName\": null,\n        \"lastName\": null\n    },\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesIds\": \"7\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT (Update) Event Totally Invalid",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Freeway Performance Exposition\",\n    \"host\": {\n        \"firstName\": null,\n        \"lastName\": null\n    },\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesIds\": \"7\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Event",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Events All",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"description": "",
+			"item": [
+				{
+					"name": "GET Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Michael\",\n    \"lastName\": \"Parapazzi\",\n    \"title\": \"Professor\",\n    \"pose\": \"Embedded Software Developer\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"email\": \"blockandre@block.com\",\n    \"location\": \"Warsaw\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST User Invalid",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e802348f-6630-4ba6-af48-4a785889468b",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Professor\",\n    \"pose\": \"Embedded Software Developer\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"location\": \"Warsaw\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT (Update) User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 16,\n\t\"firstName\": \"Andrew\",\n\t\"lastName\": \"Blocksinsg\",\n    \"title\": \"Professor\",\n    \"pose\": \"Architect\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"location\": \"Warsaw\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users/16",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users",
+								"16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT (Update) User Invalid",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 4,\n\t\"firstName\": \"Andrew\",\n\t\"lastName\": \"Blocksinsg\",\n    \"title\": \"Professor\",\n    \"pose\": \"Architect\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"location\": \"Warsaw\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users/16",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users",
+								"16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users/16",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users",
+								"16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Users All",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Invitations",
+			"description": "",
+			"item": [
+				{
+					"name": "GET Invitations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Invitation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Invitations By Inviter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations/inviter?id=13&ev=all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations",
+								"inviter"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "13"
+								},
+								{
+									"key": "ev",
+									"value": "all"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Invitation By Inviter And Event",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations/inviter?id=13&ev=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations",
+								"inviter"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "13"
+								},
+								{
+									"key": "ev",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Invitations By Invitee",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations/invitee?id=4&ev=all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations",
+								"invitee"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4"
+								},
+								{
+									"key": "ev",
+									"value": "all"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Invitation By Invitee And Event",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations/invitee?id=4&ev=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations",
+								"invitee"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4"
+								},
+								{
+									"key": "ev",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Invitation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inviter\": {\n        \"id\": 12,\n        \"firstName\": \"Albert\",\n        \"lastName\": \"Einstein\"\n    },\n    \"invitee\": {\n        \"id\": 3,\n        \"firstName\": \"Morgan\",\n        \"lastName\": \"Freeman\"\n    },\n    \"event\": {\n        \"id\": 1,\n        \"name\": \"Presidential Banquet\",\n        \"host\": {\n            \"id\": 13,\n            \"firstName\": \"Andrew\",\n            \"lastName\": \"Block\"\n        }\n    },\n    \"message\": \"Hello World!\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Invitation Invalid Inviter",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 8,\n    \"inviter\": {\n        \"id\": 989999999,\n        \"firstName\": \"Albert\",\n    },\n    \"invitee\": {\n        \"id\": 3,\n        \"firstName\": \"Morgan\",\n        \"lastName\": \"Freeman\"\n    },\n    \"event\": {\n        \"id\": 1,\n        \"name\": \"Presidential Banquet\",\n        \"host\": {\n            \"id\": 13,\n            \"firstName\": \"Andrew\",\n            \"lastName\": \"Block\"\n        }\n    },\n    \"message\": \"Hello World!\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Invitation Invalid Invitee",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 8,\n    \"inviter\": {\n        \"id\": 12,\n        \"firstName\": \"Albert\",\n        \"lastName\": \"Einstein\"\n    },\n    \"invitee\": {\n        \"id\": 9999999,\n        \"firstName\": \"Morgan\",\n    },\n    \"event\": {\n        \"id\": 1,\n        \"name\": \"Presidential Banquet\",\n        \"host\": {\n            \"id\": 13,\n            \"firstName\": \"Andrew\",\n            \"lastName\": \"Block\"\n        }\n    },\n    \"message\": \"Hello World!\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Invitation Invalid Event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 8,\n    \"inviter\": {\n        \"id\": 12,\n        \"firstName\": \"Albert\",\n        \"lastName\": \"Einstein\"\n    },\n    \"invitee\": {\n        \"id\": 3,\n        \"firstName\": \"Morgan\",\n        \"lastName\": \"Freeman\"\n    },\n    \"event\": {\n        \"id\": 999999999,\n        \"name\": \"Presidential Banquet\",\n        \"host\": {\n            \"id\": 13,\n            \"firstName\": \"Andrew\",\n            \"lastName\": \"Block\"\n        }\n    },\n    \"message\": \"Hello World!\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Invitation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations/15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations",
+								"15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Invitations All",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/invitations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"invitations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "GET Events",
 			"request": {
 				"method": "GET",
@@ -24,191 +942,6 @@
 					"path": [
 						"api",
 						"events"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GET Event",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/events/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"events",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST Event",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Freeway Performance Exposition\",\n    \"host\": {\n        \"id\": 2\n    },\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesIds\": \"2000000003\",\n    \"inviteesNumber\": 2000\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/events",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"events"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST Event Invalid",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "e802348f-6630-4ba6-af48-4a785889468b",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Municipal Week\",\n    \"place\": \"Stadion Narodowy\",\n    \"addressPostCode\": \"03-901 Warszawa\",\n    \"beginTime\": \"2018-06-01T08:00:5\",\n    \"endTime\": \"2018-06-08T18:\",\n    \"rsvp\": false,\n    \"hostId\": 102\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/events",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"events"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "PUT (Update) Event",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Freeway Performance Exposition\",\n    \"host\": {\n        \"id\": 2,\n        \"firstName\": null,\n        \"lastName\": null,\n        \"title\": null,\n        \"pose\": null,\n        \"headline\": null,\n        \"phone\": null,\n        \"email\": null,\n        \"linkedin\": null,\n        \"location\": null,\n        \"tags\": null\n    },\n    \"place\": \"Boston City Centre Poland\",\n    \"addressStreet\": \"Marszalka 23/11\",\n    \"addressPostCode\": \"33-002 Zlotnik\",\n    \"beginTime\": \"2018-05-15T11:30:00\",\n    \"endTime\": \"2018-05-15T14:30:00\",\n    \"rsvp\": false,\n    \"attendeesIds\": \"2000000003\",\n    \"inviteesNumber\": 2000\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/events/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"events",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "DELETE Event",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/events/5",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"events",
-						"5"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "DELETE Events All",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/events/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"events",
-						""
 					]
 				}
 			},
@@ -239,7 +972,7 @@
 			"response": []
 		},
 		{
-			"name": "GET User",
+			"name": "GET Invitations",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -248,7 +981,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8088/api/users/3",
+					"raw": "http://localhost:8088/api/invitations",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -256,174 +989,7 @@
 					"port": "8088",
 					"path": [
 						"api",
-						"users",
-						"3"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST User",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"firstName\": \"Michael\",\n    \"lastName\": \"Parapazzi\",\n    \"title\": \"Professor\",\n    \"pose\": \"Embedded Software Developer\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"email\": \"blockandre@block.com\",\n    \"location\": \"Warsaw\"\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST User Invalid",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "e802348f-6630-4ba6-af48-4a785889468b",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"title\": \"Professor\",\n    \"pose\": \"Embedded Software Developer\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"location\": \"Warsaw\"\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "PUT (Update) User",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"id\": 3,\n\t\"firstName\": \"Andrew\",\n\t\"lastName\": \"Blocksinsg\",\n    \"title\": \"Professor\",\n    \"pose\": \"Architect\",\n    \"headline\": \"Nevermind!\",\n    \"phone\": \"+34123456789\",\n    \"location\": \"Warsaw\"\n}"
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/users/3",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"users",
-						"3"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "DELETE User",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/users/:id",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"users",
-						":id"
-					],
-					"variable": [
-						{
-							"key": "id",
-							"value": "13"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "DELETE Users All",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:8088/api/users/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8088",
-					"path": [
-						"api",
-						"users",
-						""
+						"invitations"
 					]
 				}
 			},

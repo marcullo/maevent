@@ -22,6 +22,5 @@ namespace Maevent.API.Models
         public DateTime EndTime { get; set; }
         public Boolean Rsvp { get; set; }
         public string AttendeesIds { get; set; }
-        public int InviteesNumber { get; set; }
     }
 }
