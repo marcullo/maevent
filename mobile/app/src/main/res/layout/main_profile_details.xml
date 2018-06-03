@@ -25,16 +25,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_person_details_name"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="@dimen/default_vertical_margin"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            tools:text="Andrew Block" />
+        <LinearLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_horizontal_margin"
+            android:layout_marginStart="@dimen/default_horizontal_margin"
+            android:gravity="center_vertical"
+            android:paddingTop="@dimen/default_vertical_margin"
+            android:weightSum="10"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_person_details_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                tools:text="Andrew Block" />
+
+            <TextView
+                android:id="@+id/tv_person_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                card_view:layout_constraintBottom_toTopOf="@+id/tv_person_details_name"
+                card_view:layout_constraintEnd_toEndOf="@+id/tv_person_pose"
+                card_view:layout_constraintTop_toBottomOf="@+id/tv_person_details_name"
+                tools:text="Sankt Petersburg, Russia" />
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_person_photo"
@@ -43,18 +68,8 @@
             android:layout_marginTop="8dp"
             android:padding="@dimen/configure_profile_margin_size"
             app:srcCompat="@drawable/ic_configure_profile_introduction"
-            card_view:layout_constraintStart_toStartOf="@+id/tv_person_details_name"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_person_details_name" />
-
-        <TextView
-            android:id="@+id/tv_person_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            card_view:layout_constraintEnd_toEndOf="@+id/tv_person_pose"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_person_details_name"
-            card_view:layout_constraintBottom_toTopOf="@+id/tv_person_details_name"
-            tools:text="Warsaw"/>
+            card_view:layout_constraintStart_toStartOf="@+id/top_layout"
+            card_view:layout_constraintTop_toBottomOf="@+id/top_layout" />
 
         <TextView
             android:id="@+id/tv_person_location_label"
@@ -63,8 +78,8 @@
             android:text="@string/text_location"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            card_view:layout_constraintEnd_toEndOf="@+id/tv_person_location"
-            card_view:layout_constraintTop_toBottomOf="@+id/tv_person_location" />
+            card_view:layout_constraintEnd_toEndOf="@+id/tv_person_rank"
+            card_view:layout_constraintTop_toBottomOf="@+id/top_layout" />
 
         <TextView
             android:id="@+id/tv_person_rank"
@@ -90,11 +105,10 @@
             android:id="@+id/tv_person_pose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/default_horizontal_margin"
             android:layout_marginTop="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintEnd_toEndOf="@+id/top_layout"
             card_view:layout_constraintHorizontal_bias="0.95"
             card_view:layout_constraintStart_toEndOf="@+id/iv_person_photo"
             card_view:layout_constraintTop_toBottomOf="@id/tv_person_rank_label"

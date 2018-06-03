@@ -338,7 +338,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
                 .setConfirmButton(getString(R.string.text_yes), new TwoButtonsDialogListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        setMainActivity();
+                        setProfileActivity();
                     }
                 })
                 .setCancelButton(getString(R.string.text_no), new TwoButtonsDialogListener() {
@@ -445,7 +445,13 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
                 ThisUser.saveContent(context);
                 Log.i(LOG_TAG, "Success. Id: " + ThisUser.getProfile().id);
                 Log.i(LOG_TAG, "Data: " + data);
-                setMainActivity();
+
+                if (mConfigProfileRequested) {
+                    setProfileActivity();
+                }
+                else {
+                    setMainActivity();
+                }
             }
 
             @Override
@@ -589,6 +595,13 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     private void setMainActivity() {
         Log.d(LOG_TAG, "Setting main activity.");
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void setProfileActivity() {
+        Log.d(LOG_TAG, "Setting profile activity.");
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
         finish();
     }

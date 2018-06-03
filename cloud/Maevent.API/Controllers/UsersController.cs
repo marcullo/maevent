@@ -184,6 +184,9 @@ namespace Maevent.API.Controllers
                     return BadRequest("User with requested name exists.");
                 }
 
+                var newNameOccured = (usr.FirstName != model.FirstName) || (usr.LastName != model.LastName);
+                var events = _repo.GetAllEventsOfHost(usr);
+
                 usr.FirstName = model.FirstName;
                 usr.LastName = model.LastName;
                 usr.Title = model.Title;
@@ -197,9 +200,36 @@ namespace Maevent.API.Controllers
 
                 _repo.Update(usr);
 
+                if (!await _repo.SaveAllAsync())
+                {
+                    return BadRequest("Could not update user");
+                }
+
+                if (!newNameOccured)
+                {
+                    return Ok(Mapper.Map<UserModel>(usr));
+                }
+                
+                // Updating info of related events
+                
+                if (events.Count() == 0)
+                {
+                    return Ok(Mapper.Map<UserModel>(usr));
+                }
+                foreach (var ev in events)
+                {
+                    ev.HostFirstName = usr.FirstName;
+                    ev.HostLastName = usr.LastName;
+                }
+                _repo.UpdateMany(events);
+
                 if (await _repo.SaveAllAsync())
                 {
                     return Ok(Mapper.Map<UserModel>(usr));
+                }
+                else
+                {
+                    return BadRequest("User updated but related events not");
                 }
             }
             catch (Exception ex)

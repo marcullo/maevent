@@ -12,10 +12,12 @@ namespace Maevent.Data
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
         void Update<T>(T entity) where T : class;
+        void UpdateMany<T>(IEnumerable<T> entities) where T : class;
         Task<bool> SaveAllAsync();
 
         // Events
         IEnumerable<Entities.Event> GetAllEvents();
+        IEnumerable<Entities.Event> GetAllEventsOfHost(User host);
         Event GetEvent(int id);
         Event GetEventByName(string name);
         bool EventExists(string name);

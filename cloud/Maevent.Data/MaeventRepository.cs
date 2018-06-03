@@ -29,12 +29,26 @@ namespace Maevent.Data
         {
             _context.Update(entity);
         }
-
+        public void UpdateMany<T>(IEnumerable<T> entities) where T : class
+        {
+            foreach (var entity in entities)
+            {
+                _context.Update(entity);
+            }
+        }
 
         public IEnumerable<Entities.Event> GetAllEvents()
         {
             return _context.Events
                 .OrderBy(c => c.BeginTime)
+                .ToList();
+        }
+        public IEnumerable<Entities.Event> GetAllEventsOfHost(User host)
+        {
+            return _context.Events
+                .OrderBy(c => c.BeginTime)
+                .Where(c => c.HostFirstName == host.FirstName 
+                    && c.HostLastName == host.LastName)
                 .ToList();
         }
 
@@ -85,5 +99,6 @@ namespace Maevent.Data
         {
             return (await _context.SaveChangesAsync()) > 0;
         }
+
     }
 }
