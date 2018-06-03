@@ -18,7 +18,6 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
     // Watch out! attendees data has always evem number of elems.
     // In case of odd number of attendees one dummy elem is added.
     private Users mAttendees;
-    private int mDummyPosition;
 
     private OnClickHandler mClickHandler;
 
@@ -36,6 +35,7 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
         int layoutId = R.layout.main_profile;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(layoutId, null);
+        view.setBackgroundResource(R.drawable.touch_selector);
 
         return new AttendeeViewHolder(view) {
             @Override
@@ -70,9 +70,6 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
             return 0;
         }
         int size = mAttendees.size();
-        /*if (mAttendees.getLast() instanceof UserDummy) {
-            size--;
-        }*/
         return size;
     }
 

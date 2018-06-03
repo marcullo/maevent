@@ -600,9 +600,7 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     }
 
     private void setProfileActivity() {
-        Log.d(LOG_TAG, "Setting profile activity.");
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
+        Log.d(LOG_TAG, "Going back.");
         finish();
     }
 
