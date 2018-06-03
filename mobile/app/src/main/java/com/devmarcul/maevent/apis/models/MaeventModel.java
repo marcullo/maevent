@@ -16,7 +16,7 @@ import java.util.Calendar;
 
 public class MaeventModel extends MaeventApiModel implements Parcelable {
 
-    public static final String TIME_FORMAT = "yyyy-MM-ddThh:mm:ss";
+    public static final String TIME_FORMAT = "yyyy-MM-ddTHH:mm:ss";
 
     @SerializedName(value = "Id", alternate = {"id"})
     public int Id;
