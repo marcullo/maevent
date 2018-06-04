@@ -65,7 +65,6 @@ public class EventDetailsViewAdapter implements
         String street = params.addressStreet;
         String postCode = params.addressPostCode;
         String time = getTimeSting(params.beginTime, params.endTime);
-        String usersNumber = String.valueOf(event.getAttendeesNumber());
         String duration = getDurationString(params.beginTime, params.endTime);
 
         mViewHolder.mNameView.setText(eventName);
@@ -75,21 +74,11 @@ public class EventDetailsViewAdapter implements
         mViewHolder.mPostalCodeView.setText(postCode);
         mViewHolder.mTimeView.setText(time);
         mViewHolder.mDurationView.setText(duration);
-        mViewHolder.mUsersNumberView.setText(usersNumber);
     }
 
-    public void adaptUsersNumber(Maevent event, boolean usersAreAttendees) {
-        String usersNumber;
-        int usersNumberIconRes;
-
-        if (usersAreAttendees) {
-            usersNumber = String.valueOf(event.getAttendeesNumber());
-            usersNumberIconRes = R.drawable.ic_people;
-        }
-        else {
-            usersNumber = String.valueOf(((Invitation)event).getAttendeesNumber());
-            usersNumberIconRes = R.drawable.ic_confusion;
-        }
+    public void adaptUsersNumber(Maevent event) {
+        String usersNumber = String.valueOf(event.getAttendeesNumber());
+        int usersNumberIconRes = R.drawable.ic_people;
 
         mViewHolder.mUsersNumberView.setText(usersNumber);
         mViewHolder.mUsersNumberIcon.setBackgroundResource(usersNumberIconRes);

@@ -22,6 +22,7 @@ public class InvitationBuilder {
         Invitation objectCopy = InvitationBuilder.objects[cnt];
         Invitation object = new Invitation(
                 objectCopy.getParams(),
+                objectCopy.getAttendeesIds(),
                 objectCopy.getHost(),
                 objectCopy.getInviter(),
                 objectCopy.getInvitee(),
@@ -46,29 +47,29 @@ public class InvitationBuilder {
         inviter = UserBuilder.build();
         invitee = UserBuilder.build();
         inviteesNr++;
-        object0 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
+        object0 = new Invitation(params, ";1;2;", UserBuilder.build(), inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
-        object1 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
+        object1 = new Invitation(params,";2;6;7;", UserBuilder.build(), inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
         message = "You're welcome!";
-        object2 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
+        object2 = new Invitation(params, ";5;", UserBuilder.build(), inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
-        object3 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
+        object3 = new Invitation(params, ";1;2;3;4;5;6;7;", UserBuilder.build(), inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
         message = "";
-        object4 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
+        object4 = new Invitation(params, "5;6;7;8;9;", UserBuilder.build(), inviter, invitee, message);
     }
 
     private static void assignObjects() {

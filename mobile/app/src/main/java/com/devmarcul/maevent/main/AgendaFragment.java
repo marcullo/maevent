@@ -142,7 +142,7 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsDialog.show();
 
         mEventDetailsAdapter.adaptContent(event);
-        mEventDetailsAdapter.adaptUsersNumber(event, true);
+        mEventDetailsAdapter.adaptUsersNumber(event);
         mEventDetailsAdapter.adaptJoinButton(!isPendingEvent);
         mEventDetailsAdapter.bindListeners();
 
@@ -158,7 +158,7 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsDialog.show();
 
         mEventDetailsAdapter.adaptContent(invitation);
-        mEventDetailsAdapter.adaptUsersNumber(invitation, false);
+        mEventDetailsAdapter.adaptUsersNumber(invitation);
         mEventDetailsAdapter.adaptJoinButton(false);
         mEventDetailsAdapter.bindListeners();
 
@@ -270,7 +270,6 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsHandler.setOnClickJoinHandler(new EventDetailsHandler.OnClickJoinHandler() {
             @Override
             public void onClickJoin() {
-                //TODO Refactor
                 mEventDetailsAdapter.adaptJoinButton(false);
                 mEventDetailsDialog.hide();
                 MainActivity.pendingEvent = mEventDetailsHandler.getFocus();

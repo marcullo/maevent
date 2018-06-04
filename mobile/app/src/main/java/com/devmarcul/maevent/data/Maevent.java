@@ -2,6 +2,9 @@ package com.devmarcul.maevent.data;
 
 import com.devmarcul.maevent.utils.StringUtils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Maevent implements DataValidator {
 
     private static String LOG_TAG = "Maevent";
@@ -10,6 +13,7 @@ public class Maevent implements DataValidator {
     protected User host;
     protected MaeventParams params;
     protected String attendeesIds;
+    //TODO Remove
     protected int inviteesNumber;
 
     public MaeventParams getParams() {
@@ -95,8 +99,16 @@ public class Maevent implements DataValidator {
         if (attendeesIds == null) {
             return 0;
         }
-        String[] ids = attendeesIds.trim().split(";");
-        return ids.length;
+
+        int attendeesNumber = 0;
+
+        Pattern p = Pattern.compile("\\d+;");
+        Matcher m = p.matcher(attendeesIds);
+        while(m.find()) {
+            attendeesNumber++;
+        }
+
+        return attendeesNumber;
     }
 
     public static boolean isNameValid(String name) {

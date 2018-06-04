@@ -44,7 +44,7 @@ public class MaeventManager implements MaeventContentUpdater {
         Maevent event = new Maevent();
         event.setParams(params);
         event.setHost(host);
-        event.setAttendeesIds(String.valueOf(host.getProfile().id));
+        event.setAttendeesIds(";" + String.valueOf(host.getProfile().id) + ";");
 
         MaeventModel model = new MaeventModel(event);
         NetworkService.getInstance()

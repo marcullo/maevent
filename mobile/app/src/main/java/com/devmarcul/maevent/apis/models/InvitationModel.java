@@ -79,9 +79,10 @@ public class InvitationModel implements Parcelable {
         User invitee = new User();
         invitee.setProfile(Invitee.toUserProfile());
         String message = Message;
+        String attendeesIds = event.getAttendeesIds();
 
         return new Invitation(
-                params, host, inviter, invitee, message);
+                params, attendeesIds, host, inviter, invitee, message);
     }
 }
 
