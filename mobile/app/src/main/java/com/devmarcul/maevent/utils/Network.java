@@ -21,5 +21,9 @@ public class Network {
         {
             return mBuilder.append(container).toString();
         }
+
+        public String build() {
+            return mBuilder.toString();
+        }
     }
 }

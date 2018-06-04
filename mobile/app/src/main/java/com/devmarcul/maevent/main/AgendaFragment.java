@@ -25,6 +25,7 @@ import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.business_logic.MaeventInvitationManager;
 import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.business_logic.MaeventSteward;
+import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.content_providers.hardcoded.InvitationBuilder;
 import com.devmarcul.maevent.data.Invitation;
@@ -334,7 +335,7 @@ public class AgendaFragment extends Fragment implements
     public void updateInvitations() {
         final Context context = getContext();
 
-        MaeventInvitationManager.getInstance().getAllInvitations(parent, new NetworkReceiver.Callback<Invitations>() {
+        MaeventInvitationManager.getInstance().getAllInvitationsIntendedForUser(parent, ThisUser.getProfile(), new NetworkReceiver.Callback<Invitations>() {
             @Override
             public void onSuccess(Invitations data) {
                 mInvitationsData.clear();
@@ -352,7 +353,7 @@ public class AgendaFragment extends Fragment implements
             @Override
             public void onError(Exception exception) {
                 if (exception instanceof ClientError) {
-                    Prompt.displayShort("Your profile is invalid - probably name exists! Contact with support.", context);
+                    Prompt.displayShort("Your profile is invalid. Contact with support.", context);
                 }
                 else if (exception instanceof ServerError) {
                     Prompt.displayShort("No connection with server.", context);
