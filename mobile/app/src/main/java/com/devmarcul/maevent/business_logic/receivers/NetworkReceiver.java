@@ -23,7 +23,7 @@ public class NetworkReceiver<T> extends ResultReceiver {
 
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
-        if (resultCode == NetworkService.RESULT_CODE_OK_PARCEL) {
+        if (resultCode == NetworkService.RESULT_CODE_OK_PARCEL || resultCode == NetworkService.RESULT_CODE_OK_PARCEL1) {
             mCallback.onSuccess(resultData.getParcelable(PARAM_RESULT));
         }
         else if (resultCode == NetworkService.RESULT_CODE_OK) {

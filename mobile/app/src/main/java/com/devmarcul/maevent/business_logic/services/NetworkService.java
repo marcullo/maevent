@@ -23,6 +23,8 @@ import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.devmarcul.maevent.apis.MaeventApi;
+import com.devmarcul.maevent.apis.models.InvitationModel;
+import com.devmarcul.maevent.apis.models.InvitationsModel;
 import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.apis.models.MaeventsModel;
 import com.devmarcul.maevent.apis.models.UserModel;
@@ -55,7 +57,8 @@ public class NetworkService extends IntentService implements MaeventApi {
 
     public static final String REQUEST_METHODS[] = { "GET", "POST"," PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH" };
     public static final int RESULT_CODE_OK = 200;
-    public static final int RESULT_CODE_OK_PARCEL = 290;
+    public static final int RESULT_CODE_OK_PARCEL = 250;
+    public static final int RESULT_CODE_OK_PARCEL1 = 251;
     public static final int RESULT_CODE_CLIENT_ERROR = 400;
     public static final int RESULT_CODE_SERVER_ERROR = 500;
     public static final int RESULT_CODE_INTERNAL_ERROR = 999;
@@ -110,6 +113,9 @@ public class NetworkService extends IntentService implements MaeventApi {
         else if (Action.UPDATE_USER.name().equals(action)) {
             final UserModel model = intent.getParcelableExtra(Param.USER.name());
             handleUpdateUser(receiver, model);
+        }
+        else if (Action.GET_INVITATIONS.name().equals(action)) {
+            handleGetInvitations(receiver);
         }
     }
 
@@ -406,6 +412,52 @@ public class NetworkService extends IntentService implements MaeventApi {
                 receiver.send(RESULT_CODE_ERROR, bundle);
             }
         });
+        mRequestQueue.add(request);
+    }
+
+    @Override
+    public void handleGetInvitations(final ResultReceiver receiver) {
+        final Bundle bundle = new Bundle();
+
+        StringRequest request = new StringRequest
+                (Request.Method.GET, MaeventApi.URL_INVITATIONS, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        InvitationsModel model;
+                        try {
+                            Gson gson = new Gson();
+                            List<InvitationModel> content = gson.fromJson(response, new TypeToken<List<InvitationModel>>(){}.getType());
+                            model = new InvitationsModel(content);
+                        }
+                        catch (JsonSyntaxException ex) {
+                            Log.e(LOG_TAG, "Error while parsing JSON");
+                            model = null;
+                        }
+                        catch (Exception ex) {
+                            Log.e(LOG_TAG, ex.toString());
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response);
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
+                            receiver.send(RESULT_CODE_OK_PARCEL1, bundle);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof ClientError) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ClientError());
+                        }
+                        else {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ServerError());
+                        }
+                        receiver.send(RESULT_CODE_ERROR, bundle);
+                    }
+                });
         mRequestQueue.add(request);
     }
 }

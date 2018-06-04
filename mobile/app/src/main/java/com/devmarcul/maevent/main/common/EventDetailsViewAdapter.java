@@ -87,7 +87,7 @@ public class EventDetailsViewAdapter implements
             usersNumberIconRes = R.drawable.ic_people;
         }
         else {
-            usersNumber = String.valueOf(((Invitation)event).getInviteesNr());
+            usersNumber = String.valueOf(((Invitation)event).getAttendeesNumber());
             usersNumberIconRes = R.drawable.ic_confusion;
         }
 

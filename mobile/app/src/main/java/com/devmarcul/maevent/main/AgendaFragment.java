@@ -22,6 +22,7 @@ import com.android.volley.ClientError;
 import com.android.volley.ServerError;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.business_logic.MaeventInvitationManager;
 import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.business_logic.MaeventSteward;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
@@ -61,7 +62,8 @@ public class AgendaFragment extends Fragment implements
     private ItemViewHolder mIncomingEventsLabel;
 
     private Invitations mInvitationsData;
-    private Handler mInvitationsHandler;
+    private ProgressBar mInvitationsProgressBar;
+    private TextView mInvitationsNumberView;
     private RecyclerView mInvitationsRecyclerView;
     private InvitationAdapter mInvitationAdapter;
     private ItemViewHolder mInvitationsLabel;
@@ -86,12 +88,11 @@ public class AgendaFragment extends Fragment implements
         parent = getActivity();
 
         initIncomingEvents();
-//        initInvitations();
-        final View invitationsLabelView = view.findViewById(R.id.main_invitations_label);
-        invitationsLabelView.setVisibility(View.INVISIBLE);
+        initInvitations();
         initEventDetailsDialog();
 
         updateEvents();
+        updateInvitations();
 
         return view;
     }
@@ -186,6 +187,7 @@ public class AgendaFragment extends Fragment implements
         mIncomingEventsRecyclerView.setAdapter(mIncomingEventAdapter);
 
         final View incomingEventsLabelView = view.findViewById(R.id.main_incoming_events_label);
+        incomingEventsLabelView.setVisibility(View.VISIBLE);
         mIncomingEventsLabel = new ItemViewHolder(incomingEventsLabelView, mIncomingEventsRecyclerView);
         incomingEventsLabelView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,12 +201,7 @@ public class AgendaFragment extends Fragment implements
     }
 
     private void initInvitations() {
-        //TODO Load content
         mInvitationsData = new Invitations();
-        for (int i = 0; i < 2; i++) {
-            Invitation invitation = InvitationBuilder.build();
-            mInvitationsData.add(invitation);
-        }
 
         mInvitationsRecyclerView = view.findViewById(R.id.rv_invitations);
         mInvitationsRecyclerView.addItemDecoration(new DividerItemDecoration(parent, DividerItemDecoration.VERTICAL));
@@ -223,12 +220,11 @@ public class AgendaFragment extends Fragment implements
             public void onDelete(RecyclerView.ViewHolder viewHolder) {
                 InvitationAdapter adapter = (InvitationAdapter) mInvitationsRecyclerView.getAdapter();
                 int pos = viewHolder.getAdapterPosition();
-                mInvitationsData = adapter.removeIntivation(pos);
+                mInvitationsData = adapter.removeInvitation(pos);
 
                 String size = String.valueOf(mInvitationsData.size());
-                TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
-                invitationsNumberView.setText(size);
-                invitationsNumberView.setVisibility(View.VISIBLE);
+                mInvitationsNumberView.setText(size);
+                mInvitationsNumberView.setVisibility(View.VISIBLE);
             }
         });
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHandler);
@@ -238,6 +234,7 @@ public class AgendaFragment extends Fragment implements
         mInvitationsRecyclerView.setAdapter(mInvitationAdapter);
 
         final View invitationsLabelView = view.findViewById(R.id.main_invitations_label);
+        invitationsLabelView.setVisibility(View.VISIBLE);
         mInvitationsLabel = new ItemViewHolder(invitationsLabelView, mInvitationsRecyclerView);
         invitationsLabelView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,24 +243,9 @@ public class AgendaFragment extends Fragment implements
             }
         });
 
-        mInvitationsHandler = new Handler();
-        mInvitationsHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ProgressBar pb = view.findViewById(R.id.pb_invitations_number_loading_indicator);
-                pb.setVisibility(View.VISIBLE);
-                mInvitationAdapter.setIncomingEventsData(mInvitationsData);
-                pb.setVisibility(View.GONE);
-
-                String size = String.valueOf(mInvitationsData.size());
-                TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
-                invitationsNumberView.setText(size);
-                invitationsNumberView.setVisibility(View.VISIBLE);
-
-            }
-        }, 1000);
-
-        mInvitationsRecyclerView.setVisibility(View.VISIBLE);
+        mInvitationsProgressBar = view.findViewById(R.id.pb_invitations_number_loading_indicator);
+        mInvitationsProgressBar.setVisibility(View.GONE);
+        mInvitationsNumberView = view.findViewById(R.id.tv_invitations_number);
     }
 
     private void initEventDetailsDialog() {
@@ -297,22 +279,19 @@ public class AgendaFragment extends Fragment implements
         int pos = viewHolder.getAdapterPosition();
 
         Invitation invitation = mInvitationsData.get(pos);
-        Maevent event = invitation;
 
         IncomingEventAdapter incomingEventAdapter = (IncomingEventAdapter) mIncomingEventsRecyclerView.getAdapter();
-        mIncomingEventsData = incomingEventAdapter.appendIncomingEventsData(event);
+        mIncomingEventsData = incomingEventAdapter.appendIncomingEventsData(invitation);
 
         String size = String.valueOf(mIncomingEventsData.size());
-        TextView incomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
-        incomingEventsNumberView.setText(size);
-        incomingEventsNumberView.setVisibility(View.VISIBLE);
+        mIncomingEventsNumberView.setText(size);
+        mIncomingEventsNumberView.setVisibility(View.VISIBLE);
 
-        mInvitationsData = invitationAdapter.removeIntivation(pos);
+        mInvitationsData = invitationAdapter.removeInvitation(pos);
 
         size = String.valueOf(mInvitationsData.size());
-        TextView invitationsNumberView = view.findViewById(R.id.tv_invitations_number);
-        invitationsNumberView.setText(size);
-        invitationsNumberView.setVisibility(View.VISIBLE);
+        mInvitationsNumberView.setText(size);
+        mInvitationsNumberView.setVisibility(View.VISIBLE);
     }
 
     public void updateEvents() {
@@ -320,9 +299,9 @@ public class AgendaFragment extends Fragment implements
 
         MaeventManager.getInstance().getAllEvents(parent, new NetworkReceiver.Callback<Maevents>() {
             @Override
-            public void onSuccess(Maevents events) {
+            public void onSuccess(Maevents data) {
                 mIncomingEventsData.clear();
-                mIncomingEventsData = events;
+                mIncomingEventsData = data;
 
                 mIncomingEventAdapter.setIncomingEventsData(mIncomingEventsData);
 
@@ -330,6 +309,8 @@ public class AgendaFragment extends Fragment implements
                 mIncomingEventsNumberView.setText(size);
                 mIncomingEventsNumberView.setVisibility(View.VISIBLE);
                 mIncomingEventsProgressBar.setVisibility(View.GONE);
+                mIncomingEventsLabel.expand();
+                mInvitationsProgressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -344,6 +325,43 @@ public class AgendaFragment extends Fragment implements
                     Prompt.displayShort("Internal error.", context);
                 }
                 mIncomingEventsProgressBar.setVisibility(View.GONE);
+                mIncomingEventsLabel.expand();
+                mInvitationsProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    public void updateInvitations() {
+        final Context context = getContext();
+
+        MaeventInvitationManager.getInstance().getAllInvitations(parent, new NetworkReceiver.Callback<Invitations>() {
+            @Override
+            public void onSuccess(Invitations data) {
+                mInvitationsData.clear();
+                mInvitationsData = data;
+
+                mInvitationAdapter.setInvitationsData(mInvitationsData);
+
+                String size = String.valueOf(mInvitationsData.size());
+                mInvitationsNumberView.setText(size);
+                mInvitationsNumberView.setVisibility(View.VISIBLE);
+                mInvitationsProgressBar.setVisibility(View.GONE);
+                mInvitationsLabel.expand();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Your profile is invalid - probably name exists! Contact with support.", context);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", context);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", context);
+                }
+                mInvitationsProgressBar.setVisibility(View.GONE);
+                mInvitationsLabel.expand();
             }
         });
     }

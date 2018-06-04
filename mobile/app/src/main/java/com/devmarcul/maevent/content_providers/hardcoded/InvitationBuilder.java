@@ -24,7 +24,8 @@ public class InvitationBuilder {
                 objectCopy.getParams(),
                 objectCopy.getHost(),
                 objectCopy.getInviter(),
-                objectCopy.getInviteesNr());
+                objectCopy.getInvitee(),
+                objectCopy.getMessage());
 
         cnt++;
         if (cnt == CNT) {
@@ -37,32 +38,37 @@ public class InvitationBuilder {
     private static void initialize() {
         MaeventParams params;
         User inviter;
+        User invitee;
+        String message = "Let's go!";
         int inviteesNr = 2;
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
+        invitee = UserBuilder.build();
         inviteesNr++;
-        object0 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
+        object0 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
-        object1 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
+        object1 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
-        object2 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
+        message = "You're welcome!";
+        object2 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
-        object3 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
+        object3 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
-        object4 = new Invitation(params, UserBuilder.build(), inviter, inviteesNr);
+        message = "";
+        object4 = new Invitation(params, UserBuilder.build(), inviter, invitee, message);
     }
 
     private static void assignObjects() {

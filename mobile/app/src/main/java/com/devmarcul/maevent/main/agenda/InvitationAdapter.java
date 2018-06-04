@@ -57,7 +57,7 @@ public class InvitationAdapter
         return mInvitations.size();
     }
 
-    public void setIncomingEventsData(Invitations invitationsData) {
+    public void setInvitationsData(Invitations invitationsData) {
         mInvitations = invitationsData;
         notifyDataSetChanged();
     }
@@ -68,7 +68,7 @@ public class InvitationAdapter
         return mInvitations;
     }
 
-    public Invitations removeIntivation(int pos) {
+    public Invitations removeInvitation(int pos) {
         mInvitations.remove(pos);
         notifyItemRemoved(pos);
         return mInvitations;

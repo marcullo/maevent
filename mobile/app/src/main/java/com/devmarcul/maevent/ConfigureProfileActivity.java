@@ -87,7 +87,8 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
 
     private boolean mConfigProfileRequested;
     private boolean mRequestFinished;
-    private int mRetriesNr;
+    private boolean mOnActivityResultHandled;
+    private boolean mOnFirstResumeHandled;
     private Validator mValidator;
 
     // For validation only ----------------------------------------------------
@@ -119,8 +120,6 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mRetriesNr = 0;
 
         initUi();
 
@@ -160,11 +159,21 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
             mLoadingLocationView.setVisibility(View.GONE);
             mLoadingView.setVisibility(View.GONE);
             initCancelDialog();
-            updateUi(ThisUser.getProfile());
+
+            UserProfile profile;
+            if (!mOnFirstResumeHandled) {
+                profile = ThisUser.getProfile();
+            }
+            else {
+                profile = extractProfileFromViews();
+            }
+
+            updateUi(profile);
+            mOnFirstResumeHandled = true;
             return;
         }
         else if (ThisUser.isRegistered()) {
-            Prompt.displayShort("Fetching data", this);
+            Prompt.displayShort("Fetching user data", this);
             Log.i(LOG_TAG, "Profile exists but is incomplete. Let's fetch data");
             getUserProfile();
             return;
@@ -213,8 +222,8 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
 
         if (id == R.id.configure_profile_action_preview) {
             UserProfile profile = extractProfileFromViews();
-            mPreviewDialog.show();
             mUserDetailsAdapter.adaptContent(profile);
+            mPreviewDialog.show();
             return false;
         }
         if (id == R.id.configure_profile_action_save) {
@@ -294,6 +303,8 @@ public class ConfigureProfileActivity extends AppCompatActivity implements
 
         mLoadingLocationView.setVisibility(View.GONE);
         mContactViewAdapter.updatePlaceViews(place);
+
+        mOnActivityResultHandled = true;
     }
 
     @Override
