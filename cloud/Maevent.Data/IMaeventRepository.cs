@@ -18,6 +18,7 @@ namespace Maevent.Data
         // Events
         IEnumerable<Event> GetAllEvents();
         IEnumerable<Event> GetAllEventsOfHost(User host);
+        IEnumerable<Event> GetAllEventsByAttendee(int attendeeId);
         Event GetEvent(int id);
         Event GetEventByName(string name);
         int GetEventInviteesNumber(int id);

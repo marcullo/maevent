@@ -52,6 +52,14 @@ namespace Maevent.Data
                 .ToList();
         }
 
+        public IEnumerable<Event> GetAllEventsByAttendee(int attendeeId)
+        {
+            return _context.Events
+               .OrderBy(c => c.BeginTime)
+               .Where(c => c.AttendeesIds.Contains(";" + attendeeId.ToString() + ";"))
+               .ToList();
+        }
+
         public Event GetEvent(int id)
         {
             return _context.Events

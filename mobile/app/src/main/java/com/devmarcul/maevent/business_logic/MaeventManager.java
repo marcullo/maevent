@@ -67,4 +67,22 @@ public class MaeventManager implements MaeventContentUpdater {
                     }
                 });
     }
+
+    @Override
+    public void getAllEventsIntendedForUser(final Context context, UserProfile profile, final NetworkReceiver.Callback<Maevents> callback) {
+        String identifier = String.valueOf(profile.id);
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.GET_EVENTS_INTENDED_FOR_USER, MaeventApi.Param.STRING, identifier, new NetworkReceiver.Callback<MaeventsModel>() {
+                    @Override
+                    public void onSuccess(MaeventsModel model) {
+                        Maevents events = model.toMaevents();
+                        callback.onSuccess(events);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        callback.onError(exception);
+                    }
+                });
+    }
 }

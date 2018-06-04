@@ -39,7 +39,7 @@ namespace Maevent.Data
                 BeginTime = new DateTime(2018, 06, 07, 18, 00, 00),
                 EndTime = new DateTime(2018, 06, 07, 23, 00, 00),
                 Rsvp = true,
-                AttendeesIds = "13;2;3;4;5;6;7;8;9;10;11;12;14;15",
+                AttendeesIds = ";13;4;5;6;7;8;9;10;11;14;15;",
             },
             new Event() // id = 2
             {
@@ -52,7 +52,7 @@ namespace Maevent.Data
                 BeginTime = new DateTime(2018, 06, 06, 17, 00, 00),
                 EndTime = new DateTime(2018, 06, 06, 22, 30, 00),
                 Rsvp = false,
-                AttendeesIds = "12;13;4;5;6",
+                AttendeesIds = ";12;2;3;9;",
             },
             new Event() // id = 3
             {
@@ -65,7 +65,7 @@ namespace Maevent.Data
                 BeginTime = new DateTime(2018, 05, 20, 10, 30, 00),
                 EndTime = new DateTime(2018, 05, 22, 10, 30, 00),
                 Rsvp = false,
-                AttendeesIds = "12;3;4;8",
+                AttendeesIds = ";7;9;10;11;",
             },
             new Event() // id = 4
             {
@@ -78,7 +78,7 @@ namespace Maevent.Data
                 BeginTime = new DateTime(2018, 06, 06, 18, 00, 00),
                 EndTime = new DateTime(2018, 06, 06, 20, 00, 00),
                 Rsvp = false,
-                AttendeesIds = "13",
+                AttendeesIds = ";9;13;8;9;",
             },
             new Event() // id = 5
             {
@@ -91,7 +91,7 @@ namespace Maevent.Data
                 BeginTime = new DateTime(2018, 09, 29, 08, 00, 00),
                 EndTime = new DateTime(2018, 09, 30, 22, 00, 00),
                 Rsvp = false,
-                AttendeesIds = "13;10",
+                AttendeesIds = ";5;13;6;7;8;12;14;15",
             },
             new Event() // id = 6
             {
@@ -104,7 +104,7 @@ namespace Maevent.Data
                 BeginTime = new DateTime(2018, 06, 06, 23, 00, 00),
                 EndTime = new DateTime(2018, 06, 07, 23, 00, 00),
                 Rsvp = false,
-                AttendeesIds = "13;2;3;4;5",
+                AttendeesIds = ";8;2;3;4;5;",
             },
         };
 
@@ -319,6 +319,13 @@ namespace Maevent.Data
             },
             new Invitation()
             {
+                InviteeId = 2,
+                InviterId = 13,
+                EventId = 1,
+                Message = "You are welcome!"
+            },
+            new Invitation()
+            {
                 InviteeId = 3,
                 InviterId = 13,
                 EventId = 1,
@@ -353,37 +360,51 @@ namespace Maevent.Data
                 EventId = 2,
                 Message = "Guys, come in!"
             },
-            // eventId = 3
             new Invitation()
             {
-                InviteeId = 3,
+                InviteeId = 7,
                 InviterId = 12,
-                EventId = 3,
-                Message = "Guys, come in!"
-            },
-            new Invitation()
-            {
-                InviteeId = 4,
-                InviterId = 12,
-                EventId = 3,
+                EventId = 2,
                 Message = "Guys, come in!"
             },
             new Invitation()
             {
                 InviteeId = 8,
                 InviterId = 12,
+                EventId = 2,
+                Message = "Guys, come in!"
+            },
+            // eventId = 3
+            new Invitation()
+            {
+                InviteeId = 3,
+                InviterId = 7,
                 EventId = 3,
                 Message = "Guys, come in!"
             },
-            // eventId = 5
+            new Invitation()
+            {
+                InviteeId = 4,
+                InviterId = 7,
+                EventId = 3,
+                Message = "Guys, come in!"
+            },
+            new Invitation()
+            {
+                InviteeId = 8,
+                InviterId = 7,
+                EventId = 3,
+                Message = "Guys, come in!"
+            },
+            // eventId = 4
             new Invitation()
             {
                 InviteeId = 10,
-                InviterId = 13,
-                EventId = 5,
+                InviterId = 9,
+                EventId = 4,
                 Message = "You are welcome!"
             },
-            // eventId = 6
+            // eventId = 5
             new Invitation()
             {
                 InviteeId = 2,
@@ -405,11 +426,40 @@ namespace Maevent.Data
                 EventId = 5,
                 Message = "You are welcome!"
             },
+            // eventId = 6
             new Invitation()
             {
-                InviteeId = 5,
-                InviterId = 13,
-                EventId = 5,
+                InviteeId = 10,
+                InviterId = 8,
+                EventId = 6,
+                Message = "You are welcome!"
+            },
+            new Invitation()
+            {
+                InviteeId = 11,
+                InviterId = 8,
+                EventId = 6,
+                Message = "You are welcome!"
+            },
+            new Invitation()
+            {
+                InviteeId = 12,
+                InviterId = 8,
+                EventId = 6,
+                Message = "You are welcome!"
+            },
+             new Invitation()
+            {
+                InviteeId = 13,
+                InviterId = 8,
+                EventId = 6,
+                Message = "You are welcome!"
+            },
+            new Invitation()
+            {
+                InviteeId = 14,
+                InviterId = 8,
+                EventId = 6,
                 Message = "You are welcome!"
             },
         };

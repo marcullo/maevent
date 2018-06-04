@@ -91,6 +91,14 @@ public class NetworkService extends IntentService implements MaeventApi {
         if (Action.GET_EVENTS.name().equals(action)) {
             handleGetEvents(receiver);
         }
+        else if (Action.GET_EVENTS_INTENDED_FOR_USER.name().equals(action)) {
+            final String identifier = intent.getStringExtra(Param.STRING.name());
+            if (identifier == null) {
+                Log.d(LOG_TAG,"Invalid intent");
+                return;
+            }
+            handleGetEventsIntendedForUser(receiver, identifier);
+        }
         else if (Action.CREATE_EVENT.name().equals(action)) {
             final MaeventModel model = intent.getParcelableExtra(Param.EVENT.name());
             handleCreateEvent(receiver, model);
@@ -152,6 +160,8 @@ public class NetworkService extends IntentService implements MaeventApi {
     }
 
     public void startService(Context context, MaeventApi.Action action, MaeventApi.Param param, NetworkReceiver.Callback callback) {
+        // This case param is none
+
         NetworkReceiver receiver = new NetworkReceiver(new Handler(context.getMainLooper()), callback);
 
         Intent intent = new Intent(context, NetworkService.class);
@@ -175,6 +185,57 @@ public class NetworkService extends IntentService implements MaeventApi {
 
         StringRequest request = new StringRequest
                 (Request.Method.GET, MaeventApi.URL_EVENTS, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        MaeventsModel model;
+                        try {
+                            Gson gson = new Gson();
+                            List<MaeventModel> content = gson.fromJson(response, new TypeToken<List<MaeventModel>>(){}.getType());
+                            model = new MaeventsModel(content);
+                        }
+                        catch (JsonSyntaxException ex) {
+                            Log.e(LOG_TAG, "Error while parsing JSON");
+                            model = null;
+                        }
+                        catch (Exception ex) {
+                            Log.e(LOG_TAG, ex.toString());
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response);
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
+                            receiver.send(RESULT_CODE_OK_PARCEL, bundle);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof ClientError) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ClientError());
+                        }
+                        else {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ServerError());
+                        }
+                        receiver.send(RESULT_CODE_ERROR, bundle);
+                    }
+                });
+        mRequestQueue.add(request);
+    }
+
+    @Override
+    public void handleGetEventsIntendedForUser(final ResultReceiver receiver, String identifier) {
+        final Bundle bundle = new Bundle();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(MaeventApi.URL_EVENTS_ATTENDEE).append("?")
+                .append(URL_USER_ID).append(identifier);
+        String url = builder.toString();
+
+        StringRequest request = new StringRequest
+                (Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         MaeventsModel model;
@@ -475,8 +536,8 @@ public class NetworkService extends IntentService implements MaeventApi {
 
         StringBuilder builder = new StringBuilder();
         builder.append(MaeventApi.URL_INVITATIONS_INVITEE).append("?")
-                .append(URL_INVITATIONS_INVITEE_ID).append(identifier).append("&")
-                .append(URL_INVITATIONS_EVENT_ID).append(URL_INVITATIONS_EVENT_ID_ALL);
+                .append(URL_USER_ID).append(identifier).append("&")
+                .append(URL_EVENT_ID).append(URL_ALL);
         String url = builder.toString();
 
         StringRequest request = new StringRequest

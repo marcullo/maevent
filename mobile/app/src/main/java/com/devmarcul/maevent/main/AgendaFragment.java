@@ -31,6 +31,7 @@ import com.devmarcul.maevent.content_providers.hardcoded.InvitationBuilder;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Invitations;
 import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.Maevents;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.main.agenda.IncomingEventAdapter;
@@ -40,9 +41,16 @@ import com.devmarcul.maevent.main.common.EventDetailsHandler;
 import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;
 import com.devmarcul.maevent.utils.CustomTittleSetter;
 import com.devmarcul.maevent.utils.Prompt;
+import com.devmarcul.maevent.utils.TimeUtils;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.utils.SwipeAcceptDeleteCallback;
+
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+
+import static com.devmarcul.maevent.utils.TimeUtils.getCalendarFromString;
 
 public class AgendaFragment extends Fragment implements
         IncomingEventAdapter.IncomingEventAdapterOnClickHandler,
@@ -245,7 +253,6 @@ public class AgendaFragment extends Fragment implements
         });
 
         mInvitationsProgressBar = view.findViewById(R.id.pb_invitations_number_loading_indicator);
-        mInvitationsProgressBar.setVisibility(View.GONE);
         mInvitationsNumberView = view.findViewById(R.id.tv_invitations_number);
     }
 
@@ -298,7 +305,7 @@ public class AgendaFragment extends Fragment implements
     public void updateEvents() {
         final Context context = getContext();
 
-        MaeventManager.getInstance().getAllEvents(parent, new NetworkReceiver.Callback<Maevents>() {
+        MaeventManager.getInstance().getAllEventsIntendedForUser(parent, ThisUser.getProfile(), new NetworkReceiver.Callback<Maevents>() {
             @Override
             public void onSuccess(Maevents data) {
                 mIncomingEventsData.clear();
@@ -311,7 +318,6 @@ public class AgendaFragment extends Fragment implements
                 mIncomingEventsNumberView.setVisibility(View.VISIBLE);
                 mIncomingEventsProgressBar.setVisibility(View.GONE);
                 mIncomingEventsLabel.expand();
-                mInvitationsProgressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -327,7 +333,6 @@ public class AgendaFragment extends Fragment implements
                 }
                 mIncomingEventsProgressBar.setVisibility(View.GONE);
                 mIncomingEventsLabel.expand();
-                mInvitationsProgressBar.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -338,9 +343,10 @@ public class AgendaFragment extends Fragment implements
         MaeventInvitationManager.getInstance().getAllInvitationsIntendedForUser(parent, ThisUser.getProfile(), new NetworkReceiver.Callback<Invitations>() {
             @Override
             public void onSuccess(Invitations data) {
+                sortInvitations(data);
+
                 mInvitationsData.clear();
                 mInvitationsData = data;
-
                 mInvitationAdapter.setInvitationsData(mInvitationsData);
 
                 String size = String.valueOf(mInvitationsData.size());
@@ -363,6 +369,24 @@ public class AgendaFragment extends Fragment implements
                 }
                 mInvitationsProgressBar.setVisibility(View.GONE);
                 mInvitationsLabel.expand();
+            }
+        });
+    }
+
+    private void sortInvitations(Invitations invitations) {
+        if (invitations == null) {
+            return;
+        }
+        Collections.sort(invitations, new Comparator<Invitation>() {
+            @Override
+            public int compare(Invitation i1, Invitation i2) {
+                String begin1Text = i1.getParams().beginTime;
+                String begin2Text = i2.getParams().beginTime;
+
+                Calendar begin1 = TimeUtils.getCalendarFromString(begin1Text, MaeventParams.TIME_FORMAT);
+                Calendar begin2 = TimeUtils.getCalendarFromString(begin2Text, MaeventParams.TIME_FORMAT);
+
+                return begin1.getTime().compareTo(begin2.getTime());
             }
         });
     }
