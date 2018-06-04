@@ -26,7 +26,8 @@ namespace Maevent.Data
         // Users
         User GetUser(int id);
         User GetUserByName(string firstName, string lastName);
-        IEnumerable<Entities.User> GetAllUsers();
+        IEnumerable<User> GetAllUsers();
+        IEnumerable<User> GetUsersByEvent(int eventId);
 
         // Invitations
         IEnumerable<Invitation> GetAllInvitations();

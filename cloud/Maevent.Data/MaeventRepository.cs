@@ -96,10 +96,28 @@ namespace Maevent.Data
                 .FirstOrDefault();
         }
 
-        public IEnumerable<Entities.User> GetAllUsers()
+        public IEnumerable<User> GetAllUsers()
         {
             return _context.Users
                 .OrderBy(c => c.LastName)
+                .ToList();
+        }
+        public IEnumerable<User> GetUsersByEvent(int eventId)
+        {
+            var ev = GetEvent(eventId);
+            if (ev == null)
+            {
+                return null;
+            }
+
+            var attendeesIds = ev.AttendeesIds;
+            if (attendeesIds == null)
+            {
+                return null;
+            }
+
+            return _context.Users
+                .Where(c => attendeesIds.Contains(";" + c.Id.ToString() + ";"))
                 .ToList();
         }
 

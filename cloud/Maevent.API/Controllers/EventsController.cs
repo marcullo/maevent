@@ -124,6 +124,37 @@ namespace Maevent.API.Controllers
             return BadRequest("Could not fetch event");
         }
 
+        [HttpGet("{id}/attendees")]
+        public IActionResult GetAttendees(int id)
+        {
+            try
+            {
+                var ev = _repo.GetEvent(id);
+                if (ev == null)
+                {
+                    return NotFound();
+                }
+
+                var invitees = _repo.GetUsersByEvent(id);
+
+                List<UserModel> inviteesModel = new List<UserModel>();
+                foreach (var invitee in invitees)
+                {
+                    var model = Mapper.Map<UserModel>(invitee);
+                    inviteesModel.Add(model);
+                }
+
+                return Ok(inviteesModel);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception thrown while fetching event: {ex}");
+            }
+
+            return BadRequest("Could not fetch event");
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]EventModel model)
         {

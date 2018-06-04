@@ -7,6 +7,7 @@ import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.apis.models.UsersModel;
 import com.devmarcul.maevent.business_logic.interfaces.UserContentUpdater;
+import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.Maevents;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
@@ -70,6 +71,24 @@ public class MaeventUserManager implements UserContentUpdater {
     public void getAllUsers(final Context context, final NetworkReceiver.Callback<Users> callback) {
         NetworkService.getInstance()
                 .startService(context, MaeventApi.Action.GET_USERS, MaeventApi.Param.NONE, new NetworkReceiver.Callback<UsersModel>() {
+                    @Override
+                    public void onSuccess(UsersModel model) {
+                        Users users = model.toUsers();
+                        callback.onSuccess(users);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        callback.onError(exception);
+                    }
+                });
+    }
+
+    @Override
+    public void getAllAttendees(Context context, Maevent event, final NetworkReceiver.Callback<Users> callback) {
+        String eventIdentifier = String.valueOf(event.getId());
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.GET_ATTENDEES, MaeventApi.Param.STRING, eventIdentifier, new NetworkReceiver.Callback<UsersModel>() {
                     @Override
                     public void onSuccess(UsersModel model) {
                         Users users = model.toUsers();

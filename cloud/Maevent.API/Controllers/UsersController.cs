@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Maevent.API.Constraints;
 using Maevent.API.Models;
 using Maevent.Data;
 using Maevent.Data.Entities;
@@ -248,6 +249,28 @@ namespace Maevent.API.Controllers
             }
 
             return BadRequest("Could not update user");
+        }
+
+        [HttpGet("event")]
+        public IActionResult GetByEvent([RequiredFromQuery]string ev)
+        {
+            try
+            {
+                if (!int.TryParse(ev, out int eventId))
+                {
+                    return BadRequest("Invalid event id");
+                }
+
+                var attendees = _repo.GetUsersByEvent(eventId);
+
+                return Ok(Mapper.Map<IEnumerable<UserModel>>(attendees));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Threw exception while fetching attendees: {ex}");
+            }
+
+            return BadRequest("Could not fetch attendees");
         }
     }
 }

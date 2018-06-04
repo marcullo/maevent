@@ -168,7 +168,7 @@ public class LiveEventFragment extends Fragment implements
     private void updateUsers() {
         final Context context = getContext();
 
-        MaeventUserManager.getInstance().getAllUsers(parent, new NetworkReceiver.Callback<Users>() {
+        MaeventUserManager.getInstance().getAllAttendees(parent, MainActivity.pendingEvent, new NetworkReceiver.Callback<Users>() {
             @Override
             public void onSuccess(Users users) {
                 mAttendeesData.clear();
