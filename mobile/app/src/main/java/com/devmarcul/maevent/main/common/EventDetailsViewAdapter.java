@@ -74,9 +74,11 @@ public class EventDetailsViewAdapter implements
         mViewHolder.mPostalCodeView.setText(postCode);
         mViewHolder.mTimeView.setText(time);
         mViewHolder.mDurationView.setText(duration);
+
+        adaptUsersNumber(event);
     }
 
-    public void adaptUsersNumber(Maevent event) {
+    private void adaptUsersNumber(Maevent event) {
         String usersNumber = String.valueOf(event.getAttendeesNumber());
         int usersNumberIconRes = R.drawable.ic_people;
 

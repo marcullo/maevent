@@ -157,7 +157,7 @@ namespace Maevent.Data
                 Pose = "Physicist, Cosmologist",
                 Headline = "Intelligence is the ability to adapt to change.",
                 Phone = "+001122334457",
-                Email = "step@freeman.com",
+                Email = "stephen@hawking.com",
                 Linkedin = null,
                 Location = "Cambridge",
                 Tags = "Time;Space;Black holes;Quantum gravity"
@@ -233,7 +233,7 @@ namespace Maevent.Data
                 LastName = "Tesla",
                 Title = "Eng.",
                 Pose = "Physicist, Engineer, Inventor",
-                Headline = "If your hate could be turned into electricity, it would likgt up the whole world.",
+                Headline = "If your hate could be turned into electricity, it would light up the whole world.",
                 Phone = "+001122334464",
                 Email = "nicola@tesla.com",
                 Linkedin = "tesla",

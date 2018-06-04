@@ -142,7 +142,6 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsDialog.show();
 
         mEventDetailsAdapter.adaptContent(event);
-        mEventDetailsAdapter.adaptUsersNumber(event);
         mEventDetailsAdapter.adaptJoinButton(!isPendingEvent);
         mEventDetailsAdapter.bindListeners();
 
@@ -158,7 +157,6 @@ public class AgendaFragment extends Fragment implements
         mEventDetailsDialog.show();
 
         mEventDetailsAdapter.adaptContent(invitation);
-        mEventDetailsAdapter.adaptUsersNumber(invitation);
         mEventDetailsAdapter.adaptJoinButton(false);
         mEventDetailsAdapter.bindListeners();
 
