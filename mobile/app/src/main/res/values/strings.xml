@@ -22,9 +22,10 @@
     <string name="abbrev_hours">HRS</string>
     <string name="abbrev_days">DAYS</string>
 
-    <string name="toolbar_title_agenda">Joining</string>
-    <string name="toolbar_title_live_event">Networking</string>
-    <string name="toolbar_title_create_event">Creating</string>
+    <string name="toolbar_title_agenda">Join</string>
+    <string name="toolbar_title_live_event">Network</string>
+    <string name="toolbar_title_create_event">Create</string>
+    <string name="toolbar_title_invite_users">Invite collegues</string>
 
     <string name="configure_profile_preview">PREVIEW</string>
     <string name="configure_profile_save">SAVE</string>
@@ -74,9 +75,20 @@
     <string name="main_create_event_button_tooltip">Create event</string>
     <string name="main_create_event_rsvp">@string/text_rsvp</string>
 
+    <string name="invite_button_text">Invite</string>
+    <string name="invite_new_invitees_text">New invitees:</string>
+
     <string name="no_internet_connection_title">Internet connection disappeared</string>
     <string name="no_internet_connection_description">How would you network without network connection?</string>
 
     <string name="error_main_create_event_invalid_place">Invalid place selected.</string>
+
+    <string name="invite_action_add_user">Add user</string>
+    <string name="invite_action_clear_all">Clear all</string>
+    <string name="invite_found_text">Found</string>
+    <string name="invite_search_label">Searching</string>
+    <string name="invite_search_label_found">Found</string>
+    <string name="invite_search_label_not_found">Not found</string>
+    <string name="invite_found_label">Results</string>
 
 </resources>

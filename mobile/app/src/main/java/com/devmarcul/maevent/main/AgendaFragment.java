@@ -3,7 +3,6 @@ package com.devmarcul.maevent.main;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -27,7 +26,6 @@ import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.business_logic.MaeventSteward;
 import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
-import com.devmarcul.maevent.content_providers.hardcoded.InvitationBuilder;
 import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Invitations;
 import com.devmarcul.maevent.data.Maevent;
@@ -49,8 +47,6 @@ import com.devmarcul.maevent.utils.SwipeAcceptDeleteCallback;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-
-import static com.devmarcul.maevent.utils.TimeUtils.getCalendarFromString;
 
 public class AgendaFragment extends Fragment implements
         IncomingEventAdapter.IncomingEventAdapterOnClickHandler,

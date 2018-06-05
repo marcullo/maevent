@@ -16,7 +16,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.business_logic.MaeventAccountManager;
+import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.data.MaeventParams;
+import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.ConnectionResult;
@@ -39,11 +44,63 @@ public class WelcomeActivity extends AppCompatActivity
     private DetailsDialog mNoInternetConnectionDialog;
     private View mNoInternetConnectionView;
 
+
+    private void startInviteActivity(Maevent event) {
+        if (event == null) {
+            return;
+        }
+        if (!event.isValid()) {
+            return;
+        }
+
+        MaeventModel focusedModel = new MaeventModel(event);
+
+        Log.d(LOG_TAG, "Setting next activity.");
+        Intent intent = new Intent(this, InviteActivity.class);
+        intent.putExtra(InviteActivity.KEY_PARCEL_FOCUSED_EVENT_MODEL, focusedModel);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(LOG_TAG, "Hello to Maevent!");
         setContentView(R.layout.activity_welcome);
+
+
+
+
+
+
+        Maevent event = new Maevent();
+
+        MaeventParams params = new MaeventParams();
+        params.name = "Hello, World!";
+        params.place = "Belweder";
+        params.addressStreet = "Belwederska 1";
+        params.addressPostCode = "00-001 Warszawa";
+        params.beginTime = "1000AM300518";
+        params.endTime = "1000PM310518";
+        params.rsvp = false;
+        event.setParams(params);
+
+        User host = new User();
+        UserProfile profile = new UserProfile();
+        profile.id = 8;
+        profile.firstName = "Joseph";
+        profile.lastName = "Pilsudski";
+        host.setProfile(profile);
+        event.setHost(host);
+
+        event.setAttendeesIds(";8;");
+
+        startInviteActivity(event);
+
+
+
+
+
+
 
         MaeventAccountManager.setupClient(this);
 

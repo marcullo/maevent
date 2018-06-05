@@ -25,6 +25,7 @@ public class EventDetailsViewHolder {
     public TextView mPostalCodeView;
     public TextView mTimeView;
     public TextView mDurationView;
+    public ImageView mDurationIcon;
     public TextView mUsersNumberView;
     public ImageView mUsersNumberIcon;
 
@@ -41,6 +42,7 @@ public class EventDetailsViewHolder {
         mPostalCodeView = view.findViewById(R.id.tv_event_details_postal_code);
         mTimeView = view.findViewById(R.id.tv_event_details_time);
         mDurationView = view.findViewById(R.id.tv_event_details_duration);
+        mDurationIcon = view.findViewById(R.id.iv_event_details_time_icon);
         mUsersNumberView = view.findViewById(R.id.tv_event_details_users_number);
         mUsersNumberIcon = view.findViewById(R.id.iv_event_details_users_number_icon);
     }

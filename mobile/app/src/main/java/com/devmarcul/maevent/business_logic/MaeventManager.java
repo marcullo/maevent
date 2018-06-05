@@ -27,24 +27,13 @@ public class MaeventManager implements MaeventContentUpdater {
     }
 
     @Override
-    public void createEvent(final Context context, MaeventParams params, NetworkReceiver.Callback<Boolean> callback) {
-        if (!Maevent.areParamsValid(params)) {
+    public void createEvent(final Context context, Maevent event, NetworkReceiver.Callback<Boolean> callback) {
+        if (event == null) {
             return;
         }
-
-        ThisUser.updateContent(context);
-        UserProfile profile = ThisUser.getProfile();
-        if (profile == null) {
-            throw new IllegalStateException("ThisUser profile must not be null");
+        if (!event.isValid()) {
+            return;
         }
-
-        User host = new User();
-        host.setProfile(profile);
-
-        Maevent event = new Maevent();
-        event.setParams(params);
-        event.setHost(host);
-        event.setAttendeesIds(";" + String.valueOf(host.getProfile().id) + ";");
 
         MaeventModel model = new MaeventModel(event);
         NetworkService.getInstance()

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:id="@+id/invite_user_profile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/touch_selector"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/iv_person_photo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:padding="@dimen/configure_profile_margin_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_configure_profile_introduction"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_person_first_name"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_person_photo"
+        app:layout_constraintStart_toEndOf="@+id/iv_person_photo"
+        app:layout_constraintTop_toTopOf="@+id/iv_person_photo"
+        tools:text="Andrew" />
+
+    <TextView
+        android:id="@+id/tv_person_last_name"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_person_first_name"
+        app:layout_constraintStart_toEndOf="@+id/tv_person_first_name"
+        app:layout_constraintTop_toTopOf="@+id/tv_person_first_name"
+        tools:text="Block" />
+
+    <TextView
+        android:id="@+id/tv_person_location"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="right"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_person_last_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_person_last_name"
+        tools:text="Warsaw" />
+
+</android.support.constraint.ConstraintLayout>

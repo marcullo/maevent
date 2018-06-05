@@ -4,10 +4,8 @@ import android.view.View;
 
 import com.devmarcul.maevent.R;
 import com.devmarcul.maevent.common.ContentAdapter;
-import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
-import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.utils.StringUtils;
 import com.devmarcul.maevent.utils.TimeUtils;
@@ -36,6 +34,9 @@ public class EventDetailsViewAdapter implements
     @Override
     public void adaptContent(Maevent event) {
         MaeventParams params = event.getParams();
+        if (params == null) {
+            return;
+        }
 
         if (event.getHost() == null
                 || event.getHost().getProfile() == null) {
@@ -49,15 +50,6 @@ public class EventDetailsViewAdapter implements
 
         String hostFirstName = hostProfile.firstName;
         String hostLastName = hostProfile.lastName;
-        if (params == null) {
-            return;
-        }
-        if (hostProfile == null)
-
-        if (event.getHost() == null) {
-            return;
-        }
-
         String eventName = params.name;
         StringBuilder builder = new StringBuilder();
         builder.append(hostFirstName).append(StringUtils.getNewLine()).append(hostLastName);
@@ -95,7 +87,7 @@ public class EventDetailsViewAdapter implements
         }
     }
 
-    private String getTimeSting(String start, String end) {
+    public static String getTimeSting(String start, String end) {
         String startTime = TimeUtils.convertTimeStringToOtherFormat(start,
                 MaeventParams.TIME_FORMAT, EventDetailsViewHolder.TIME_FORMAT);
         String stopTime = TimeUtils.convertTimeStringToOtherFormat(end,
