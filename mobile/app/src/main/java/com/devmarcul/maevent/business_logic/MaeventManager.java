@@ -4,9 +4,11 @@ import android.content.Context;
 import android.util.Log;
 
 import com.devmarcul.maevent.apis.MaeventApi;
+import com.devmarcul.maevent.apis.models.InvitationModel;
 import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.apis.models.MaeventsModel;
 import com.devmarcul.maevent.business_logic.interfaces.MaeventContentUpdater;
+import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
@@ -38,6 +40,32 @@ public class MaeventManager implements MaeventContentUpdater {
         final MaeventModel model = new MaeventModel(event);
         NetworkService.getInstance()
                 .startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, model, new NetworkReceiver.Callback<MaeventModel>() {
+                    @Override
+                    public void onSuccess(MaeventModel model) {
+                        Maevent event = model.toMaevent();
+                        callback.onSuccess(event);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        callback.onError(exception);
+                    }
+                });
+    }
+
+    @Override
+    public void addAttendee(Context context, Invitation invitation, final NetworkReceiver.Callback<Maevent> callback) {
+        if (invitation == null) {
+            return;
+        }
+        if (!invitation.isValid()) {
+            return;
+        }
+
+        InvitationModel model = new InvitationModel(invitation);
+
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.ADD_ATTENDEE, MaeventApi.Param.INVITATION, model, new NetworkReceiver.Callback<MaeventModel>() {
                     @Override
                     public void onSuccess(MaeventModel model) {
                         Maevent event = model.toMaevent();

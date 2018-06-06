@@ -8,15 +8,16 @@ public class Invitation extends Maevent {
 
     private User inviter;
     private User invitee;
+    private int eventId;
     private String message;
 
     public Invitation(Maevent event, User inviter, User invitee, String message) {
-        this.id = event.id;
         this.params = event.params;
         this.attendeesIds = event.attendeesIds;
         this.host = event.host;
         this.inviter = inviter;
         this.invitee = invitee;
+        this.eventId = event.getId();
         this.message = message;
     }
 
@@ -26,6 +27,10 @@ public class Invitation extends Maevent {
 
     public User getInvitee() {
         return invitee;
+    }
+
+    public int getEventId() {
+        return eventId;
     }
 
     public UserProfile getInviterProfile() {

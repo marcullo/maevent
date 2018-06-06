@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Maevent.API.Controllers
@@ -327,12 +328,6 @@ namespace Maevent.API.Controllers
                     return BadRequest("Invalid invitation id");
                 }
 
-                var ev = _repo.GetEvent(id);
-                if (ev == null)
-                {
-                    return NotFound();
-                }
-
                 var seekedInvitee = _repo.GetUser(inviteeId);
                 if (seekedInvitee == null)
                 {
@@ -341,7 +336,7 @@ namespace Maevent.API.Controllers
                 }
 
                 var seekedInvitation = _repo.GetInvitation(invitationId);
-                if (seekedInvitee == null)
+                if (seekedInvitation == null)
                 {
                     _logger.LogWarning($"Invitation with id {invitationId} not found in the database.");
                     return NotFound();
@@ -349,28 +344,44 @@ namespace Maevent.API.Controllers
 
                 if (seekedInvitee.Id != seekedInvitation.InviteeId)
                 {
-                    _logger.LogWarning($"User are not allowed to accept other's person invitation.");
+                    _logger.LogWarning($"User is not allowed to accept other's person invitation.");
                     return Unauthorized();
                 }
 
+                var ev = _repo.GetEvent(id);
+                if (ev == null)
+                {
+                    return NotFound();
+                }
+
                 String inviteeIdentifier = inviteeId.ToString();
-                if (ev.AttendeesIds.Contains(";" + inviteeIdentifier + ";"))
+                String attendeesIds = ev.AttendeesIds;
+                if (attendeesIds.Contains(";" + inviteeIdentifier + ";"))
                 {
                     _logger.LogWarning($"User registered on the event earlier.");
                     return BadRequest("Could not update event attendees");
                 }
 
-                ev.AttendeesIds = String.Concat(ev.AttendeesIds, inviteeIdentifier, ";");
+                StringBuilder sb = new StringBuilder();
+                sb.Append(attendeesIds).Append(inviteeIdentifier).Append(";");
+
+                ev.AttendeesIds = sb.ToString();
 
                 _repo.Update(ev);
                 if (await _repo.SaveAllAsync())
                 {
-                    EventModel mapped = Mapper.Map<EventModel>(ev);
-                    mapped.Host = GetHostModel(ev);
-                    return Ok(mapped);
+                    _repo.Delete(seekedInvitation);
+                    if (await _repo.SaveAllAsync())
+                    {
+                        EventModel mapped = Mapper.Map<EventModel>(ev);
+                        mapped.Host = GetHostModel(ev);
+                        return Ok(mapped);
+                    }
+                    else
+                    {
+                        _logger.LogError($"Attendee added but invitations not deleted.");
+                    }
                 }
-
-                return Ok();
             }
             catch (Exception ex)
             {

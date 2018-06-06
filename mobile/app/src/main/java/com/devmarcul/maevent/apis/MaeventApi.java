@@ -14,11 +14,14 @@ public interface MaeventApi {
     String RESULT_RECEIVER = "RESULT_RECEIVER";
 
     enum Action {
-        GET_EVENTS, GET_EVENTS_INTENDED_FOR_USER, GET_EVENT, CREATE_EVENT,
+        GET_EVENTS, GET_EVENTS_INTENDED_FOR_USER, GET_EVENT, CREATE_EVENT, ADD_ATTENDEE,
         GET_USERS, GET_ATTENDEES, GET_USERS_BY_QUERY, GET_USER, CREATE_USER, UPDATE_USER,
         GET_INVITATIONS, GET_INVITATIONS_INTENDED_FOR_USER, SEND_INVITATION };
     enum Param { NONE, STRING, EVENT, USER, INVITATION };
 
+    String URL_ATTENDEES_TEXT = "attendees";
+    String URL_INVITATION_ID = "inv=";
+    String URL_ATTENDEE_ID = "insert=";
     String URL_EVENT_ID = "ev=";
     String URL_QUERY_ID = "q=";
     String URL_USER_ID = "id=";
@@ -38,6 +41,9 @@ public interface MaeventApi {
     void handleGetEvents(final ResultReceiver receiver);
     void handleGetEvent(final ResultReceiver receiver, String identifier);
     void handleCreateEvent(final ResultReceiver receiver, MaeventModel model);
+    /* .........../identifier/attendees */
+    void handleAddAttendee(final ResultReceiver receiver, InvitationModel model);
+
     /* .........../attendee */
     void handleGetEventsIntendedForUser(final ResultReceiver receiver, String identifier);
 

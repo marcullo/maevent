@@ -444,22 +444,14 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
             mResponsesNumber = new AtomicInteger();
             mResponsesNumber.set(0);
 
-            MaeventInvitationManager.getInstance().sendInvitation(context, invitation, new NetworkReceiver.Callback<Boolean>() {
+            MaeventInvitationManager.getInstance().sendInvitation(context, invitation, new NetworkReceiver.Callback<Invitation>() {
                 @Override
-                public void onSuccess(Boolean res) {
-                    if (!res) {
-                        NetworkService.getInstance().cancelAllRequests();
-                        mRequestFinished = true;
-                        adaptInviteesList(true);
-                        adaptInviteLoadingBar(false);
-                        adaptInviteButton(true);
-                        invalidateOptionsMenu();
-                        return;
-                    }
-
+                public void onSuccess(Invitation invitation) {
                     int responses = mResponsesNumber.incrementAndGet();
                     if (responses == mInviteesData.size()) {
                         mRequestFinished = true;
+                        mFocusedEvent = invitation;
+                        mFocusedEvent.setId(invitation.getEventId());
                         mInviteesData.clear();
                         mInviteesAdapter.setInviteesData(mInviteesData);
                         updateInviteesCounter();
@@ -470,7 +462,7 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
                 @Override
                 public void onError(Exception exception) {
                     if (exception instanceof ClientError) {
-                        Prompt.displayShort("Some user was invited already.", context);
+                        Prompt.displayShort("Some user was already invited.", context);
                     }
                     else if (exception instanceof ServerError) {
                         Prompt.displayShort("No connection with server.", context);
@@ -528,6 +520,6 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
     }
 
     private void performSuccess() {
-        Prompt.displayShort("Success!", this);
+        Prompt.displayShort("Sent!", this);
     }
 }

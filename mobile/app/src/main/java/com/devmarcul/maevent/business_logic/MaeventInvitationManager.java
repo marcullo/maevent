@@ -47,8 +47,8 @@ public class MaeventInvitationManager implements InvitationContentUpdater {
                 .startService(context, MaeventApi.Action.GET_INVITATIONS_INTENDED_FOR_USER, MaeventApi.Param.STRING, identifier, new NetworkReceiver.Callback<InvitationsModel>() {
                     @Override
                     public void onSuccess(InvitationsModel model) {
-                        Invitations events = model.toInvitations();
-                        callback.onSuccess(events);
+                        Invitations invitations = model.toInvitations();
+                        callback.onSuccess(invitations);
                     }
 
                     @Override
@@ -59,13 +59,14 @@ public class MaeventInvitationManager implements InvitationContentUpdater {
     }
 
     @Override
-    public void sendInvitation(Context context, Invitation invitation, final NetworkReceiver.Callback<Boolean> callback) {
+    public void sendInvitation(Context context, Invitation invitation, final NetworkReceiver.Callback<Invitation> callback) {
         final InvitationModel model = new InvitationModel(invitation);
         NetworkService.getInstance()
-                .startService(context, MaeventApi.Action.SEND_INVITATION, MaeventApi.Param.INVITATION, model, new NetworkReceiver.Callback<Boolean>() {
+                .startService(context, MaeventApi.Action.SEND_INVITATION, MaeventApi.Param.INVITATION, model, new NetworkReceiver.Callback<InvitationModel>() {
                     @Override
-                    public void onSuccess(Boolean result) {
-                        callback.onSuccess(result);
+                    public void onSuccess(InvitationModel result) {
+                        Invitation invitation = model.toInvitation();
+                        callback.onSuccess(invitation);
                     }
 
                     @Override

@@ -113,6 +113,10 @@ public class NetworkService extends IntentService implements MaeventApi {
             final MaeventModel model = intent.getParcelableExtra(Param.EVENT.name());
             handleCreateEvent(receiver, model);
         }
+        else if (Action.ADD_ATTENDEE.name().equals(action)) {
+            final InvitationModel model = intent.getParcelableExtra(Param.INVITATION.name());
+            handleAddAttendee(receiver, model);
+        }
         else if (Action.GET_USERS.name().equals(action)) {
             handleGetUsers(receiver);
         }
@@ -394,6 +398,62 @@ public class NetworkService extends IntentService implements MaeventApi {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, error);
+                        receiver.send(RESULT_CODE_ERROR, bundle);
+                    }
+                });
+        mRequestQueue.add(request);
+    }
+
+    @Override
+    public void handleAddAttendee(final ResultReceiver receiver, InvitationModel model) {
+        final Bundle bundle = new Bundle();
+
+        int attendeeId = model.Invitee.Id;
+        int eventId = model.Event.Id;
+        int invitationId = model.Id;
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(MaeventApi.URL_EVENTS).append(eventId).append("/")
+                .append(URL_ATTENDEES_TEXT).append("?")
+                .append(URL_ATTENDEE_ID).append(attendeeId).append("&")
+                .append(URL_INVITATION_ID).append(invitationId);
+        String url = builder.toString();
+
+        StringRequest request = new StringRequest
+                (Request.Method.PUT, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        MaeventModel model;
+                        try {
+                            Gson gson = new Gson();
+                            model = gson.fromJson(response, MaeventModel.class);
+                        }
+                        catch (JsonSyntaxException ex) {
+                            Log.e(LOG_TAG, "Error while parsing JSON");
+                            model = null;
+                        }
+                        catch (Exception ex) {
+                            Log.e(LOG_TAG, ex.toString());
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response);
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
+                            receiver.send(RESULT_CODE_OK_PARCEL, bundle);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof ClientError) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ClientError());
+                        }
+                        else {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ServerError());
+                        }
                         receiver.send(RESULT_CODE_ERROR, bundle);
                     }
                 });
@@ -795,8 +855,27 @@ public class NetworkService extends IntentService implements MaeventApi {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        bundle.putSerializable(NetworkReceiver.PARAM_RESULT, true);
-                        receiver.send(RESULT_CODE_OK, bundle);
+                        InvitationModel model;
+                        try {
+                            Gson gson = new Gson();
+                            model = gson.fromJson(response.toString(), InvitationModel.class);
+                        }
+                        catch (JsonSyntaxException ex) {
+                            Log.e(LOG_TAG, "Error while parsing JSON");
+                            model = null;
+                        }
+                        catch (Exception ex) {
+                            Log.e(LOG_TAG, ex.toString());
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response.toString());
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
+                            receiver.send(RESULT_CODE_OK_PARCEL1, bundle);
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override

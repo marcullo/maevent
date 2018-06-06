@@ -34,7 +34,13 @@ public class InvitationModel implements Parcelable {
         Id = invitation.getId();
         Inviter = new UserModel(invitation.getInviter());
         Invitee = new UserModel(invitation.getInvitee());
-        Event = new MaeventModel(invitation);
+
+        Maevent event = new Maevent();
+        event.setParams(invitation.getParams());
+        event.setId(invitation.getEventId());
+        event.setHost(invitation.getHost());
+        Event = new MaeventModel(event);
+        Event.Id = invitation.getEventId();
         Message = invitation.getMessage();
     }
 
@@ -79,7 +85,11 @@ public class InvitationModel implements Parcelable {
         User invitee = new User();
         invitee.setProfile(Invitee.toUserProfile());
         String message = Message;
-        return new Invitation(event, inviter, invitee, message);
+
+        Invitation invitation = new Invitation(event, inviter, invitee, message);
+        invitation.setId(Id);
+
+        return invitation;
     }
 }
 

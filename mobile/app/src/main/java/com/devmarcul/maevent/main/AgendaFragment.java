@@ -276,21 +276,48 @@ public class AgendaFragment extends Fragment implements
     }
 
     private void acceptInvitation(RecyclerView.ViewHolder viewHolder) {
-        InvitationAdapter invitationAdapter = (InvitationAdapter) mInvitationsRecyclerView.getAdapter();
-        int pos = viewHolder.getAdapterPosition();
-
+        final Context context = parent;
+        final int pos = viewHolder.getAdapterPosition();
         Invitation invitation = mInvitationsData.get(pos);
+        mInvitationsProgressBar.setVisibility(View.VISIBLE);
+        mInvitationsNumberView.setVisibility(View.GONE);
 
-        IncomingEventAdapter incomingEventAdapter = (IncomingEventAdapter) mIncomingEventsRecyclerView.getAdapter();
-        mIncomingEventsData = incomingEventAdapter.appendIncomingEventsData(invitation);
+        MaeventManager.getInstance().addAttendee(parent, invitation, new NetworkReceiver.Callback<Maevent>() {
+            @Override
+            public void onSuccess(Maevent event) {
+                appendEventToList(event);
+                removeInvitatiomFromList(pos);
+                mInvitationsProgressBar.setVisibility(View.GONE);
+                mInvitationsNumberView.setVisibility(View.VISIBLE);
+            }
 
+            @Override
+            public void onError(Exception exception) {
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Failed!", context);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", context);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", context);
+                }
+                mInvitationsProgressBar.setVisibility(View.GONE);
+                mInvitationsNumberView.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void appendEventToList(Maevent event) {
+        mIncomingEventsData = mIncomingEventAdapter.appendIncomingEventsData(event);
         String size = String.valueOf(mIncomingEventsData.size());
         mIncomingEventsNumberView.setText(size);
         mIncomingEventsNumberView.setVisibility(View.VISIBLE);
+    }
 
-        mInvitationsData = invitationAdapter.removeInvitation(pos);
-
-        size = String.valueOf(mInvitationsData.size());
+    private void removeInvitatiomFromList(int pos) {
+        mInvitationsData = mInvitationAdapter.removeInvitation(pos);
+        String size = String.valueOf(mInvitationsData.size());
         mInvitationsNumberView.setText(size);
         mInvitationsNumberView.setVisibility(View.VISIBLE);
     }
