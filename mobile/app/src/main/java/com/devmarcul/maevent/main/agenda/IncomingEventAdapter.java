@@ -84,6 +84,12 @@ public class IncomingEventAdapter
         return mIncomingEvents;
     }
 
+    public Maevents removeIncomingEvent(int pos) {
+        mIncomingEvents.remove(pos);
+        notifyItemRemoved(pos);
+        return mIncomingEvents;
+    }
+
     public class IncomingEventAdapterViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {

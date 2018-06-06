@@ -113,7 +113,7 @@ namespace Maevent.API.Controllers
 
                 var model = Mapper.Map<EventModel>(ev);
                 model.Host = GetHostModel(ev);
-                
+
                 return Ok(model);
 
             }
@@ -245,7 +245,7 @@ namespace Maevent.API.Controllers
 
             return BadRequest("Could not delete event");
         }
-        
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] EventModel model)
         {
@@ -294,7 +294,7 @@ namespace Maevent.API.Controllers
                 if (await _repo.SaveAllAsync())
                 {
                     EventModel mapped = Mapper.Map<EventModel>(ev);
-                    mapped.Host = Mapper.Map <UserModel>(seekedHost);
+                    mapped.Host = Mapper.Map<UserModel>(seekedHost);
                     return Ok(mapped);
                 }
             }
@@ -307,7 +307,7 @@ namespace Maevent.API.Controllers
         }
 
         [HttpPut("{id}/attendees")]
-        public async Task<IActionResult> Put(int id, 
+        public async Task<IActionResult> Put(int id,
             [RequiredFromQuery] string insert,
             [RequiredFromQuery] string inv)
         {
@@ -389,7 +389,7 @@ namespace Maevent.API.Controllers
             }
 
             return BadRequest("Could not update event attendees");
-        }         
+        }
 
         [HttpGet("attendee")]
         public IActionResult GetAllByAttendee([RequiredFromQuery]string id)
@@ -421,5 +421,58 @@ namespace Maevent.API.Controllers
             return BadRequest("Could not fetch events");
         }
 
-    }
+        [HttpDelete("{id}/attendees")]
+        public async Task<IActionResult> Delete(int id,
+            [RequiredFromQuery] string usr)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                if (!int.TryParse(usr, out int attendeeId))
+                {
+                    return BadRequest("Invalid attendee id");
+                }
+
+                var seekedAttendee = _repo.GetUser(attendeeId);
+                if (seekedAttendee == null)
+                {
+                    _logger.LogWarning($"User which which wants to leave the event is not registered in the database");
+                    return Unauthorized();
+                }
+
+                var ev = _repo.GetEvent(id);
+                if (ev == null)
+                {
+                    return NotFound();
+                }
+
+                String attendee = attendeeId.ToString();
+                String attendeesIds = ev.AttendeesIds;
+                String identifier = ";" + attendee + ";";
+                if (!attendeesIds.Contains(identifier))
+                {
+                    _logger.LogWarning($"User is not an attendee of the current event.");
+                    return BadRequest("Could not update event attendees");
+                }
+
+                ev.AttendeesIds = attendeesIds.Replace(identifier, ";");
+
+                _repo.Update(ev);
+                if (await _repo.SaveAllAsync())
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Threw exception while resigning from event: {ex}");
+            }
+
+            return BadRequest("Could not resign from event");
+        }
+    } 
 }

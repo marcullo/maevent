@@ -2,6 +2,7 @@ package com.devmarcul.maevent.business_logic;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ThemedSpinnerAdapter;
 
 import com.devmarcul.maevent.apis.MaeventApi;
 import com.devmarcul.maevent.apis.models.InvitationModel;
@@ -70,6 +71,33 @@ public class MaeventManager implements MaeventContentUpdater {
                     public void onSuccess(MaeventModel model) {
                         Maevent event = model.toMaevent();
                         callback.onSuccess(event);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        callback.onError(exception);
+                    }
+                });
+    }
+
+    @Override
+    public void deleteAttendee(Context context, int attendeId, Maevent event, final NetworkReceiver.Callback<Boolean> callback) {
+        if (event == null) {
+            return;
+        }
+        if (!event.isValid()) {
+            return;
+        }
+
+        MaeventModel model = new MaeventModel(event);
+        ThisUser.updateContent(context);
+        String attendeeIdentifier = String.valueOf(ThisUser.getProfile().id);
+
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.DELETE_ATTENDEE, MaeventApi.Param.EVENT, attendeeIdentifier, model, new NetworkReceiver.Callback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean model) {
+                        callback.onSuccess(model);
                     }
 
                     @Override

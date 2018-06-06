@@ -11,6 +11,7 @@ import com.devmarcul.maevent.data.UserProfile;
 public interface MaeventContentUpdater {
     void createEvent(final Context context, Maevent event, NetworkReceiver.Callback<Maevent> callback);
     void addAttendee(final Context context, Invitation invitation, NetworkReceiver.Callback<Maevent> callback);
+    void deleteAttendee(final Context context, int attendeId, Maevent event, NetworkReceiver.Callback<Boolean> callback);
     void getAllEvents(final Context context, final NetworkReceiver.Callback<Maevents> callback);
     void getAllEventsIntendedForUser(final Context context, UserProfile profile, final NetworkReceiver.Callback<Maevents> callback);
     void getEvent(final Context context, int id, final NetworkReceiver.Callback<Maevent> callback);

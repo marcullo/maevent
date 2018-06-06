@@ -117,6 +117,11 @@ public class NetworkService extends IntentService implements MaeventApi {
             final InvitationModel model = intent.getParcelableExtra(Param.INVITATION.name());
             handleAddAttendee(receiver, model);
         }
+        else if (Action.DELETE_ATTENDEE.name().equals(action)) {
+            final String attendeeIdentifier = intent.getStringExtra(Param.STRING2.name());
+            final MaeventModel model = intent.getParcelableExtra(Param.EVENT.name());
+            handleDeleteAttendee(receiver, attendeeIdentifier, model);
+        }
         else if (Action.GET_USERS.name().equals(action)) {
             handleGetUsers(receiver);
         }
@@ -186,6 +191,19 @@ public class NetworkService extends IntentService implements MaeventApi {
 
         Intent intent = new Intent(context, NetworkService.class);
         intent.setAction(action.name());
+        intent.putExtra(param.name(), parcel);
+        intent.putExtra(RESULT_RECEIVER, receiver);
+        context.startService(intent);
+
+        Log.d(LOG_TAG, action.name() + " Handling network intent service: parcel");
+    }
+
+    public void startService(Context context, MaeventApi.Action action, MaeventApi.Param param, String val, Parcelable parcel, NetworkReceiver.Callback callback) {
+        NetworkReceiver receiver = new NetworkReceiver(new Handler(context.getMainLooper()), callback);
+
+        Intent intent = new Intent(context, NetworkService.class);
+        intent.setAction(action.name());
+        intent.putExtra(Param.STRING2.name(), val);
         intent.putExtra(param.name(), parcel);
         intent.putExtra(RESULT_RECEIVER, receiver);
         context.startService(intent);
@@ -444,6 +462,40 @@ public class NetworkService extends IntentService implements MaeventApi {
                             bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
                             receiver.send(RESULT_CODE_OK_PARCEL, bundle);
                         }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof ClientError) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ClientError());
+                        }
+                        else {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ServerError());
+                        }
+                        receiver.send(RESULT_CODE_ERROR, bundle);
+                    }
+                });
+        mRequestQueue.add(request);
+    }
+
+    @Override
+    public void handleDeleteAttendee(final ResultReceiver receiver, String attendeeIdentifier, MaeventModel model) {
+        final Bundle bundle = new Bundle();
+
+        int eventId = model.Id;
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(MaeventApi.URL_EVENTS).append(eventId).append("/")
+                .append(URL_ATTENDEES_TEXT).append("?")
+                .append(URL_ATTENDEE_DELETE_ID).append(attendeeIdentifier);
+        String url = builder.toString();
+
+        StringRequest request = new StringRequest
+                (Request.Method.DELETE, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        bundle.putSerializable(NetworkReceiver.PARAM_RESULT, true);
+                        receiver.send(RESULT_CODE_OK, bundle);
                     }
                 }, new Response.ErrorListener() {
                     @Override

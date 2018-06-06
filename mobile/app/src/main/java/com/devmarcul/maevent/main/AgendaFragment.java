@@ -39,6 +39,7 @@ import com.devmarcul.maevent.main.common.EventDetailsHandler;
 import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;
 import com.devmarcul.maevent.utils.CustomTittleSetter;
 import com.devmarcul.maevent.utils.Prompt;
+import com.devmarcul.maevent.utils.SwipeDeleteCallback;
 import com.devmarcul.maevent.utils.TimeUtils;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
@@ -195,6 +196,15 @@ public class AgendaFragment extends Fragment implements
         mIncomingEventsRecyclerView.setLayoutManager(layoutManager);
         mIncomingEventsRecyclerView.setHasFixedSize(false);
 
+        SwipeDeleteCallback swipeHandler = new SwipeDeleteCallback(parent, new SwipeDeleteCallback.SwipedCallback() {
+            @Override
+            public void onDelete(RecyclerView.ViewHolder viewHolder) {
+                deleteEvent(viewHolder);
+            }
+        });
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeHandler);
+        itemTouchHelper.attachToRecyclerView(mIncomingEventsRecyclerView);
+
         mIncomingEventAdapter = new IncomingEventAdapter(this);
         mIncomingEventsRecyclerView.setAdapter(mIncomingEventAdapter);
 
@@ -210,6 +220,46 @@ public class AgendaFragment extends Fragment implements
 
         mIncomingEventsProgressBar = view.findViewById(R.id.pb_incoming_events_number_loading_indicator);
         mIncomingEventsNumberView = view.findViewById(R.id.tv_incoming_events_number);
+    }
+
+    private void deleteEvent(RecyclerView.ViewHolder viewHolder) {
+        final Context context = parent;
+
+        mIncomingEventsProgressBar.setVisibility(View.VISIBLE);
+        mIncomingEventsNumberView.setVisibility(View.GONE);
+
+        final IncomingEventAdapter adapter = (IncomingEventAdapter) mIncomingEventsRecyclerView.getAdapter();
+        final int pos = viewHolder.getAdapterPosition();
+
+        Maevent event = mIncomingEventsData.get(pos);
+
+        ThisUser.updateContent(context);
+        MaeventManager.getInstance().deleteAttendee(context, ThisUser.getProfile().id, event, new NetworkReceiver.Callback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean data) {
+                mIncomingEventsData = adapter.removeIncomingEvent(pos);
+                String size = String.valueOf(mIncomingEventsData.size());
+                mIncomingEventsNumberView.setText(size);
+                mIncomingEventsProgressBar.setVisibility(View.GONE);
+                mIncomingEventsNumberView.setVisibility(View.VISIBLE);
+                MainActivity.pendingEvent = null;
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Failed!", context);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", context);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", context);
+                }
+                mIncomingEventsProgressBar.setVisibility(View.GONE);
+                mIncomingEventsNumberView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void initInvitations() {
@@ -298,6 +348,7 @@ public class AgendaFragment extends Fragment implements
                 removeInvitatiomFromList(pos);
                 mInvitationsProgressBar.setVisibility(View.GONE);
                 mInvitationsNumberView.setVisibility(View.VISIBLE);
+                mIncomingEventsLabel.expand();
             }
 
             @Override

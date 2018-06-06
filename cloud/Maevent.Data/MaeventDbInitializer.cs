@@ -69,7 +69,7 @@ namespace Maevent.Data
             },
             new Event() // id = 4
             {
-                Name = "Relax",
+                Name = "Total Relax",
                 HostFirstName = "Andrew",
                 HostLastName = "Block",
                 Place = "Łazienki Królewskie",
