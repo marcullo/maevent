@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/main_action_refresh"
+        android:title="@string/text_refresh"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/main_action_profile"
         android:title="@string/text_profile"
         app:showAsAction="never"/>

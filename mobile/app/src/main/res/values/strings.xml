@@ -17,6 +17,7 @@
     <string name="text_in">In</string>
     <string name="text_tomorrow">Next day</string>
     <string name="text_location">City</string>
+    <string name="text_refresh">Refresh</string>
 
     <string name="abbrev_mins">MINS</string>
     <string name="abbrev_hours">HRS</string>

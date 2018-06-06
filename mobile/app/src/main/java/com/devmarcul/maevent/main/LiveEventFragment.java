@@ -80,6 +80,12 @@ public class LiveEventFragment extends Fragment implements
         return view;
     }
 
+    public void refresh() {
+        mAttendeesProgressBar.setVisibility(View.VISIBLE);
+        mAttendeeRecyclerView.setVisibility(View.GONE);
+        updateUsers();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -177,6 +183,7 @@ public class LiveEventFragment extends Fragment implements
 
                 mLiveEventToolbar.setVisibility(View.VISIBLE);
                 mAttendeesProgressBar.setVisibility(View.GONE);
+                mAttendeeRecyclerView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -191,6 +198,7 @@ public class LiveEventFragment extends Fragment implements
                     Prompt.displayShort("Internal error.", context);
                 }
                 mAttendeesProgressBar.setVisibility(View.GONE);
+                mAttendeeRecyclerView.setVisibility(View.GONE);
             }
         });
     }

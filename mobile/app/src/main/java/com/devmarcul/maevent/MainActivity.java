@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.devmarcul.maevent.data.Maevent;
-import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.main.AgendaFragment;
 import com.devmarcul.maevent.main.LiveEventFragment;
 import com.devmarcul.maevent.main.CreateEventFragment;
@@ -82,12 +81,30 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.main_action_refresh) {
+            switch (lastLoadedFragmentId) {
+                case R.id.main_agenda:
+                    ((AgendaFragment)lastLoadedFragment).refresh();
+                    break;
+
+                case R.id.main_live_event:
+                    ((LiveEventFragment)lastLoadedFragment).refresh();
+                    break;
+
+                case R.id.main_create_event:
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Not implemented fragment!");
+            }
+            return true;
+        }
         if (id == R.id.main_action_profile) {
             setProfileActivity();
             return true;
         }
         if (id == R.id.main_action_support) {
-            Prompt.displayTodo(this);
+            Prompt.displayShort("See Marcullo@github", this);
             return true;
         }
         if (id == R.id.main_action_logout) {

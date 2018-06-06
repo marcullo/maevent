@@ -102,6 +102,15 @@ public class AgendaFragment extends Fragment implements
         return view;
     }
 
+    public void refresh() {
+        mIncomingEventsProgressBar.setVisibility(View.VISIBLE);
+        mIncomingEventsNumberView.setVisibility(View.GONE);
+        mInvitationsProgressBar.setVisibility(View.VISIBLE);
+        mInvitationsNumberView.setVisibility(View.GONE);
+        updateEvents();
+        updateInvitations();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
