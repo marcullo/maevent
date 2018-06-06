@@ -24,6 +24,7 @@ public class EventDetailsViewAdapter implements
         void onClickLocation();
         void onClickCalendar();
         void onClickJoin();
+        void onClickAddAttendee();
     }
 
     public EventDetailsViewAdapter(OnClickHandler handler, View viewHolderView) {
@@ -81,12 +82,11 @@ public class EventDetailsViewAdapter implements
     }
 
     public void adaptJoinButton(boolean visible) {
-        if (visible) {
-            mViewHolder.mJoinButton.setVisibility(View.VISIBLE);
-        }
-        else {
-            mViewHolder.mJoinButton.setVisibility(View.GONE);
-        }
+        mViewHolder.mJoinButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    public void adaptAddAttendeeButton(boolean visible) {
+        mViewHolder.mAddAttendeeButton.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     public static String getTimeSting(String start, String end) {
@@ -109,6 +109,7 @@ public class EventDetailsViewAdapter implements
         mViewHolder.mCallButton.setOnClickListener(this);
         mViewHolder.mCalendarButton.setOnClickListener(this);
         mViewHolder.mJoinButton.setOnClickListener(this);
+        mViewHolder.mAddAttendeeButton.setOnClickListener(this);
     }
 
     @Override
@@ -117,6 +118,7 @@ public class EventDetailsViewAdapter implements
         mViewHolder.mCallButton.setOnClickListener(null);
         mViewHolder.mCalendarButton.setOnClickListener(null);
         mViewHolder.mJoinButton.setOnClickListener(null);
+        mViewHolder.mAddAttendeeButton.setOnClickListener(null);
     }
 
     @Override
@@ -137,6 +139,9 @@ public class EventDetailsViewAdapter implements
         }
         else if (v == mViewHolder.mJoinButton) {
             mClickHandler.onClickJoin();
+        }
+        else if (v == mViewHolder.mAddAttendeeButton) {
+            mClickHandler.onClickAddAttendee();
         }
     }
 }

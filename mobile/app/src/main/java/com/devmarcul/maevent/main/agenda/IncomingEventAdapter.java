@@ -199,6 +199,10 @@ public class IncomingEventAdapter
                 String suffix = context.getString(R.string.text_hours);
                 sb.append("1").append(ENDL).append(suffix);
             }
+            else if (minutes < 60 * 24) {
+                String suffix = context.getString(R.string.text_within_day);
+                sb.append(suffix);
+            }
             else if (minutes < 2 * 60 * 24) {
                 String suffix = context.getString(R.string.text_tomorrow);
                 sb.append(suffix);

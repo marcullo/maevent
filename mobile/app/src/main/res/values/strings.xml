@@ -16,6 +16,7 @@
     <string name="text_hours">hours</string>
     <string name="text_in">In</string>
     <string name="text_tomorrow">Next day</string>
+    <string name="text_within_day">Within day</string>
     <string name="text_location">City</string>
     <string name="text_refresh">Refresh</string>
 
@@ -53,6 +54,7 @@
     </string-array>
 
     <string name="main_join_event">Join</string>
+    <string name="main_add_attendee">+Attendee</string>
 
     <string name="main_agenda_label">Agenda</string>
     <string name="main_description_label">Description</string>

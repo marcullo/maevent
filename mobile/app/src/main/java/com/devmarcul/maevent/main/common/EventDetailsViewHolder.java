@@ -18,6 +18,7 @@ public class EventDetailsViewHolder {
     public ImageButton mCallButton;
     public ImageButton mCalendarButton;
     public Button mJoinButton;
+    public Button mAddAttendeeButton;
     public TextView mNameView;
     public TextView mHostView;
     public TextView mPlaceView;
@@ -36,6 +37,7 @@ public class EventDetailsViewHolder {
         mCallButton = view.findViewById(R.id.btn_main_event_details_call);
         mCalendarButton = view.findViewById(R.id.btn_main_event_details_calendar);
         mJoinButton = view.findViewById(R.id.btn_main_event_details_join);
+        mAddAttendeeButton = view.findViewById(R.id.btn_main_event_details_add_attendee);
         mNameView = view.findViewById(R.id.tv_event_details_name);
         mHostView = view.findViewById(R.id.tv_event_details_host);
         mPlaceView = view.findViewById(R.id.tv_event_details_place);

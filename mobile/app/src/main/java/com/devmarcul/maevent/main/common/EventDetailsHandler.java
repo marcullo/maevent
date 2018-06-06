@@ -14,9 +14,14 @@ public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandl
     private Invitation mFocusedInvitation;
     private Activity parent;
     private OnClickJoinHandler onClickJoinHandler;
+    private OnClickAddAttendeeHandler onClickAddAttendeeHandler;
 
     public interface OnClickJoinHandler {
         void onClickJoin();
+    }
+
+    public interface OnClickAddAttendeeHandler {
+        void onClickAddAttendee();
     }
 
     public EventDetailsHandler() {
@@ -32,8 +37,10 @@ public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandl
         return null;
     }
 
-    public void setOnClickJoinHandler(OnClickJoinHandler handler) {
-        onClickJoinHandler = handler;
+    public void setOnClickHandlers(OnClickJoinHandler onClickJoin,
+                                      OnClickAddAttendeeHandler onClickAddAttendee) {
+        onClickJoinHandler = onClickJoin;
+        onClickAddAttendeeHandler = onClickAddAttendee;
     }
 
     public void focus(Maevent event, Invitation invitation) {
@@ -110,6 +117,13 @@ public class EventDetailsHandler implements EventDetailsViewAdapter.OnClickHandl
     public void onClickJoin() {
         if (onClickJoinHandler != null) {
             onClickJoinHandler.onClickJoin();
+        }
+    }
+
+    @Override
+    public void onClickAddAttendee() {
+        if (onClickAddAttendeeHandler != null) {
+            onClickAddAttendeeHandler.onClickAddAttendee();
         }
     }
 }

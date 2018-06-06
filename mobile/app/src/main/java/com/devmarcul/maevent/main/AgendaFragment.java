@@ -32,6 +32,7 @@ import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.Maevents;
 import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.main.agenda.IncomingEventAdapter;
 import com.devmarcul.maevent.main.agenda.InvitationAdapter;
 import com.devmarcul.maevent.main.agenda.ItemViewHolder;
@@ -149,6 +150,7 @@ public class AgendaFragment extends Fragment implements
 
         mEventDetailsAdapter.adaptContent(event);
         mEventDetailsAdapter.adaptJoinButton(!isPendingEvent);
+        mEventDetailsAdapter.adaptAddAttendeeButton(false);
         mEventDetailsAdapter.bindListeners();
 
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
@@ -164,6 +166,7 @@ public class AgendaFragment extends Fragment implements
 
         mEventDetailsAdapter.adaptContent(invitation);
         mEventDetailsAdapter.adaptJoinButton(false);
+        mEventDetailsAdapter.adaptAddAttendeeButton(false);
         mEventDetailsAdapter.bindListeners();
 
         mEventDetailsLoading.setVisibility(View.INVISIBLE);
@@ -312,21 +315,28 @@ public class AgendaFragment extends Fragment implements
     private void initEventDetailsDialog() {
         View eventDetailsView = mEventDetailsView.findViewById(R.id.main_event_details);
 
+
         mEventDetailsHandler = MainActivity.eventDetailsHandler;
 
         DetailsDialog.Builder builder = new DetailsDialog.Builder(parent, eventDetailsView);
         mEventDetailsDialog = builder.build(true);
 
         mEventDetailsAdapter = new EventDetailsViewAdapter(mEventDetailsHandler, eventDetailsView);
+        mEventDetailsAdapter.adaptAddAttendeeButton(false);
 
         mEventDetailsHandler.focus(parent);
-        mEventDetailsHandler.setOnClickJoinHandler(new EventDetailsHandler.OnClickJoinHandler() {
+        mEventDetailsHandler.setOnClickHandlers(new EventDetailsHandler.OnClickJoinHandler() {
             @Override
             public void onClickJoin() {
                 mEventDetailsAdapter.adaptJoinButton(false);
                 mEventDetailsDialog.hide();
+
                 MainActivity.pendingEvent = mEventDetailsHandler.getFocus();
-                ((MainActivity)parent).loadLiveEventFragment();
+                ((MainActivity) parent).loadLiveEventFragment();
+            }
+        }, new EventDetailsHandler.OnClickAddAttendeeHandler() {
+            @Override
+            public void onClickAddAttendee() {
             }
         });
 

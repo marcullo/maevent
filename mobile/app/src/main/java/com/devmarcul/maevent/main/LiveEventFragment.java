@@ -2,6 +2,7 @@ package com.devmarcul.maevent.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
@@ -9,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +18,18 @@ import android.widget.ProgressBar;
 
 import com.android.volley.ClientError;
 import com.android.volley.ServerError;
+import com.devmarcul.maevent.InviteActivity;
 import com.devmarcul.maevent.MainActivity;
 import com.devmarcul.maevent.R;
+import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.business_logic.MaeventUserManager;
+import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.common.TagsViewAdapter;
-import com.devmarcul.maevent.content_providers.hardcoded.UserBuilder;
+import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserDummy;
+import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.data.Users;
 import com.devmarcul.maevent.main.common.EventDetailsHandler;
 import com.devmarcul.maevent.main.common.EventDetailsViewAdapter;
@@ -38,6 +44,8 @@ public class LiveEventFragment extends Fragment implements
         AttendeeViewAdapter.OnClickHandler,
         ViewScroller,
         CustomTittleSetter {
+
+    private static final String LOG_TAG = "LiveEventFragment";
 
     private View view;
     private Activity parent;
@@ -145,6 +153,31 @@ public class LiveEventFragment extends Fragment implements
         mEventDetailsAdapter = new EventDetailsViewAdapter(mEventDetailsHandler, mEventDetailsView);
         mEventDetailsAdapter.adaptContent(MainActivity.pendingEvent);
         mEventDetailsAdapter.adaptJoinButton(false);
+
+        Maevent pendingEvent = mEventDetailsHandler.getFocus();
+        UserProfile hostProfile = pendingEvent.getHost().getProfile();
+        ThisUser.updateContent(parent);
+        UserProfile thisUserProfile = ThisUser.getProfile();
+        if (hostProfile.id == thisUserProfile.id) {
+            mEventDetailsAdapter.adaptAddAttendeeButton(true);
+        }
+        else {
+            mEventDetailsAdapter.adaptAddAttendeeButton(false);
+        }
+
+        mEventDetailsHandler.setOnClickHandlers(new EventDetailsHandler.OnClickJoinHandler() {
+            @Override
+            public void onClickJoin() {
+            }
+        }, new EventDetailsHandler.OnClickAddAttendeeHandler() {
+            @Override
+            public void onClickAddAttendee() {
+                Maevent event = MainActivity.pendingEvent;
+                if (event != null) {
+                    startInviteActivity(event);
+                }
+            }
+        });
         mEventDetailsAdapter.bindListeners();
     }
 
@@ -206,5 +239,21 @@ public class LiveEventFragment extends Fragment implements
                 mAttendeeRecyclerView.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void startInviteActivity(Maevent event) {
+        if (event == null) {
+            return;
+        }
+        if (!event.isValid()) {
+            return;
+        }
+
+        MaeventModel focusedModel = new MaeventModel(event);
+
+        Log.d(LOG_TAG, "Setting next activity.");
+        Intent intent = new Intent(parent, InviteActivity.class);
+        intent.putExtra(InviteActivity.KEY_PARCEL_FOCUSED_EVENT_MODEL, focusedModel);
+        startActivity(intent);
     }
 }
