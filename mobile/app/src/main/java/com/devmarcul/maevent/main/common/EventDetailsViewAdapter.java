@@ -58,6 +58,7 @@ public class EventDetailsViewAdapter implements
         String postCode = params.addressPostCode;
         String time = getTimeSting(params.beginTime, params.endTime);
         String duration = getDurationString(params.beginTime, params.endTime);
+        int rsvp = params.rsvp ? View.VISIBLE : View.GONE;
 
         mViewHolder.mNameView.setText(eventName);
         mViewHolder.mHostView.setText(builder.toString());
@@ -66,6 +67,7 @@ public class EventDetailsViewAdapter implements
         mViewHolder.mPostalCodeView.setText(postCode);
         mViewHolder.mTimeView.setText(time);
         mViewHolder.mDurationView.setText(duration);
+        mViewHolder.mRsvpView.setVisibility(rsvp);
 
         adaptUsersNumber(event);
     }

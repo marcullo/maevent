@@ -21,7 +21,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/event_details"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -183,15 +183,14 @@
         <ImageButton
             android:id="@+id/btn_main_incoming_event_rsvp"
             android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_height="25dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/ic_rsvp"
             android:backgroundTint="@color/colorPrimary"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/iv_event_details_time_icon"
-            card_view:layout_constraintBottom_toBottomOf="@+id/tv_event_details_time"
-            card_view:layout_constraintStart_toEndOf="@+id/tv_event_details_time"
-            card_view:layout_constraintTop_toTopOf="@+id/tv_event_details_time" />
+            android:visibility="visible"
+            card_view:layout_constraintBottom_toTopOf="@+id/tv_event_details_name"
+            card_view:layout_constraintStart_toEndOf="@+id/tv_event_details_name"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_event_details_name" />
 
         <Button
             android:id="@+id/btn_main_event_details_join"

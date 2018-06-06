@@ -28,6 +28,7 @@ public class EventDetailsViewHolder {
     public ImageView mDurationIcon;
     public TextView mUsersNumberView;
     public ImageView mUsersNumberIcon;
+    public ImageButton mRsvpView;
 
     public EventDetailsViewHolder(View view) {
         this.view = view;
@@ -45,5 +46,6 @@ public class EventDetailsViewHolder {
         mDurationIcon = view.findViewById(R.id.iv_event_details_time_icon);
         mUsersNumberView = view.findViewById(R.id.tv_event_details_users_number);
         mUsersNumberIcon = view.findViewById(R.id.iv_event_details_users_number_icon);
+        mRsvpView = view.findViewById(R.id.btn_main_incoming_event_rsvp);
     }
 }
