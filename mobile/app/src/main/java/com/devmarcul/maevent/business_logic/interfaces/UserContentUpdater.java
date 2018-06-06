@@ -13,4 +13,5 @@ public interface UserContentUpdater {
     void updateUser(final Context context, UserProfile profile, NetworkReceiver.Callback<String> callback);
     void getAllUsers(final Context context, final NetworkReceiver.Callback<Users> callback);
     void getAllAttendees(final Context context, Maevent event, final NetworkReceiver.Callback<Users> callback);
+    void getUsersByQuery(final Context context, String query, final NetworkReceiver.Callback<Users> callback);
 }

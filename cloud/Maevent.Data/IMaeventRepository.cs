@@ -24,6 +24,7 @@ namespace Maevent.Data
         int GetEventInviteesNumber(int id);
 
         // Users
+        IEnumerable<User> GetUsersByQuery(string query);
         User GetUser(int id);
         User GetUserByName(string firstName, string lastName);
         IEnumerable<User> GetAllUsers();

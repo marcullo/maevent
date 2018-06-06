@@ -81,6 +81,18 @@ namespace Maevent.Data
                 .Count();
         }
 
+        public IEnumerable<User> GetUsersByQuery(string query)
+        {
+            if (String.IsNullOrEmpty(query))
+            {
+                return null;
+            }
+            return _context.Users
+                    .Where(c => 
+                        (c.FirstName + " " + c.LastName).Contains(query))
+                    .ToList();
+        }
+
         public User GetUser(int id)
         {
             return _context.Users

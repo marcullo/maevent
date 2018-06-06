@@ -1,3 +1,4 @@
+
 package com.devmarcul.maevent.business_logic.services;
 
 import android.app.IntentService;
@@ -113,6 +114,14 @@ public class NetworkService extends IntentService implements MaeventApi {
                 return;
             }
             handleGetAttendees(receiver, eventIdentifier);
+        }
+        else if (Action.GET_USERS_BY_QUERY.name().equals(action)) {
+            final String query = intent.getStringExtra(Param.STRING.name());
+            if (query == null) {
+                Log.d(LOG_TAG,"Invalid intent");
+                return;
+            }
+            handleGetUsersByQuery(receiver, query);
         }
         else if (Action.GET_USER.name().equals(action)) {
             final String identifier = intent.getStringExtra(Param.STRING.name());
@@ -367,6 +376,57 @@ public class NetworkService extends IntentService implements MaeventApi {
         StringBuilder builder = new StringBuilder();
         builder.append(MaeventApi.URL_EVENT_ATTENDEES).append("?")
                 .append(URL_EVENT_ID).append(eventIdentifier);
+        String url = builder.toString();
+
+        StringRequest request = new StringRequest
+                (Request.Method.GET, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        UsersModel model;
+                        try {
+                            Gson gson = new Gson();
+                            List<UserModel> content = gson.fromJson(response, new TypeToken<List<UserModel>>(){}.getType());
+                            model = new UsersModel(content);
+                        }
+                        catch (JsonSyntaxException ex) {
+                            Log.e(LOG_TAG, "Error while parsing JSON");
+                            model = null;
+                        }
+                        catch (Exception ex) {
+                            Log.e(LOG_TAG, ex.toString());
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response);
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
+                            receiver.send(RESULT_CODE_OK_PARCEL, bundle);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof ClientError) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ClientError());
+                        }
+                        else {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ServerError());
+                        }
+                        receiver.send(RESULT_CODE_ERROR, bundle);
+                    }
+                });
+        mRequestQueue.add(request);
+    }
+
+    @Override
+    public void handleGetUsersByQuery(final ResultReceiver receiver, String query) {
+        final Bundle bundle = new Bundle();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(MaeventApi.URL_USERS).append("?")
+                .append(URL_QUERY_ID).append(query);
         String url = builder.toString();
 
         StringRequest request = new StringRequest

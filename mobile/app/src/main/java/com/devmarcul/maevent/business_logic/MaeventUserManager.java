@@ -101,4 +101,24 @@ public class MaeventUserManager implements UserContentUpdater {
                     }
                 });
     }
+
+    @Override
+    public void getUsersByQuery(Context context, String query, final NetworkReceiver.Callback<Users> callback) {
+        if (query == null) {
+            return;
+        }
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.GET_USERS_BY_QUERY, MaeventApi.Param.STRING, query, new NetworkReceiver.Callback<UsersModel>() {
+                    @Override
+                    public void onSuccess(UsersModel model) {
+                        Users users = model.toUsers();
+                        callback.onSuccess(users);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        callback.onError(exception);
+                    }
+                });
+    }
 }

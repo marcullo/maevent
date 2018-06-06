@@ -14,11 +14,12 @@ public interface MaeventApi {
 
     enum Action {
         GET_EVENTS, GET_EVENTS_INTENDED_FOR_USER, CREATE_EVENT,
-        GET_USERS, GET_ATTENDEES, GET_USER, CREATE_USER, UPDATE_USER,
+        GET_USERS, GET_ATTENDEES, GET_USERS_BY_QUERY, GET_USER, CREATE_USER, UPDATE_USER,
         GET_INVITATIONS, GET_INVITATIONS_INTENDED_FOR_USER };
     enum Param { NONE, STRING, EVENT, USER };
 
     String URL_EVENT_ID = "ev=";
+    String URL_QUERY_ID = "q=";
     String URL_USER_ID = "id=";
     String URL_ALL = "all";
 
@@ -41,6 +42,7 @@ public interface MaeventApi {
     /* /api/users */
     void handleGetUsers(final ResultReceiver receiver);
     void handleGetAttendees(final ResultReceiver receiver, String eventIdentifier);
+    void handleGetUsersByQuery(final ResultReceiver receiver, String query);
     void handleCreateUser(final ResultReceiver receiver, UserModel model);
     /* ........../identifier */
     void handleGetUser(final ResultReceiver receiver, String identifier);

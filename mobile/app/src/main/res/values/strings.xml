@@ -87,8 +87,7 @@
     <string name="invite_action_clear_all">Clear all</string>
     <string name="invite_found_text">Found</string>
     <string name="invite_search_label">Searching</string>
-    <string name="invite_search_label_found">Found</string>
+    <string name="invite_search_label_found">Results</string>
     <string name="invite_search_label_not_found">Not found</string>
-    <string name="invite_found_label">Results</string>
 
 </resources>

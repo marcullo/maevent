@@ -42,6 +42,22 @@ namespace Maevent.API.Controllers
             return BadRequest("Could not fetch users");
         }
 
+        [HttpGet]
+        public IActionResult Index([RequiredFromQuery]string q)
+        {
+            try
+            {
+                var users = _repo.GetUsersByQuery(q);
+                return Ok(Mapper.Map<IEnumerable<UserModel>>(users));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Threw exception while fetching users: {ex}");
+            }
+
+            return BadRequest("Could not fetch users");
+        }
+
         [HttpDelete]
         public async Task<IActionResult> DeleteAll()
         {

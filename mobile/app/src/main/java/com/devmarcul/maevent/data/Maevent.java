@@ -2,6 +2,8 @@ package com.devmarcul.maevent.data;
 
 import com.devmarcul.maevent.utils.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,6 +111,20 @@ public class Maevent implements DataValidator {
         }
 
         return attendeesNumber;
+    }
+
+    public List<Integer> getAttendeesIdList() {
+        ArrayList<Integer> ids = new ArrayList<>();
+        if (attendeesIds == null) {
+            return ids;
+        }
+        Pattern p = Pattern.compile("\\d+;");
+        Matcher m = p.matcher(attendeesIds);
+        while(m.find()) {
+            String identifier = m.group().replaceAll(";", "");
+            ids.add(Integer.valueOf(identifier));
+        }
+        return ids;
     }
 
     public static boolean isNameValid(String name) {

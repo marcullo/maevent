@@ -21,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.devmarcul.maevent.apis.models.MaeventModel;
+import com.devmarcul.maevent.business_logic.MaeventUserManager;
+import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.content_providers.hardcoded.UserBuilder;
 import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.User;
@@ -34,6 +36,9 @@ import com.devmarcul.maevent.utils.SwipeDeleteCallback;
 import com.devmarcul.maevent.utils.Tools;
 import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 public class InviteActivity extends AppCompatActivity implements CustomTittleSetter {
 
@@ -53,6 +58,7 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
     MaterialSearchView mSearchView;
     private ProgressBar mFoundUsersLoadingBar;
     private TextView mSearchResultsLabel;
+    private TextView mSearchResultsDescription;
     private DetailsDialog mSearchResultsDialog;
     private RecyclerView mFoundUsersRecyclerView;
     private SearchingUsersAdapter mFoundUsersAdapter;
@@ -155,7 +161,6 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
         final Context context = this;
 
         mFoundUsersData = new Users();
-
         mSearchView = findViewById(R.id.sv_user_search);
         mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
@@ -164,8 +169,8 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
                     return false;
                 }
                 int len = query.length();
-                if (len < 4 || len > 30) {
-                    Prompt.displayShort("Query should have from 4 to 36 chars", context);
+                if (len < 2 || len > 35) {
+                    Prompt.displayShort("Query should have from 5 to 35 chars", context);
                     return true;
                 }
                 searchUser(query);
@@ -180,6 +185,7 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
         mSearchView.showSearch();
 
         mSearchResultsLabel = mSearchResultsView.findViewById(R.id.tv_search_label);
+        mSearchResultsDescription = mSearchResultsView.findViewById(R.id.tv_found_description);
 
         View searchResultsView = mSearchResultsView.findViewById(R.id.invite_search_results);
         DetailsDialog.Builder builder = new DetailsDialog.Builder(this, searchResultsView);
@@ -195,6 +201,8 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
             public void onClick(User user) {
                 if (user != null) {
                     updateSearchResult(user);
+                    mFoundUsersData.clear();
+                    mFoundUsersAdapter.setFoundUsersData(mFoundUsersData);
                 }
             }
         });
@@ -268,6 +276,14 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
         mEventDetailsAdapter.adaptContent(mFocusedEvent);
     }
 
+    private void initSearchLabel() {
+        mSearchResultsLabel.setText(R.string.invite_search_label);
+    }
+
+    private void initSearchUserDescription() {
+        mSearchResultsDescription.setText("");
+    }
+
     private void adaptInviteButton(boolean active) {
         mInviteButton.setClickable(active);
         Drawable background = mInviteButton.getBackground();
@@ -280,7 +296,7 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
     }
 
     private void adaptFoundUsersLoadingBar(boolean visible) {
-        mFoundUsersLoadingBar.setVisibility(visible ? View.VISIBLE : View.GONE);
+        mFoundUsersLoadingBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void adaptInviteLoadingBar(boolean visible) {
@@ -296,25 +312,85 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
         mInviteesTouchHelper.attachToRecyclerView(rv);
     }
 
+    private void adaptSearchResultsDescription(boolean found, String description) {
+        int labelRes = found ? R.string.invite_search_label_found : R.string.invite_search_label_not_found;
+        mSearchResultsLabel.setText(labelRes);
+        if (description != null) {
+            mSearchResultsDescription.setText(description);
+        }
+    }
+
     private void clearInvitees() {
         mInviteesAdapter.clearInvitations();
     }
 
     private void searchUser(String name) {
+        final Context context = this;
+
         mFoundUsersData.clear();
         adaptFoundUsersLoadingBar(true);
-        mSearchResultsLabel.setText(R.string.invite_search_label);
-
+        initSearchLabel();
+        initSearchUserDescription();
         mSearchResultsDialog.show();
-        mFoundUsersData.add(UserBuilder.build());
-        mFoundUsersData.add(UserBuilder.build());
-        mFoundUsersData.add(UserBuilder.build());
-        mFoundUsersData.add(UserBuilder.build());
-        mFoundUsersData.add(UserBuilder.build());
-        mFoundUsersAdapter.setFoundUsersData(mFoundUsersData);
+
+        MaeventUserManager.getInstance().getUsersByQuery(this, name, new NetworkReceiver.Callback<Users>() {
+            @Override
+            public void onSuccess(Users users) {
+                updateUsersFound(users);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                adaptFoundUsersLoadingBar(false);
+                Prompt.displayShort("Failed!", context);
+            }
+        });
+    }
+
+    public void updateUsersFound(Users users) {
+        adaptFoundUsersLoadingBar(false);
+
+        int foundUsersNr = users.size();
+        if (foundUsersNr < 1) {
+            adaptSearchResultsDescription(false, "User not found, sorry.");
+            return;
+        }
+
+        List<Integer> ids = mFocusedEvent.getAttendeesIdList();
+
+        boolean exists;
+        for (User foundUser :
+                users) {
+            exists = false;
+            for (User invitee:
+                    mInviteesData) {
+                if (invitee.getProfile().id == foundUser.getProfile().id) {
+                    exists = true;
+                    break;
+                }
+            }
+            for (Integer id:
+                    ids) {
+                if (id == foundUser.getProfile().id) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                mFoundUsersData.add(foundUser);
+            }
+        }
+
+        foundUsersNr = mFoundUsersData.size();
+        if (foundUsersNr < 1) {
+            adaptSearchResultsDescription(false, "I've got nothing for you, sorry!");
+
+            return;
+        }
 
         adaptFoundUsersLoadingBar(false);
-        mSearchResultsLabel.setText(R.string.invite_search_label_found);
+        adaptSearchResultsDescription(true, null);
+        mFoundUsersAdapter.setFoundUsersData(mFoundUsersData);
     }
 
     public void updateSearchResult(User user) {
