@@ -40,6 +40,10 @@ import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.devmarcul.maevent.utils.bottom_navig.ViewScroller;
 import com.devmarcul.maevent.main.live_event.AttendeeViewAdapter;
 
+import java.util.List;
+
+import me.originqiu.library.EditTag;
+
 public class LiveEventFragment extends Fragment implements
         AttendeeViewAdapter.OnClickHandler,
         ViewScroller,
@@ -55,6 +59,8 @@ public class LiveEventFragment extends Fragment implements
     private EventDetailsHandler mEventDetailsHandler;
 
     private Users mAttendeesData;
+    private Users mAttendeesDataBackup;
+
     private ProgressBar mAttendeesProgressBar;
     private RecyclerView mAttendeeRecyclerView;
     private AttendeeViewAdapter mAttendeeViewAdapter;
@@ -66,6 +72,8 @@ public class LiveEventFragment extends Fragment implements
     private UserDetailsViewAdapter mAttendeeDetailsAdapter;
 
     private View mLiveEventToolbar;
+
+    private EditTag mFilterTags;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,7 @@ public class LiveEventFragment extends Fragment implements
 
         initEventDetails();
         initAttendees();
+        initTagsFilter();
         initAttendeeDetailsDialog();
 
         updateUsers();
@@ -193,6 +202,63 @@ public class LiveEventFragment extends Fragment implements
         mAttendeeRecyclerView.setAdapter(mAttendeeViewAdapter);
 
         mAttendeesProgressBar = view.findViewById(R.id.pb_attendees_loading);
+    }
+
+    private void initTagsFilter() {
+        mFilterTags = mLiveEventToolbar.findViewById(R.id.main_live_event_filter);
+        mFilterTags.setEditable(true);
+        mFilterTags.setTagAddCallBack(new EditTag.TagAddCallback() {
+            @Override
+            public boolean onTagAdd(String s) {
+                updateFilters(s, true);
+                return true;
+            }
+        });
+        mFilterTags.setTagDeletedCallback(new EditTag.TagDeletedCallback() {
+            @Override
+            public void onTagDelete(String s) {
+                updateFilters(s, false);
+            }
+        });
+    }
+
+    private void updateFilters(String antotherTag, boolean added) {
+        if (mAttendeesDataBackup == null) {
+            mAttendeesDataBackup = new Users();
+        }
+        mAttendeesDataBackup.clear();
+
+        List<String> tags = mFilterTags.getTagList();
+        if (added) {
+            tags.add(antotherTag);
+        }
+
+        for (User user :
+                mAttendeesData) {
+            int tagsCnt = 0;
+
+            if (user.getProfile() == null) {
+                continue;
+            }
+            if (user.getProfile().tags == null) {
+                continue;
+            }
+
+            for (String tagAttendee:
+                    user.getProfile().tags) {
+                for (String tag:
+                        tags) {
+                    if (tagAttendee.toLowerCase().contains(tag.toLowerCase())) {
+                        tagsCnt++;
+                        break;
+                    }
+                }
+            }
+            if (tagsCnt >= tags.size()) {
+                mAttendeesDataBackup.add(user);
+            }
+        }
+        mAttendeeViewAdapter.setAttendeesData(mAttendeesDataBackup);
     }
 
     private void initAttendeeDetailsDialog() {

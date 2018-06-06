@@ -251,7 +251,7 @@ namespace Maevent.Data
                 Email = "morgan@freeman.com",
                 Linkedin = null,
                 Location = "Memphis",
-                Tags = "Dynamo;Radio;Tesla coil;Solar battery"
+                Tags = "Worldwide;Space;Matter;Radio"
             },
             new User() // id = 12
             {

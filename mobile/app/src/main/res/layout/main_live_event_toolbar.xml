@@ -2,13 +2,31 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:weightSum="3"
     android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <TextView
+        android:id="@+id/tv_filter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:text="@string/filter" />
+
+    <me.originqiu.library.EditTag
+        android:id="@+id/main_live_event_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:input_layout="@layout/configure_profile_input_tag"
+        app:tag_layout="@layout/configure_profile_tag"/>
+
     <Button
         android:id="@+id/main_live_event_agenda"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -21,6 +39,7 @@
 
     <Button
         android:id="@+id/main_live_event_description"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -33,6 +52,7 @@
 
     <Button
         android:id="@+id/main_live_event_wall"
+        android:visibility="gone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"

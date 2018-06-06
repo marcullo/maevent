@@ -92,5 +92,6 @@
     <string name="invite_search_label">Searching</string>
     <string name="invite_search_label_found">Results</string>
     <string name="invite_search_label_not_found">Not found</string>
+    <string name="filter"> Filter: </string>
 
 </resources>
