@@ -10,11 +10,11 @@ public class Invitation extends Maevent {
     private User invitee;
     private String message;
 
-    public Invitation(MaeventParams params, String attendeesIds, User host, User inviter, User invitee, String message) {
-        super();
-        this.params = params;
-        this.attendeesIds = attendeesIds;
-        this.host = host;
+    public Invitation(Maevent event, User inviter, User invitee, String message) {
+        this.id = event.id;
+        this.params = event.params;
+        this.attendeesIds = event.attendeesIds;
+        this.host = event.host;
         this.inviter = inviter;
         this.invitee = invitee;
         this.message = message;

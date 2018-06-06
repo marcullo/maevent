@@ -139,10 +139,9 @@ public class CreateEventFragment extends Fragment implements
         event.setHost(host);
         event.setAttendeesIds(";" + String.valueOf(host.getProfile().id) + ";");
 
-        MaeventManager.getInstance().createEvent(parent, event, new NetworkReceiver.Callback<Boolean>() {
+        MaeventManager.getInstance().createEvent(parent, event, new NetworkReceiver.Callback<Maevent>() {
             @Override
-            public void onSuccess(Boolean success) {
-                Prompt.displayShort("Success!", parent);
+            public void onSuccess(Maevent event) {
                 mCreateEventAdapter.setCreateEventLoadingGone();
                 mCreateEventAdapter.updateCreateEventButtonVisibility();
                 mCreateEventAdapter.bindListeners();

@@ -86,7 +86,7 @@ public class Maevent implements DataValidator {
         sb.append(ENDL);
         sb.append(Maevent.LOG_TAG).append(ENDL);
         sb.append(MaeventParams.LOG_TAG).append(":").append(ENDL);
-        sb.append(params.name).append(ENDL);
+        sb.append("id ").append(id).append(" ").append(params.name).append(ENDL);
         sb.append(params.place).append(" (")
                 .append(params.addressStreet).append(", ")
                 .append(params.addressPostCode).append(")").append(ENDL);

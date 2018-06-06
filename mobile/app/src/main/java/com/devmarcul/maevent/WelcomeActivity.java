@@ -71,7 +71,7 @@ public class WelcomeActivity extends AppCompatActivity
 
 
 
-
+/*
         Maevent event = new Maevent();
 
         MaeventParams params = new MaeventParams();
@@ -96,7 +96,7 @@ public class WelcomeActivity extends AppCompatActivity
 
         startInviteActivity(event);
 
-
+*/
 
 
 

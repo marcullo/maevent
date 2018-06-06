@@ -30,6 +30,7 @@ import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.apis.models.MaeventsModel;
 import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.apis.models.UsersModel;
+import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.data.User;
 import com.devmarcul.maevent.data.UserProfile;
@@ -68,11 +69,11 @@ public class NetworkService extends IntentService implements MaeventApi {
     private static final NetworkService instance = new NetworkService();
     private static RequestQueue mRequestQueue;
 
+    // Do not use this constructor! This is only for service declaration in Android Manifest.
+
     public static synchronized NetworkService getInstance() {
         return instance;
     }
-
-    // Do not use this constructor! This is only for service declaration in Android Manifest.
     public NetworkService() {
         super(NetworkService.class.getName());
     }
@@ -91,6 +92,14 @@ public class NetworkService extends IntentService implements MaeventApi {
 
         if (Action.GET_EVENTS.name().equals(action)) {
             handleGetEvents(receiver);
+        }
+        else if (Action.GET_EVENT.name().equals(action)) {
+            final String identifier = intent.getStringExtra(Param.STRING.name());
+            if (identifier == null) {
+                Log.d(LOG_TAG,"Invalid intent");
+                return;
+            }
+            handleGetEvent(receiver, identifier);
         }
         else if (Action.GET_EVENTS_INTENDED_FOR_USER.name().equals(action)) {
             final String identifier = intent.getStringExtra(Param.STRING.name());
@@ -149,6 +158,10 @@ public class NetworkService extends IntentService implements MaeventApi {
                 return;
             }
             handleGetInvitationsIntendedForUser(receiver, identifier);
+        }
+        else if (Action.SEND_INVITATION.name().equals(action)) {
+            final InvitationModel model = intent.getParcelableExtra(Param.INVITATION.name());
+            handleSendInvitation(receiver, model);
         }
     }
 
@@ -209,6 +222,55 @@ public class NetworkService extends IntentService implements MaeventApi {
                             Gson gson = new Gson();
                             List<MaeventModel> content = gson.fromJson(response, new TypeToken<List<MaeventModel>>(){}.getType());
                             model = new MaeventsModel(content);
+                        }
+                        catch (JsonSyntaxException ex) {
+                            Log.e(LOG_TAG, "Error while parsing JSON");
+                            model = null;
+                        }
+                        catch (Exception ex) {
+                            Log.e(LOG_TAG, ex.toString());
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response);
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
+                            receiver.send(RESULT_CODE_OK_PARCEL, bundle);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof ClientError) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ClientError());
+                        }
+                        else {
+                            bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, new ServerError());
+                        }
+                        receiver.send(RESULT_CODE_ERROR, bundle);
+                    }
+                });
+        mRequestQueue.add(request);
+    }
+
+    @Override
+    public void handleGetEvent(final ResultReceiver receiver, String identifier) {
+        final Bundle bundle = new Bundle();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(MaeventApi.URL_EVENTS).append(identifier);
+        String url = builder.toString();
+
+        StringRequest request = new StringRequest
+                (Request.Method.GET, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        MaeventModel model;
+                        try {
+                            Gson gson = new Gson();
+                            model = gson.fromJson(response, MaeventModel.class);
                         }
                         catch (JsonSyntaxException ex) {
                             Log.e(LOG_TAG, "Error while parsing JSON");
@@ -310,8 +372,23 @@ public class NetworkService extends IntentService implements MaeventApi {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        bundle.putSerializable(NetworkReceiver.PARAM_RESULT, true);
-                        receiver.send(RESULT_CODE_OK, bundle);
+                        MaeventModel model;
+                        try {
+                            Gson gson = new Gson();
+                            model = gson.fromJson(response.toString(), MaeventModel.class);
+                        }
+                        catch (Exception ex) {
+                            Log.e(LOG_TAG, ex.toString());
+                            model = null;
+                        }
+                        if (model == null) {
+                            bundle.putSerializable(NetworkReceiver.PARAM_RESULT, response.toString());
+                            receiver.send(RESULT_CODE_INTERNAL_ERROR, bundle);
+                        }
+                        else {
+                            bundle.putParcelable(NetworkReceiver.PARAM_RESULT, model);
+                            receiver.send(RESULT_CODE_OK_PARCEL, bundle);
+                        }
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -698,6 +775,36 @@ public class NetworkService extends IntentService implements MaeventApi {
                         receiver.send(RESULT_CODE_ERROR, bundle);
                     }
                 });
+        mRequestQueue.add(request);
+    }
+
+    @Override
+    public void handleSendInvitation(final ResultReceiver receiver, InvitationModel model) {
+        JSONObject body;
+        try {
+            Gson gson = new Gson();
+            body = new JSONObject(gson.toJson(model));
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Invalid request");
+            return;
+        }
+
+        final Bundle bundle = new Bundle();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, MaeventApi.URL_INVITATIONS, body,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        bundle.putSerializable(NetworkReceiver.PARAM_RESULT, true);
+                        receiver.send(RESULT_CODE_OK, bundle);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                bundle.putSerializable(NetworkReceiver.PARAM_EXCEPTION, error);
+                receiver.send(RESULT_CODE_ERROR, bundle);
+            }
+        });
         mRequestQueue.add(request);
     }
 }

@@ -11,27 +11,27 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserModel extends MaeventApiModel implements Parcelable {
 
-    @SerializedName(value = "Id", alternate = {"id"})
-    public String Id;
-    @SerializedName(value = "FirstName", alternate = {"firstName"})
+    @SerializedName(value = "id", alternate = {"Id"})
+    public int Id;
+    @SerializedName(value = "firstName", alternate = {"FirstName"})
     public String FirstName;
-    @SerializedName(value = "LastName", alternate = {"lastName"})
+    @SerializedName(value = "lastName", alternate = {"LastName"})
     public String LastName;
-    @SerializedName(value = "Title", alternate = {"title"})
+    @SerializedName(value = "title", alternate = {"Title"})
     public String Title;
-    @SerializedName(value = "Pose", alternate = {"pose"})
+    @SerializedName(value = "pose", alternate = {"Pose"})
     public String Pose;
-    @SerializedName(value = "Headline", alternate = {"headline"})
+    @SerializedName(value = "headline", alternate = {"Headline"})
     public String Headline;
-    @SerializedName(value = "Phone", alternate = {"phone"})
+    @SerializedName(value = "phone", alternate = {"Phone"})
     public String Phone;
-    @SerializedName(value = "Email", alternate = {"email"})
+    @SerializedName(value = "email", alternate = {"Email"})
     public String Email;
-    @SerializedName(value = "Linkedin", alternate = {"linkedin", "linkedIn"})
+    @SerializedName(value = "linkedin", alternate = {"Linkedin"})
     public String Linkedin;
-    @SerializedName(value = "Location", alternate = {"location"})
+    @SerializedName(value = "location", alternate = {"Location"})
     public String Location;
-    @SerializedName(value = "Tags", alternate = {"tags"})
+    @SerializedName(value = "tags", alternate = {"Tags"})
     public String Tags;
 
     public UserModel(User user) {
@@ -53,7 +53,7 @@ public class UserModel extends MaeventApiModel implements Parcelable {
             tags = builder.toString();
         }
 
-        Id = String.valueOf(profile.id);
+        Id = profile.id;
         FirstName = profile.firstName;
         LastName = profile.lastName;
         Title = profile.title;
@@ -67,7 +67,7 @@ public class UserModel extends MaeventApiModel implements Parcelable {
     }
 
     protected UserModel(Parcel in) {
-        Id = in.readString();
+        Id = in.readInt();
         FirstName = in.readString();
         LastName = in.readString();
         Title = in.readString();
@@ -99,7 +99,7 @@ public class UserModel extends MaeventApiModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(Id);
+        dest.writeInt(Id);
         dest.writeString(FirstName);
         dest.writeString(LastName);
         dest.writeString(Title);

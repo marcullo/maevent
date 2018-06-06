@@ -12,15 +12,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class InvitationModel implements Parcelable {
 
-    @SerializedName(value = "Id", alternate = "id")
-    public String Id;
-    @SerializedName(value = "Inviter", alternate = "inviter")
+    @SerializedName(value = "id", alternate = "Id")
+    public int Id;
+    @SerializedName(value = "inviter", alternate = "Inviter")
     public UserModel Inviter;
-    @SerializedName(value = "Invitee", alternate = "invitee")
+    @SerializedName(value = "invitee", alternate = "Invitee")
     public UserModel Invitee;
-    @SerializedName(value = "Event", alternate = "event")
+    @SerializedName(value = "event", alternate = "Event")
     public MaeventModel Event;
-    @SerializedName(value = "Message", alternate = "message")
+    @SerializedName(value = "message", alternate = "Message")
     public String Message;
 
     public InvitationModel(Invitation invitation) {
@@ -31,13 +31,15 @@ public class InvitationModel implements Parcelable {
             throw new IllegalArgumentException("Event host must not be null");
         }
 
-        Id = String.valueOf(invitation.getId());
+        Id = invitation.getId();
         Inviter = new UserModel(invitation.getInviter());
         Invitee = new UserModel(invitation.getInvitee());
+        Event = new MaeventModel(invitation);
+        Message = invitation.getMessage();
     }
 
     protected InvitationModel(Parcel in) {
-        Id = in.readString();
+        Id = in.readInt();
         Inviter = in.readParcelable(UserModel.class.getClassLoader());
         Invitee = in.readParcelable(UserModel.class.getClassLoader());
         Event = in.readParcelable(MaeventModel.class.getClassLoader());
@@ -63,7 +65,7 @@ public class InvitationModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(Id);
+        dest.writeInt(Id);
         dest.writeParcelable(Inviter, flags);
         dest.writeParcelable(Invitee, flags);
         dest.writeParcelable(Event, flags);
@@ -72,17 +74,12 @@ public class InvitationModel implements Parcelable {
 
     public Invitation toInvitation() {
         Maevent event = Event.toMaevent();
-        MaeventParams params = event.getParams();
-        User host = event.getHost();
         User inviter = new User();
         inviter.setProfile(Inviter.toUserProfile());
         User invitee = new User();
         invitee.setProfile(Invitee.toUserProfile());
         String message = Message;
-        String attendeesIds = event.getAttendeesIds();
-
-        return new Invitation(
-                params, attendeesIds, host, inviter, invitee, message);
+        return new Invitation(event, inviter, invitee, message);
     }
 }
 

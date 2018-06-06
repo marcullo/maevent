@@ -1,6 +1,5 @@
 package com.devmarcul.maevent;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,12 +19,20 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.ClientError;
+import com.android.volley.ServerError;
 import com.devmarcul.maevent.apis.models.MaeventModel;
+import com.devmarcul.maevent.business_logic.MaeventInvitationManager;
+import com.devmarcul.maevent.business_logic.MaeventManager;
 import com.devmarcul.maevent.business_logic.MaeventUserManager;
+import com.devmarcul.maevent.business_logic.ThisUser;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
-import com.devmarcul.maevent.content_providers.hardcoded.UserBuilder;
+import com.devmarcul.maevent.business_logic.services.NetworkService;
+import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Maevent;
+import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.User;
+import com.devmarcul.maevent.data.UserProfile;
 import com.devmarcul.maevent.data.Users;
 import com.devmarcul.maevent.invite.InviteesAdapter;
 import com.devmarcul.maevent.invite.SearchingUsersAdapter;
@@ -38,6 +45,7 @@ import com.devmarcul.maevent.utils.dialog.DetailsDialog;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public class InviteActivity extends AppCompatActivity implements CustomTittleSetter {
@@ -68,6 +76,7 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
     private View mInviteLoadingBar;
 
     private boolean mRequestFinished;
+    private AtomicInteger mResponsesNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +178,7 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
                     return false;
                 }
                 int len = query.length();
-                if (len < 2 || len > 35) {
+                if (len < 5 || len > 35) {
                     Prompt.displayShort("Query should have from 5 to 35 chars", context);
                     return true;
                 }
@@ -222,6 +231,9 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
 
         MaeventModel model = starter.getParcelableExtra(KEY_PARCEL_FOCUSED_EVENT_MODEL);
         mFocusedEvent = model.toMaevent();
+        if (mFocusedEvent.getId() == 0) {
+            Prompt.displayShort("Invalid event id", this);
+        }
     }
 
     private void initInvitees() {
@@ -412,7 +424,11 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
     }
 
     private void inviteUsers() {
-        Prompt.displayTodo(this);
+        final Context context = this;
+
+        if (!mRequestFinished) {
+            return;
+        }
         mRequestFinished = false;
         adaptInviteButton(false);
         adaptInviteesList(false);
@@ -420,6 +436,98 @@ public class InviteActivity extends AppCompatActivity implements CustomTittleSet
         adaptInviteLoadingBar(true);
         invalidateOptionsMenu();
 
-//        mRequestFinished = true;
+        for (User invitee :
+                mInviteesData
+             ) {
+            Invitation invitation = new Invitation(mFocusedEvent, mFocusedEvent.getHost(), invitee, "");
+
+            mResponsesNumber = new AtomicInteger();
+            mResponsesNumber.set(0);
+
+            MaeventInvitationManager.getInstance().sendInvitation(context, invitation, new NetworkReceiver.Callback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean res) {
+                    if (!res) {
+                        NetworkService.getInstance().cancelAllRequests();
+                        mRequestFinished = true;
+                        adaptInviteesList(true);
+                        adaptInviteLoadingBar(false);
+                        adaptInviteButton(true);
+                        invalidateOptionsMenu();
+                        return;
+                    }
+
+                    int responses = mResponsesNumber.incrementAndGet();
+                    if (responses == mInviteesData.size()) {
+                        mRequestFinished = true;
+                        mInviteesData.clear();
+                        mInviteesAdapter.setInviteesData(mInviteesData);
+                        updateInviteesCounter();
+                        updateEventInfo();
+                    }
+                }
+
+                @Override
+                public void onError(Exception exception) {
+                    if (exception instanceof ClientError) {
+                        Prompt.displayShort("Some user was invited already.", context);
+                    }
+                    else if (exception instanceof ServerError) {
+                        Prompt.displayShort("No connection with server.", context);
+                    }
+                    else {
+                        Prompt.displayShort("Internal error.", context);
+                    }
+                    mRequestFinished = true;
+                    adaptInviteesList(true);
+                    adaptInviteLoadingBar(false);
+                    adaptInviteButton(true);
+                    invalidateOptionsMenu();
+                }
+            });
+        }
+    }
+
+    private void updateEventInfo() {
+        final Context context = this;
+
+        if (!mRequestFinished) {
+            return;
+        }
+        mRequestFinished = false;
+
+        MaeventManager.getInstance().getEvent(context, mFocusedEvent.getId(), new NetworkReceiver.Callback<Maevent>() {
+            @Override
+            public void onSuccess(Maevent event) {
+                mRequestFinished = true;
+                mFocusedEvent.setAttendeesIds(event.getAttendeesIds());
+                adaptInviteesList(true);
+                adaptInviteLoadingBar(false);
+                invalidateOptionsMenu();
+                performSuccess();
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                if (exception instanceof ClientError) {
+                    Prompt.displayShort("Error occured during synchronizing after sending invitations.", context);
+                }
+                else if (exception instanceof ServerError) {
+                    Prompt.displayShort("No connection with server.", context);
+                }
+                else {
+                    Prompt.displayShort("Internal error.", context);
+                }
+                mRequestFinished = true;
+                adaptInviteesList(true);
+                adaptInviteLoadingBar(false);
+                adaptInviteButton(true);
+                invalidateOptionsMenu();
+            }
+        });
+    }
+
+    private void performSuccess() {
+        Prompt.displayShort("Success!", this);
     }
 }

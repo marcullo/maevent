@@ -27,7 +27,7 @@ public class MaeventManager implements MaeventContentUpdater {
     }
 
     @Override
-    public void createEvent(final Context context, Maevent event, NetworkReceiver.Callback<Boolean> callback) {
+    public void createEvent(final Context context, Maevent event, final NetworkReceiver.Callback<Maevent> callback) {
         if (event == null) {
             return;
         }
@@ -35,9 +35,20 @@ public class MaeventManager implements MaeventContentUpdater {
             return;
         }
 
-        MaeventModel model = new MaeventModel(event);
+        final MaeventModel model = new MaeventModel(event);
         NetworkService.getInstance()
-                .startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, model, callback);
+                .startService(context, MaeventApi.Action.CREATE_EVENT, MaeventApi.Param.EVENT, model, new NetworkReceiver.Callback<MaeventModel>() {
+                    @Override
+                    public void onSuccess(MaeventModel model) {
+                        Maevent event = model.toMaevent();
+                        callback.onSuccess(event);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        callback.onError(exception);
+                    }
+                });
     }
 
     @Override
@@ -66,6 +77,24 @@ public class MaeventManager implements MaeventContentUpdater {
                     public void onSuccess(MaeventsModel model) {
                         Maevents events = model.toMaevents();
                         callback.onSuccess(events);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        callback.onError(exception);
+                    }
+                });
+    }
+
+    @Override
+    public void getEvent(Context context, int id, final NetworkReceiver.Callback<Maevent> callback) {
+        String identifier = String.valueOf(id);
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.GET_EVENT, MaeventApi.Param.STRING, identifier, new NetworkReceiver.Callback<MaeventModel>() {
+                    @Override
+                    public void onSuccess(MaeventModel model) {
+                        Maevent event = model.toMaevent();
+                        callback.onSuccess(event);
                     }
 
                     @Override

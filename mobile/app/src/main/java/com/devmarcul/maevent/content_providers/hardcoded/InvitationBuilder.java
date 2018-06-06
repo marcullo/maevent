@@ -1,6 +1,7 @@
 package com.devmarcul.maevent.content_providers.hardcoded;
 
 import com.devmarcul.maevent.data.Invitation;
+import com.devmarcul.maevent.data.Maevent;
 import com.devmarcul.maevent.data.MaeventParams;
 import com.devmarcul.maevent.data.User;
 
@@ -20,10 +21,9 @@ public class InvitationBuilder {
         assignObjects();
 
         Invitation objectCopy = InvitationBuilder.objects[cnt];
+        Maevent event = objectCopy;
         Invitation object = new Invitation(
-                objectCopy.getParams(),
-                objectCopy.getAttendeesIds(),
-                objectCopy.getHost(),
+                event,
                 objectCopy.getInviter(),
                 objectCopy.getInvitee(),
                 objectCopy.getMessage());
@@ -37,6 +37,7 @@ public class InvitationBuilder {
     }
 
     private static void initialize() {
+        Maevent event;
         MaeventParams params;
         User inviter;
         User invitee;
@@ -47,29 +48,33 @@ public class InvitationBuilder {
         inviter = UserBuilder.build();
         invitee = UserBuilder.build();
         inviteesNr++;
-        object0 = new Invitation(params, ";1;2;", UserBuilder.build(), inviter, invitee, message);
+        event = MaeventBuilder.build();
+        object0 = new Invitation(event, inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
-        object1 = new Invitation(params,";2;6;7;", UserBuilder.build(), inviter, invitee, message);
+        event = MaeventBuilder.build();
+        object1 = new Invitation(event, inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
-        message = "You're welcome!";
-        object2 = new Invitation(params, ";5;", UserBuilder.build(), inviter, invitee, message);
+        event = MaeventBuilder.build();
+        object2 = new Invitation(event, inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
-        object3 = new Invitation(params, ";1;2;3;4;5;6;7;", UserBuilder.build(), inviter, invitee, message);
+        event = MaeventBuilder.build();
+        object3 = new Invitation(event, inviter, invitee, message);
 
         params = MaeventParamsBuilder.build();
         inviter = UserBuilder.build();
         inviteesNr++;
         message = "";
-        object4 = new Invitation(params, "5;6;7;8;9;", UserBuilder.build(), inviter, invitee, message);
+        event = MaeventBuilder.build();
+        object4 = new Invitation(event, inviter, invitee, message);
     }
 
     private static void assignObjects() {

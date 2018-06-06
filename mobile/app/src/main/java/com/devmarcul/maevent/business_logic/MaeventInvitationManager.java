@@ -3,10 +3,12 @@ package com.devmarcul.maevent.business_logic;
 import android.content.Context;
 
 import com.devmarcul.maevent.apis.MaeventApi;
+import com.devmarcul.maevent.apis.models.InvitationModel;
 import com.devmarcul.maevent.apis.models.InvitationsModel;
 import com.devmarcul.maevent.business_logic.interfaces.InvitationContentUpdater;
 import com.devmarcul.maevent.business_logic.receivers.NetworkReceiver;
 import com.devmarcul.maevent.business_logic.services.NetworkService;
+import com.devmarcul.maevent.data.Invitation;
 import com.devmarcul.maevent.data.Invitations;
 import com.devmarcul.maevent.data.UserProfile;
 
@@ -56,5 +58,21 @@ public class MaeventInvitationManager implements InvitationContentUpdater {
                 });
     }
 
+    @Override
+    public void sendInvitation(Context context, Invitation invitation, final NetworkReceiver.Callback<Boolean> callback) {
+        final InvitationModel model = new InvitationModel(invitation);
+        NetworkService.getInstance()
+                .startService(context, MaeventApi.Action.SEND_INVITATION, MaeventApi.Param.INVITATION, model, new NetworkReceiver.Callback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        callback.onSuccess(result);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        callback.onError(exception);
+                    }
+                });
+    }
 
 }

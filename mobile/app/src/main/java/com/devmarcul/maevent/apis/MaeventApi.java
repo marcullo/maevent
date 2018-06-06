@@ -2,6 +2,7 @@ package com.devmarcul.maevent.apis;
 
 import android.os.ResultReceiver;
 
+import com.devmarcul.maevent.apis.models.InvitationModel;
 import com.devmarcul.maevent.apis.models.MaeventModel;
 import com.devmarcul.maevent.apis.models.UserModel;
 import com.devmarcul.maevent.utils.Network;
@@ -13,10 +14,10 @@ public interface MaeventApi {
     String RESULT_RECEIVER = "RESULT_RECEIVER";
 
     enum Action {
-        GET_EVENTS, GET_EVENTS_INTENDED_FOR_USER, CREATE_EVENT,
+        GET_EVENTS, GET_EVENTS_INTENDED_FOR_USER, GET_EVENT, CREATE_EVENT,
         GET_USERS, GET_ATTENDEES, GET_USERS_BY_QUERY, GET_USER, CREATE_USER, UPDATE_USER,
-        GET_INVITATIONS, GET_INVITATIONS_INTENDED_FOR_USER };
-    enum Param { NONE, STRING, EVENT, USER };
+        GET_INVITATIONS, GET_INVITATIONS_INTENDED_FOR_USER, SEND_INVITATION };
+    enum Param { NONE, STRING, EVENT, USER, INVITATION };
 
     String URL_EVENT_ID = "ev=";
     String URL_QUERY_ID = "q=";
@@ -35,9 +36,10 @@ public interface MaeventApi {
 
     /* /api/events */
     void handleGetEvents(final ResultReceiver receiver);
+    void handleGetEvent(final ResultReceiver receiver, String identifier);
+    void handleCreateEvent(final ResultReceiver receiver, MaeventModel model);
     /* .........../attendee */
     void handleGetEventsIntendedForUser(final ResultReceiver receiver, String identifier);
-    void handleCreateEvent(final ResultReceiver receiver, MaeventModel model);
 
     /* /api/users */
     void handleGetUsers(final ResultReceiver receiver);
@@ -52,4 +54,6 @@ public interface MaeventApi {
     void handleGetInvitations(final ResultReceiver receiver);
     /* ................/invitee */
     void handleGetInvitationsIntendedForUser(final ResultReceiver receiver, String identifier);
+    /* ................/multiple */
+    void handleSendInvitation(final ResultReceiver receiver, InvitationModel model);
 }
