@@ -348,6 +348,114 @@
 					"response": []
 				},
 				{
+					"name": "PUT Event Attendee",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events/1/attendees?insert=3&inv=17",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events",
+								"1",
+								"attendees"
+							],
+							"query": [
+								{
+									"key": "insert",
+									"value": "3"
+								},
+								{
+									"key": "inv",
+									"value": "17"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Event Attendee Invalid",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events/1/attendees?insert=99999999&inv=17",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events",
+								"1",
+								"attendees"
+							],
+							"query": [
+								{
+									"key": "insert",
+									"value": "99999999"
+								},
+								{
+									"key": "inv",
+									"value": "17"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Event Attendee Invalid Invitation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/events/1/attendees?insert=3&inv=99999999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"events",
+								"1",
+								"attendees"
+							],
+							"query": [
+								{
+									"key": "insert",
+									"value": "3"
+								},
+								{
+									"key": "inv",
+									"value": "99999999"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "DELETE Event",
 					"request": {
 						"method": "DELETE",
@@ -462,6 +570,66 @@
 								{
 									"key": "ev",
 									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Users ByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users?q=in",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "in"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Users ByName Invalid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8088/api/users?q=012345",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8088",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "012345"
 								}
 							]
 						}

@@ -46,6 +46,17 @@ namespace Maevent.API.Controllers
             return eventModel;
         }
 
+        private User GetInvitee(InvitationModel model)
+        {
+            if (model == null)
+            {
+                return null;
+            }
+            var id = model.Id;
+            var seekedInvitee = _repo.GetUser(id);
+            return seekedInvitee;
+        }
+
         private List<InvitationModel> GetInvitationModels(IEnumerable<Invitation> invitations)
         {
             if (invitations == null)
@@ -196,9 +207,9 @@ namespace Maevent.API.Controllers
 
                 if (ev.Equals("all"))
                 {
-                    var invitations =_repo.GetInvitationsByInviter(inviterId);
+                    var invitations = _repo.GetInvitationsByInviter(inviterId);
                     var invitationModels = GetInvitationModels(invitations);
-                    return Ok(invitationModels);                    
+                    return Ok(invitationModels);
                 }
                 else if (int.TryParse(ev, out int eventId))
                 {

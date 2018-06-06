@@ -124,7 +124,7 @@ namespace Maevent.API.Controllers
             return BadRequest("Could not fetch event");
         }
 
-        [HttpGet("{id}/attendees")]
+        [HttpGet("{id}/attendees", Name = "GetAttendees")]
         public IActionResult GetAttendees(int id)
         {
             try
@@ -304,6 +304,81 @@ namespace Maevent.API.Controllers
 
             return BadRequest("Could not update event");
         }
+
+        [HttpPut("{id}/attendees")]
+        public async Task<IActionResult> Put(int id, 
+            [RequiredFromQuery] string insert,
+            [RequiredFromQuery] string inv)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                if (!int.TryParse(insert, out int inviteeId))
+                {
+                    return BadRequest("Invalid invitee id");
+                }
+
+                if (!int.TryParse(inv, out int invitationId))
+                {
+                    return BadRequest("Invalid invitation id");
+                }
+
+                var ev = _repo.GetEvent(id);
+                if (ev == null)
+                {
+                    return NotFound();
+                }
+
+                var seekedInvitee = _repo.GetUser(inviteeId);
+                if (seekedInvitee == null)
+                {
+                    _logger.LogWarning($"User which which wants to be an invitee is not registered in the database");
+                    return Unauthorized();
+                }
+
+                var seekedInvitation = _repo.GetInvitation(invitationId);
+                if (seekedInvitee == null)
+                {
+                    _logger.LogWarning($"Invitation with id {invitationId} not found in the database.");
+                    return NotFound();
+                }
+
+                if (seekedInvitee.Id != seekedInvitation.InviteeId)
+                {
+                    _logger.LogWarning($"User are not allowed to accept other's person invitation.");
+                    return Unauthorized();
+                }
+
+                String inviteeIdentifier = inviteeId.ToString();
+                if (ev.AttendeesIds.Contains(";" + inviteeIdentifier + ";"))
+                {
+                    _logger.LogWarning($"User registered on the event earlier.");
+                    return BadRequest("Could not update event attendees");
+                }
+
+                ev.AttendeesIds = String.Concat(ev.AttendeesIds, inviteeIdentifier, ";");
+
+                _repo.Update(ev);
+                if (await _repo.SaveAllAsync())
+                {
+                    EventModel mapped = Mapper.Map<EventModel>(ev);
+                    mapped.Host = GetHostModel(ev);
+                    return Ok(mapped);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception thrown while updating event attendees: {ex}");
+            }
+
+            return BadRequest("Could not update event attendees");
+        }         
 
         [HttpGet("attendee")]
         public IActionResult GetAllByAttendee([RequiredFromQuery]string id)
