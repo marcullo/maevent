@@ -123,6 +123,11 @@ public class LiveEventFragment extends Fragment implements
         mAttendeeDetailsContentView.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onClickDummy() {
+        refresh();
+    }
+
     private void initEventDetails() {
         mLiveEventToolbar = view.findViewById(R.id.main_live_event_toolbar);
         mEventDetailsView = view.findViewById(R.id.main_event_details);

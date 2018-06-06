@@ -23,6 +23,7 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
 
     public interface OnClickHandler {
         void onClick(User attendee);
+        void onClickDummy();
     }
 
     public AttendeeViewAdapter(OnClickHandler handler) {
@@ -44,6 +45,7 @@ public class AttendeeViewAdapter extends RecyclerView.Adapter<AttendeeViewHolder
                 User attendee = mAttendees.get(adapterPosition);
 
                 if (attendee instanceof UserDummy) {
+                    mClickHandler.onClickDummy();
                     return;
                 }
 
